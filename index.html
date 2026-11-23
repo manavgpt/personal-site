@@ -240,6 +240,7 @@
     }
 
     /* Live Clock */
+    /*
     .live-clock {
       margin-left: auto;
       font-family: var(--font-mono);
@@ -249,6 +250,7 @@
       font-variant-numeric: tabular-nums;
       white-space: nowrap;
     }
+    */
 
     /* Clean Minimal Toast */
     .toast {
@@ -319,7 +321,7 @@
       </a>
 
 
-      <span class="live-clock" id="live-clock" title="Local time (IST)"></span>
+      <!-- <span class="live-clock" id="live-clock" title="Local time (IST)"></span> -->
     </div>
   </main>
 
@@ -330,6 +332,7 @@
 
   <script>
     /* Live Clock (IST) */
+    /*
     const clockEl = document.getElementById("live-clock");
     const istFormatter = new Intl.DateTimeFormat("en-US", {
       timeZone: "Asia/Kolkata",
@@ -345,6 +348,7 @@
 
     updateClock();
     setInterval(updateClock, 1000);
+    */
 
     /* Inactivity Tab Flip */
     const favicon = document.getElementById("favicon");
