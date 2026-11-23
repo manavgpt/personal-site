@@ -16,7 +16,9 @@
   <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
 
   <style>
     :root {
@@ -119,8 +121,17 @@
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.4;
+        transform: scale(0.85);
+      }
     }
 
     /* Core Content Block */
@@ -156,6 +167,15 @@
       flex-wrap: wrap;
     }
 
+    .link-item .arrow {
+      display: inline-block;
+      transition: transform 0.2s var(--ease);
+    }
+
+    .link-item:hover .arrow {
+      transform: translate(2px, -2px);
+    }
+
     .link-item {
       color: var(--fg-muted);
       text-decoration: none;
@@ -178,6 +198,17 @@
     .copy-btn {
       color: var(--fg);
       font-weight: 500;
+    }
+
+    /* Live Clock */
+    .live-clock {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      letter-spacing: 0.04em;
+      color: var(--fg-muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
     }
 
     /* Clean Minimal Toast */
@@ -228,8 +259,8 @@
     <div class="content-block">
       <h1>this site is being built.</h1>
       <p>
-        i'm currently putting together my new personal website. 
-        curating projects, writing, and refining the details. 
+        i'm currently putting together my new personal website.
+        curating projects, writing, and refining the details.
         coming soon.
       </p>
     </div>
@@ -241,12 +272,15 @@
       </button>
 
       <a class="link-item" href="https://x.com/manavgpt" target="_blank" rel="noopener">
-        <span>twitter ↗</span>
+        <span>twitter</span><span class="arrow">↗</span>
       </a>
 
       <a class="link-item" href="./web-archive/">
-        <span>archive ↗</span>
+        <span>archive</span><span class="arrow">↗</span>
       </a>
+
+
+      <span class="live-clock" id="live-clock" title="Local time (IST)"></span>
     </div>
   </main>
 
@@ -256,6 +290,23 @@
   </div>
 
   <script>
+    /* Live Clock (IST) */
+    const clockEl = document.getElementById("live-clock");
+    const istFormatter = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Kolkata",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+
+    function updateClock() {
+      if (!clockEl) return;
+      clockEl.textContent = `${istFormatter.format(new Date())} IST`;
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+
     /* Inactivity Tab Flip */
     const favicon = document.getElementById("favicon");
     const inactiveMessages = [
