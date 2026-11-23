@@ -19,6 +19,18 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap"
+    rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+
 
   <style>
     :root {
@@ -142,11 +154,29 @@
     }
 
     h1 {
-      font-size: clamp(32px, 5.5vw, 44px);
-      font-weight: 600;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      color: var(--fg);
+      font-family: "Newsreader", Georgia, serif;
+      font-size: clamp(34px, 5.5vw, 46px);
+      font-weight: 500;
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      background: linear-gradient(180deg, #FFFFFF 0%, #A1A1AA 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      padding-bottom: 2px;
+      /* prevents descenders like 'g' from clipping */
+    }
+
+    font-size: clamp(36px, 5.8vw, 48px);
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    font-optical-sizing: auto;
+    color: var(--fg);
+    }
+
+    h1 em {
+      font-style: italic;
     }
 
     p {
@@ -246,7 +276,7 @@
         <div class="brand-avatar">
           <img src="./active.png" alt="Manav" onerror="this.style.display='none'">
         </div>
-        <span>manav chaudhari</span>
+        <span>Manav Chaudhari</span>
       </div>
 
       <div class="status">
@@ -257,7 +287,7 @@
 
     <!-- Core Message -->
     <div class="content-block">
-      <h1>this site is being built.</h1>
+      <h1>this site is being built</h1>
       <p>
         i'm currently putting together my new personal website.
         curating projects, writing, and refining the details.
