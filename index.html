@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>finally, you found me!</title>
+  <meta name="description" content="Manav Chaudhari — Currently building my new portfolio.">
+  <meta name="theme-color" content="#000000">
+
+  <!-- Favicons -->
+  <link id="favicon" rel="icon" type="image/png" sizes="192x192" href="./active.png?v=14">
+  <link rel="apple-touch-icon" sizes="180x180" href="./active.png?v=14">
+  <link rel="preload" as="image" href="./inactive.png?v=14">
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #000000;
+      --card-bg: #0A0A0C;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.16);
+
+      --fg: #EDEDED;
+      --fg-muted: #888888;
+      --fg-faint: #444444;
+
+      --accent: #E5A93C;
+
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: "JetBrains Mono", monospace;
+
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    /* Centered Minimalist Unit */
+    .container {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    /* Meta Bar */
+    .meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      letter-spacing: 0.04em;
+      color: var(--fg-muted);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--fg);
+      font-weight: 500;
+    }
+
+    .brand-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(229, 169, 60, 0.6);
+      animation: pulse 2.2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Core Content Block */
+    .content-block {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    h1 {
+      font-size: clamp(32px, 5.5vw, 44px);
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--fg);
+    }
+
+    p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--fg-muted);
+      letter-spacing: -0.01em;
+    }
+
+    /* Clean Links */
+    .links-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 13.5px;
+      flex-wrap: wrap;
+    }
+
+    .link-item {
+      color: var(--fg-muted);
+      text-decoration: none;
+      transition: color 0.2s var(--ease);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-family: inherit;
+      font-size: inherit;
+      padding: 0;
+    }
+
+    .link-item:hover {
+      color: var(--fg);
+    }
+
+    .copy-btn {
+      color: var(--fg);
+      font-weight: 500;
+    }
+
+    /* Clean Minimal Toast */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      opacity: 0;
+      pointer-events: none;
+      background: #141417;
+      border: 1px solid var(--border-hover);
+      color: var(--fg);
+      font-size: 12.5px;
+      font-family: var(--font-mono);
+      padding: 8px 16px;
+      border-radius: 99px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
+      transition: transform 0.25s var(--ease), opacity 0.25s;
+      z-index: 100;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <!-- Meta -->
+    <div class="meta-bar">
+      <div class="brand">
+        <div class="brand-avatar">
+          <img src="./active.png" alt="Manav" onerror="this.style.display='none'">
+        </div>
+        <span>Manav Chaudhari</span>
+      </div>
+
+      <div class="status">
+        <span class="status-dot"></span>
+        <span>In progress</span>
+      </div>
+    </div>
+
+    <!-- Core Message -->
+    <div class="content-block">
+      <h1>This site is being built.</h1>
+      <p>
+        I'm currently putting together my new personal website. 
+        Curating projects, writing, and refining the details. 
+        Coming soon.
+      </p>
+    </div>
+
+    <!-- Links -->
+    <div class="links-row">
+      <button class="link-item copy-btn" id="copyBtn" type="button" title="Click to copy email">
+        <span>hello@manav.here</span>
+      </button>
+
+      <a class="link-item" href="https://x.com/manavgpt" target="_blank" rel="noopener">
+        <span>Twitter / X ↗</span>
+      </a>
+
+      <a class="link-item" href="./web-archive/">
+        <span>Archive ↗</span>
+      </a>
+    </div>
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <span id="toastMsg">Email copied</span>
+  </div>
+
+  <script>
+    /* Inactivity Tab Flip */
+    const favicon = document.getElementById("favicon");
+    const inactiveMessages = [
+      "where'd you go?",
+      "still there?",
+      "multitasking, huh?",
+      "hello???",
+      "well, that was quick",
+      "off exploring?",
+    ];
+
+    let messageIndex = 0;
+    let inactiveInterval = null;
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        if (favicon) favicon.href = "./inactive.png?v=14";
+        messageIndex = 0;
+        document.title = inactiveMessages[messageIndex];
+
+        clearInterval(inactiveInterval);
+        inactiveInterval = setInterval(() => {
+          messageIndex = (messageIndex + 1) % inactiveMessages.length;
+          document.title = inactiveMessages[messageIndex];
+        }, 2700);
+      } else {
+        if (favicon) favicon.href = "./active.png?v=14";
+        clearInterval(inactiveInterval);
+        inactiveInterval = null;
+        document.title = "finally, you found me!";
+      }
+    });
+
+    /* Copy Email */
+    const copyBtn = document.getElementById("copyBtn");
+    const toast = document.getElementById("toast");
+    const toastMsg = document.getElementById("toastMsg");
+    let toastTimer = null;
+
+    function showToast(msg) {
+      if (!toast) return;
+      toastMsg.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2000);
+    }
+
+    const email = "hello@manav.here";
+    copyBtn.addEventListener("click", () => {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(email).then(() => {
+          showToast(`Copied ${email}`);
+        }).catch(() => fallbackPrompt());
+      } else {
+        fallbackPrompt();
+      }
+    });
+
+    function fallbackPrompt() {
+      showToast(email);
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link id="favicon" rel="icon" href="/active.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap"
+        rel="stylesheet">
+
+    <title>welcome to my web archive!</title>
+    <style>
+        :root {
+            --bg: #09090B;
+            --surface: #121214;
+            --ink: #F5F4F0;
+            --ink-muted: #8E8E93;
+            --ink-faint: #52525B;
+            --accent: #E2D4B7;
+            /* Warm champagne */
+            --hairline: rgba(255, 255, 255, 0.07);
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            background-color: var(--bg);
+            background-image: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(226, 212, 183, 0.07), transparent);
+            color: var(--ink);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            overflow: hidden;
+        }
+
+        /* Subtle tactile film grain over the viewport */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .card {
+            position: relative;
+            width: 100%;
+            max-width: 660px;
+            background-color: var(--surface);
+            border-radius: 18px;
+            padding: 44px 44px 32px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow:
+                0 32px 64px -16px rgba(0, 0, 0, 0.7),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            animation: cardReveal 0.8s var(--ease-out-expo) both;
+        }
+
+        /* Cursor-tracking specular light sheen */
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            background: radial-gradient(420px circle at var(--x, 50%) var(--y, 50%),
+                    rgba(226, 212, 183, 0.065),
+                    transparent 60%);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .meta-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+            margin-bottom: 16px;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--ink-muted);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            box-shadow: 0 0 8px rgba(226, 212, 183, 0.6);
+        }
+
+        h1 {
+            font-family: 'Fraunces', serif;
+            font-weight: 400;
+            font-size: clamp(26px, 4vw, 34px);
+            line-height: 1.22;
+            letter-spacing: -0.025em;
+            color: var(--ink);
+            margin-bottom: 36px;
+        }
+
+        h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .project-list {
+            list-style: none;
+            counter-reset: project-counter;
+            border-top: 1px solid var(--hairline);
+        }
+
+        .project-list li {
+            counter-increment: project-counter;
+            border-bottom: 1px solid var(--hairline);
+            transition: opacity 0.25s ease;
+        }
+
+        /* Focus-dimming: fade sibling rows when hovering one */
+        .project-list:hover li:not(:hover) {
+            opacity: 0.35;
+        }
+
+        .project-list a {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 18px 14px;
+            margin: 0 -14px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #D4D4D8;
+            font-size: 15.5px;
+            letter-spacing: -0.01em;
+            transition:
+                background-color 0.25s var(--ease-out-expo),
+                color 0.25s ease,
+                transform 0.15s ease;
+        }
+
+        .project-list a:active {
+            transform: scale(0.992);
+        }
+
+        .project-list a::before {
+            content: counter(project-counter, decimal-leading-zero);
+            font-family: 'JetBrains Mono', monospace;
+            font-variant-numeric: tabular-nums;
+            font-size: 12px;
+            color: var(--ink-faint);
+            transition: color 0.25s ease;
+        }
+
+        .project-title {
+            flex: 1;
+        }
+
+        .project-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--ink-faint);
+            letter-spacing: 0.04em;
+            transition: color 0.25s ease;
+        }
+
+        .arrow {
+            font-size: 14px;
+            color: var(--ink-faint);
+            transition: transform 0.3s var(--ease-out-expo), color 0.25s ease;
+        }
+
+        .project-list a:hover {
+            background-color: rgba(255, 255, 255, 0.035);
+            color: var(--ink);
+        }
+
+        .project-list a:hover::before,
+        .project-list a:hover .arrow {
+            color: var(--accent);
+        }
+
+        .project-list a:hover .project-tag {
+            color: var(--ink-muted);
+        }
+
+        .project-list a:hover .arrow {
+            transform: translate(3px, -3px);
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 28px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--ink-faint);
+        }
+
+        @keyframes cardReveal {
+            from {
+                opacity: 0;
+                transform: translateY(14px) scale(0.99);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @media (max-width: 520px) {
+            .card {
+                padding: 28px 24px 24px;
+            }
+
+            .project-tag {
+                display: none;
+            }
+        }
+    </style>
+    <script>
+        const favicon = document.getElementById("favicon");
+
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden) {
+                // User switched to another tab
+                favicon.href = "/inactive.png";
+                document.title = "where'd you go?";
+            } else {
+                // User returned
+                favicon.href = "/active.png";
+                document.title = "finally, you found me!";
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <main class="card" id="card">
+        <div class="meta-bar">
+            <span>Web Dev Archive</span>
+            <span class="status"><span class="status-dot"></span>Active</span>
+        </div>
+
+        <h1>Projects built while <em>learning</em> web-dev</h1>
+
+        <ol class="project-list">
+            <li>
+                <a href="/web-archive/first-web-page.html">
+                    <span class="project-title">My first login page</span>
+                    <span class="project-tag">HTML · CSS</span>
+                    <span class="arrow">↗</span>
+                </a>
+            </li>
+        </ol>
+
+        <footer class="card-footer">
+            <span>01 Entry</span>
+            <span>2026</span>
+        </footer>
+    </main>
+
+    <script>
+        const card = document.getElementById('card');
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty('--x', `${e.clientX - rect.left}px`);
+            card.style.setProperty('--y', `${e.clientY - rect.top}px`);
+        });
+    </script>
+</body>
+
+</html>
