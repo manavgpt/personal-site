@@ -12,6 +12,7 @@
   <link id="favicon" rel="icon" type="image/png" sizes="192x192" href="./active.png?v=14">
   <link rel="apple-touch-icon" sizes="180x180" href="./active.png?v=14">
   <link rel="preload" as="image" href="./inactive.png?v=14">
+  <link rel="preload" as="image" href="./avatar-sheet.png">
 
   <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -83,29 +84,33 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       color: var(--fg);
       font-weight: 500;
       cursor: default;
     }
 
+    /* 8-Way Sprite Avatar */
     .brand-avatar {
-      width: 27px;
-      height: 27px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
-      border: 1px solid var(--border);
+      /* border: 1px solid var(--border); */
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       flex-shrink: 0;
+      background-color: var(--card-bg);
+      background-image: url("./idle.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
-    .brand-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .brand-avatar.sprite-ready {
+      background-image: url("avatar-sheet.png");
+      background-size: 300% 300%;
+      background-position: 50% 50%;
     }
+
 
     /* Spider-Verse Name Glitch Effect */
     .brand-name {
@@ -151,24 +156,82 @@
     }
 
     @keyframes g-slice-base {
-      0%, 45% { color: transparent; }
-      55% { color: var(--fg); text-shadow: -2.5px 1px 0 #00f0ff, 2.5px -1px 0 #ff0080, 0 2px 0 #ffe600; }
-      80% { color: var(--fg); text-shadow: 1.5px -1px 0 #00f0ff, -1.5px 1px 0 #ff0080; }
-      100% { color: var(--fg); text-shadow: none; }
+
+      0%,
+      45% {
+        color: transparent;
+      }
+
+      55% {
+        color: var(--fg);
+        text-shadow: -2.5px 1px 0 #00f0ff, 2.5px -1px 0 #ff0080, 0 2px 0 #ffe600;
+      }
+
+      80% {
+        color: var(--fg);
+        text-shadow: 1.5px -1px 0 #00f0ff, -1.5px 1px 0 #ff0080;
+      }
+
+      100% {
+        color: var(--fg);
+        text-shadow: none;
+      }
     }
 
     @keyframes g-slice-top {
-      0% { transform: translate(-3px, -1.5px); color: var(--fg); opacity: 1; }
-      30% { transform: translate(2.5px, -1px) skewX(-6deg); color: #00f0ff; opacity: 1; }
-      55% { transform: translate(-2px, 1px); color: #ff0080; opacity: 0.85; clip-path: inset(0 0 0 0); mix-blend-mode: screen; }
-      85%, 100% { opacity: 0; transform: none; }
+      0% {
+        transform: translate(-3px, -1.5px);
+        color: var(--fg);
+        opacity: 1;
+      }
+
+      30% {
+        transform: translate(2.5px, -1px) skewX(-6deg);
+        color: #00f0ff;
+        opacity: 1;
+      }
+
+      55% {
+        transform: translate(-2px, 1px);
+        color: #ff0080;
+        opacity: 0.85;
+        clip-path: inset(0 0 0 0);
+        mix-blend-mode: screen;
+      }
+
+      85%,
+      100% {
+        opacity: 0;
+        transform: none;
+      }
     }
 
     @keyframes g-slice-bot {
-      0% { transform: translate(3.5px, 1.5px); color: var(--fg); opacity: 1; }
-      30% { transform: translate(-2.5px, 1px) skewX(6deg); color: #ffe600; opacity: 1; }
-      55% { transform: translate(2px, -1px); color: #00f0ff; opacity: 0.85; clip-path: inset(0 0 0 0); mix-blend-mode: screen; }
-      85%, 100% { opacity: 0; transform: none; }
+      0% {
+        transform: translate(3.5px, 1.5px);
+        color: var(--fg);
+        opacity: 1;
+      }
+
+      30% {
+        transform: translate(-2.5px, 1px) skewX(6deg);
+        color: #ffe600;
+        opacity: 1;
+      }
+
+      55% {
+        transform: translate(2px, -1px);
+        color: #00f0ff;
+        opacity: 0.85;
+        clip-path: inset(0 0 0 0);
+        mix-blend-mode: screen;
+      }
+
+      85%,
+      100% {
+        opacity: 0;
+        transform: none;
+      }
     }
 
     /* Mode 2: CMY Chromatic Split */
@@ -189,27 +252,84 @@
     }
 
     @keyframes g-cmy-base {
-      0% { transform: translate(0, 0); text-shadow: 2px 2px 0 #ffe600; }
-      25% { transform: translate(-1.5px, 0.5px) skewX(-4deg); text-shadow: -2px 2px 0 #ffe600; }
-      50% { transform: translate(1.5px, -0.5px); text-shadow: 2px -1.5px 0 #ffe600; }
-      75% { transform: translate(-0.5px, 0); text-shadow: -1.5px 1px 0 #00f0ff, 1.5px -1px 0 #ff0080; }
-      100% { transform: none; text-shadow: none; }
+      0% {
+        transform: translate(0, 0);
+        text-shadow: 2px 2px 0 #ffe600;
+      }
+
+      25% {
+        transform: translate(-1.5px, 0.5px) skewX(-4deg);
+        text-shadow: -2px 2px 0 #ffe600;
+      }
+
+      50% {
+        transform: translate(1.5px, -0.5px);
+        text-shadow: 2px -1.5px 0 #ffe600;
+      }
+
+      75% {
+        transform: translate(-0.5px, 0);
+        text-shadow: -1.5px 1px 0 #00f0ff, 1.5px -1px 0 #ff0080;
+      }
+
+      100% {
+        transform: none;
+        text-shadow: none;
+      }
     }
 
     @keyframes g-cmy-cyan {
-      0% { opacity: 0.9; transform: translate(-3px, -1.5px); }
-      25% { opacity: 0.95; transform: translate(3px, 1px) clip-path(none); }
-      50% { opacity: 0.85; transform: translate(-2px, 1.5px); }
-      75% { opacity: 0.7; transform: translate(-1.5px, 0); }
-      100% { opacity: 0; transform: none; }
+      0% {
+        opacity: 0.9;
+        transform: translate(-3px, -1.5px);
+      }
+
+      25% {
+        opacity: 0.95;
+        transform: translate(3px, 1px);
+      }
+
+      50% {
+        opacity: 0.85;
+        transform: translate(-2px, 1.5px);
+      }
+
+      75% {
+        opacity: 0.7;
+        transform: translate(-1.5px, 0);
+      }
+
+      100% {
+        opacity: 0;
+        transform: none;
+      }
     }
 
     @keyframes g-cmy-mag {
-      0% { opacity: 0.9; transform: translate(3px, 1.5px); }
-      25% { opacity: 0.95; transform: translate(-3px, -1px); }
-      50% { opacity: 0.85; transform: translate(2.5px, -1.5px); }
-      75% { opacity: 0.7; transform: translate(1.5px, 0); }
-      100% { opacity: 0; transform: none; }
+      0% {
+        opacity: 0.9;
+        transform: translate(3px, 1.5px);
+      }
+
+      25% {
+        opacity: 0.95;
+        transform: translate(-3px, -1px);
+      }
+
+      50% {
+        opacity: 0.85;
+        transform: translate(2.5px, -1.5px);
+      }
+
+      75% {
+        opacity: 0.7;
+        transform: translate(1.5px, 0);
+      }
+
+      100% {
+        opacity: 0;
+        transform: none;
+      }
     }
 
     /* Mode 3: Comic Halftone + Color Block Burst */
@@ -237,8 +357,16 @@
     }
 
     @keyframes g-comic-base {
-      0% { transform: skewX(-8deg); text-shadow: -3px -2px 0 #ff0080, 3px 2px 0 #00f0ff; }
-      22% { transform: translate(2px, -1px) skewX(6deg); text-shadow: 2px 2px 0 #ffe600, -2px -1px 0 #00f0ff; }
+      0% {
+        transform: skewX(-8deg);
+        text-shadow: -3px -2px 0 #ff0080, 3px 2px 0 #00f0ff;
+      }
+
+      22% {
+        transform: translate(2px, -1px) skewX(6deg);
+        text-shadow: 2px 2px 0 #ffe600, -2px -1px 0 #00f0ff;
+      }
+
       48% {
         background: linear-gradient(115deg, #22c55e 0 36%, #3b82f6 36% 68%, #f97316 68% 100%);
         color: #000000;
@@ -247,6 +375,7 @@
         transform: skewX(-10deg) scale(1.03);
         text-shadow: none;
       }
+
       72% {
         background: transparent;
         color: var(--fg);
@@ -255,6 +384,7 @@
         transform: translate(-1px, 0);
         text-shadow: -2px 0 0 #00f0ff, 2px 0 0 #ff0080, 0 1.5px 0 #ffe600;
       }
+
       100% {
         background: transparent;
         color: var(--fg);
@@ -266,21 +396,65 @@
     }
 
     @keyframes g-comic-dots {
-      0% { opacity: 0.9; transform: translate(-2px, 1px); clip-path: inset(0 15% 20% 0); }
-      22% { opacity: 1; transform: translate(3px, -2px); clip-path: inset(10% 0 0 10%); }
-      48% { opacity: 0.45; transform: translate(-1px, 2px); clip-path: inset(0 0 0 0); }
-      72%, 100% { opacity: 0; transform: none; }
+      0% {
+        opacity: 0.9;
+        transform: translate(-2px, 1px);
+        clip-path: inset(0 15% 20% 0);
+      }
+
+      22% {
+        opacity: 1;
+        transform: translate(3px, -2px);
+        clip-path: inset(10% 0 0 10%);
+      }
+
+      48% {
+        opacity: 0.45;
+        transform: translate(-1px, 2px);
+        clip-path: inset(0 0 0 0);
+      }
+
+      72%,
+      100% {
+        opacity: 0;
+        transform: none;
+      }
     }
 
     @keyframes g-comic-block {
-      0% { opacity: 0.9; color: #00f0ff; transform: translate(2.5px, -2px); clip-path: inset(0 0 50% 0); }
-      22% { opacity: 0.9; color: #ff0080; transform: translate(-3px, 2px); clip-path: inset(45% 0 0 0); }
-      48% { opacity: 0; }
-      72% { opacity: 0.8; color: #ffe600; transform: translate(1.5px, 1px); clip-path: inset(0 0 0 0); }
-      100% { opacity: 0; transform: none; }
+      0% {
+        opacity: 0.9;
+        color: #00f0ff;
+        transform: translate(2.5px, -2px);
+        clip-path: inset(0 0 50% 0);
+      }
+
+      22% {
+        opacity: 0.9;
+        color: #ff0080;
+        transform: translate(-3px, 2px);
+        clip-path: inset(45% 0 0 0);
+      }
+
+      48% {
+        opacity: 0;
+      }
+
+      72% {
+        opacity: 0.8;
+        color: #ffe600;
+        transform: translate(1.5px, 1px);
+        clip-path: inset(0 0 0 0);
+      }
+
+      100% {
+        opacity: 0;
+        transform: none;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
+
       .glitch-word,
       .glitch-word::before,
       .glitch-word::after {
@@ -304,6 +478,7 @@
     }
 
     @keyframes pulse {
+
       0%,
       100% {
         opacity: 1;
@@ -438,9 +613,7 @@
     <!-- Meta -->
     <div class="meta-bar">
       <div class="brand" id="brandTrigger">
-        <div class="brand-avatar">
-          <img src="./idle.png" alt="Manav" onerror="this.style.display='none'">
-        </div>
+        <div class="brand-avatar" id="brandAvatar" role="img" aria-label="Manav"></div>
         <span class="brand-name" aria-label="Manav Chaudhari">
           <span class="glitch-word" data-text="Manav">Manav</span>
           <span class="glitch-word" data-text="Chaudhari">Chaudhari</span>
@@ -487,6 +660,76 @@
   </div>
 
   <script>
+    /* 8-Way Sprite Swap (Cursor Tracking) */
+    (function () {
+      const avatar = document.getElementById("brandAvatar");
+      if (!avatar) return;
+
+      // Only activate sprite mode if avatar-sheet.png exists & loads
+      const sheet = new Image();
+      sheet.onload = () => {
+        avatar.classList.add("sprite-ready");
+        initTracking();
+      };
+      sheet.src = "./avatar-sheet.png";
+
+      function initTracking() {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+        // 3x3 sprite grid positions keyed by 45° sector (-4 to 4)
+        const POSITIONS = {
+          "0": "100% 50%",   // Right
+          "1": "100% 100%",  // Bottom-Right
+          "2": "50% 100%",   // Bottom
+          "3": "0% 100%",    // Bottom-Left
+          "4": "0% 50%",     // Left
+          "-4": "0% 50%",     // Left
+          "-3": "0% 0%",      // Top-Left
+          "-2": "50% 0%",     // Top
+          "-1": "100% 0%",    // Top-Right
+        };
+
+        const DEADZONE = 28; // px radius around avatar center -> look straight
+        let lastPos = "50% 50%";
+        let rafId = null;
+        let mx = 0;
+        let my = 0;
+
+        function setPos(pos) {
+          if (pos === lastPos) return;
+          avatar.style.backgroundPosition = pos;
+          lastPos = pos;
+        }
+
+        function update() {
+          rafId = null;
+          const rect = avatar.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const dx = mx - cx;
+          const dy = my - cy;
+
+          if (Math.hypot(dx, dy) < DEADZONE) {
+            setPos("50% 50%");
+            return;
+          }
+
+          const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+          const sector = Math.round(angle / 45);
+          setPos(POSITIONS[String(sector)] || "50% 50%");
+        }
+
+        window.addEventListener("pointermove", (e) => {
+          if (e.pointerType !== "mouse") return;
+          mx = e.clientX;
+          my = e.clientY;
+          if (!rafId) rafId = requestAnimationFrame(update);
+        }, { passive: true });
+
+        document.addEventListener("pointerleave", () => setPos("50% 50%"));
+      }
+    })();
+
     /* Spider-Verse Intermittent Name Glitch */
     (function () {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -522,7 +765,7 @@
 
         targets.forEach((el) => {
           el.classList.remove("glitch-slice", "glitch-cmy", "glitch-comic");
-          void el.offsetWidth; // restart animation cleanly
+          void el.offsetWidth;
           el.classList.add(mode.cls);
         });
 
@@ -534,14 +777,13 @@
 
       function scheduleNext() {
         clearTimeout(timer);
-        const delay = 3000 + Math.random() * 3500; // every 3s – 6.5s
+        const delay = 3000 + Math.random() * 3500;
         timer = setTimeout(() => {
           fireGlitch(false);
           scheduleNext();
         }, delay);
       }
 
-      // First subtle glitch shortly after load, then random loop
       setTimeout(() => {
         fireGlitch(true);
         scheduleNext();
@@ -551,25 +793,6 @@
         trigger.addEventListener("mouseenter", () => fireGlitch(false));
       }
     })();
-
-    /* Live Clock (IST) */
-    /*
-    const clockEl = document.getElementById("live-clock");
-    const istFormatter = new Intl.DateTimeFormat("en-US", {
-      timeZone: "Asia/Kolkata",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
-
-    function updateClock() {
-      if (!clockEl) return;
-      clockEl.textContent = `${istFormatter.format(new Date())} IST`;
-    }
-
-    updateClock();
-    setInterval(updateClock, 1000);
-    */
 
     /* Inactivity Tab Flip */
     const favicon = document.getElementById("favicon");
