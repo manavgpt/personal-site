@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#000000">
 
   <!-- Favicons -->
-  <link id="favicon" rel="icon" type="image/png" sizes="192x192" href="images/active.png?v=14">
+  <link id="favicon" rel="icon" type="image/png" sizes="192x192" href="images/active.png">
   <link rel="apple-touch-icon" sizes="180x180" href="images/active.png?v=14">
   <link rel="preload" as="image" href="images/inactive.png?v=14">
   <link rel="preload" as="image" href="images/avatar-sheet.png">
@@ -991,7 +991,7 @@
 
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
-        if (favicon) favicon.href = "images/inactive.png?v=14";
+        if (favicon) favicon.href = "images/inactive.png";
         messageIndex = 0;
         document.title = inactiveMessages[messageIndex];
 
@@ -1001,7 +1001,7 @@
           document.title = inactiveMessages[messageIndex];
         }, 2700);
       } else {
-        if (favicon) favicon.href = "images/active.png?v=14";
+        if (favicon) favicon.href = "images/active.png";
         clearInterval(inactiveInterval);
         inactiveInterval = null;
         document.title = "finally, you found me!";
