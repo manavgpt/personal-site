@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>finally, you found me!</title>
+  <title>Manav Chaudhari</title>
   <meta name="description" content="Manav Chaudhari — Currently building my new portfolio.">
   <meta name="theme-color" content="#000000">
 
@@ -29,6 +29,8 @@
     :root {
       --bg: #000000;
       --card-bg: #0A0A0C;
+      --surface-elevated: #141417;
+      --hover-fill: rgba(255, 255, 255, 0.065);
       --border: rgba(255, 255, 255, 0.08);
       --border-hover: rgba(255, 255, 255, 0.16);
 
@@ -42,6 +44,19 @@
       --font-mono: "JetBrains Mono", monospace;
 
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    :root[data-theme="light"] {
+      --bg: #F8F7F4;
+      --card-bg: #FFFFFF;
+      --surface-elevated: #FFFFFF;
+      --hover-fill: rgba(17, 17, 20, 0.055);
+      --border: rgba(17, 17, 20, 0.09);
+      --border-hover: rgba(17, 17, 20, 0.18);
+
+      --fg: #141417;
+      --fg-muted: #5F5F68;
+      --fg-faint: #92929C;
     }
 
     * {
@@ -63,6 +78,48 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
+    }
+
+    /* Clean Blur-Fade Theme Transition */
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      mix-blend-mode: normal;
+    }
+
+    ::view-transition-old(root) {
+      animation: theme-blur-out 420ms ease-in-out both;
+    }
+
+    ::view-transition-new(root) {
+      animation: theme-blur-in 420ms ease-in-out both;
+    }
+
+    @keyframes theme-blur-out {
+      from {
+        opacity: 1;
+        filter: blur(0px);
+      }
+
+      to {
+        opacity: 0;
+        filter: blur(10px);
+      }
+    }
+
+    @keyframes theme-blur-in {
+      from {
+        opacity: 0;
+        filter: blur(10px);
+      }
+
+      to {
+        opacity: 1;
+        filter: blur(0px);
+      }
+    }
+
+    .view-hidden {
+      display: none !important;
     }
 
     /* Centered Minimalist Unit */
@@ -108,7 +165,7 @@
       height: 50px;
       border-radius: 50%;
       overflow: hidden;
-      background-color: var(--card-bg);
+      background-color: transparent;
       background-image: url("images/idle.png");
       background-size: cover;
       background-position: center;
@@ -116,7 +173,11 @@
       cursor: pointer;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
-      transition: border-color 0.2s var(--ease);
+      transition: border-color 0.2s var(--ease), filter 0.2s var(--ease);
+    }
+
+    :root[data-theme="light"] .brand-avatar {
+      filter: drop-shadow(0 3px 8px rgba(17, 17, 20, 0.14));
     }
 
     .brand-avatar.sprite-ready {
@@ -125,7 +186,6 @@
       background-position: 50% 50%;
     }
 
-    /* Reaction override: show annoyed/inactive.png cleanly */
     /* Reaction overrides */
     .brand-avatar.is-reacting {
       background-size: 88% !important;
@@ -142,7 +202,6 @@
       background-image: url("images/poked.png") !important;
       animation: avatar-shake 360ms ease-in-out;
     }
-
 
     @keyframes avatar-dizzy {
       0% {
@@ -202,7 +261,7 @@
       opacity: 0;
       pointer-events: none;
       white-space: nowrap;
-      background: #141417;
+      background: var(--surface-elevated);
       border: 1px solid var(--border-hover);
       color: var(--fg);
       font-family: var(--font-mono);
@@ -210,7 +269,7 @@
       letter-spacing: 0.02em;
       padding: 4px 10px;
       border-radius: 99px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.75);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
       transition: opacity 0.2s var(--ease), transform 0.22s var(--ease);
       z-index: 20;
     }
@@ -222,6 +281,8 @@
 
     /* Spider-Verse Name Glitch Effect */
     .brand-name {
+      font-family: Inter;
+      font-size: 13px;
       display: inline-flex;
       align-items: center;
       gap: 0.45em;
@@ -567,7 +628,9 @@
       .brand-avatar.is-annoyed,
       .glitch-word,
       .glitch-word::before,
-      .glitch-word::after {
+      .glitch-word::after,
+      ::view-transition-old(root),
+      ::view-transition-new(root) {
         animation: none !important;
       }
     }
@@ -601,6 +664,30 @@
       }
     }
 
+    .theme-toggle-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      color: var(--fg-muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: color 0.2s var(--ease), background 0.2s var(--ease), transform 0.2s var(--ease);
+    }
+
+    .theme-toggle-btn:hover {
+      color: var(--fg);
+      background: var(--hover-fill);
+    }
+
+    .theme-toggle-btn:active {
+      transform: scale(0.90);
+    }
+
     /* Core Content Block */
     .content-block {
       display: flex;
@@ -622,6 +709,13 @@
       padding-bottom: 2px;
     }
 
+    :root[data-theme="light"] h1 {
+      background: linear-gradient(180deg, #0B0B0D 0%, #5F5F68 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
     h1 em {
       font-style: italic;
     }
@@ -634,15 +728,33 @@
       text-align: justify;
     }
 
-    /* Clean Links */
+    /* Footer / Links Row */
     .links-row {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 16px;
       padding-top: 12px;
       border-top: 1px solid var(--border);
       font-size: 13.5px;
       flex-wrap: wrap;
+    }
+
+    .footer-location {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--fg-muted);
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      margin-left: auto;
+    }
+
+    .globe-3d {
+      display: block;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      flex-shrink: 0;
     }
 
     .link-item .arrow {
@@ -660,13 +772,23 @@
       transition: color 0.2s var(--ease);
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
       cursor: pointer;
       background: transparent;
       border: none;
       font-family: inherit;
       font-size: inherit;
       padding: 0;
+    }
+
+    .link-item svg {
+      color: var(--fg-muted);
+      flex-shrink: 0;
+      transition: color 0.2s var(--ease);
+    }
+
+    .link-item:hover svg {
+      color: var(--fg);
     }
 
     .link-item:hover {
@@ -686,14 +808,14 @@
       transform: translateX(-50%) translateY(16px);
       opacity: 0;
       pointer-events: none;
-      background: #141417;
+      background: var(--surface-elevated);
       border: 1px solid var(--border-hover);
       color: var(--fg);
       font-size: 12.5px;
       font-family: var(--font-mono);
       padding: 8px 16px;
       border-radius: 99px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
       transition: transform 0.25s var(--ease), opacity 0.25s;
       z-index: 100;
     }
@@ -721,8 +843,27 @@
       </div>
 
       <div class="status">
-        <span class="status-dot"></span>
-        <span>in progress</span>
+        <!-- <span class="status-dot"></span>
+        <span>in progress</span> -->
+        <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Toggle light or dark theme"
+          title="Toggle light/dark theme">
+          <svg id="iconSun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path>
+            <path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path>
+            <path d="m19.07 4.93-1.41 1.41"></path>
+          </svg>
+          <svg id="iconMoon" class="view-hidden" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+          </svg>
+        </button>
       </div>
     </div>
 
@@ -736,20 +877,40 @@
       </p>
     </div>
 
-    <!-- Links -->
-    <div class="links-row">
-      <button class="link-item copy-btn" id="copyBtn" type="button" title="Click to copy email">
-        <span>hello@manav.here</span>
-      </button>
+    <!-- Footer / Links -->
+    <footer class="links-row">
+      <a class="link-item" href="mailto:hello@manav.here">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+        </svg>
+        <span>mail</span><span class="arrow">↗</span>
+      </a>
+
+      <a class="link-item" href="https://github.com/manavgpt" target="_blank" rel="noopener">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path
+            d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+        </svg>
+        <span>github</span><span class="arrow">↗</span>
+      </a>
 
       <a class="link-item" href="https://x.com/manavgpt" target="_blank" rel="noopener">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path
+            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        </svg>
         <span>twitter</span><span class="arrow">↗</span>
       </a>
 
-      <a class="link-item" href="./web-archive/">
-        <span>archive</span><span class="arrow">↗</span>
-      </a>
-    </div>
+      <span class="footer-location">
+        <canvas class="globe-3d" id="globe3d" width="64" height="64" aria-hidden="true"></canvas>
+        <span>bengaluru, india</span>
+      </span>
+    </footer>
+
+
   </main>
 
   <!-- Toast -->
@@ -758,6 +919,373 @@
   </div>
 
   <script>
+    /* Clean Blur-Fade Theme Switcher */
+    (function () {
+      const btn = document.getElementById("themeToggleBtn");
+      const iconSun = document.getElementById("iconSun");
+      const iconMoon = document.getElementById("iconMoon");
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      const root = document.documentElement;
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      function syncThemeUI(theme) {
+        root.setAttribute("data-theme", theme);
+        if (iconSun) iconSun.classList.toggle("view-hidden", theme === "light");
+        if (iconMoon) iconMoon.classList.toggle("view-hidden", theme !== "light");
+        if (metaTheme) metaTheme.setAttribute("content", theme === "light" ? "#F8F7F4" : "#000000");
+      }
+
+      let initialTheme = "dark";
+      try {
+        const saved = localStorage.getItem("theme");
+        if (saved === "light" || saved === "dark") {
+          initialTheme = saved;
+        } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
+          initialTheme = "light";
+        }
+      } catch (_) { }
+      syncThemeUI(initialTheme);
+
+      if (btn) {
+        btn.addEventListener("click", () => {
+          const current = root.getAttribute("data-theme") === "light" ? "light" : "dark";
+          const next = current === "dark" ? "light" : "dark";
+
+          try {
+            localStorage.setItem("theme", next);
+          } catch (_) { }
+
+          if (reducedMotion || typeof document.startViewTransition !== "function") {
+            syncThemeUI(next);
+            return;
+          }
+
+          document.startViewTransition(() => {
+            syncThemeUI(next);
+          });
+        });
+      }
+    })();
+
+    /* Shared IST Clock for 3D Globe */
+    const skyClock = (function () {
+      function getISTDate() {
+        const now = new Date();
+        const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+        return new Date(utcMs + 5.5 * 3600000);
+      }
+
+      function getHour() {
+        const ist = getISTDate();
+        return ist.getHours() + ist.getMinutes() / 60 + ist.getSeconds() / 3600;
+      }
+
+      function getLightingState(h) {
+        let dayAmount = 0;
+        let goldenAmount = 0;
+
+        if (h >= 5 && h < 7.5) {
+          const t = (h - 5) / 2.5;
+          dayAmount = t;
+          goldenAmount = Math.sin(t * Math.PI);
+        } else if (h >= 7.5 && h < 16.5) {
+          dayAmount = 1;
+          goldenAmount = 0;
+        } else if (h >= 16.5 && h < 19.5) {
+          const t = (h - 16.5) / 3;
+          dayAmount = 1 - t;
+          goldenAmount = Math.sin(t * Math.PI);
+        }
+
+        const sunAngle = ((h - 6) / 12) * Math.PI;
+        return { dayAmount, goldenAmount, sunAngle };
+      }
+
+      return { getHour, getLightingState };
+    })();
+
+    /* WebGL 3D Earth Globe */
+    (function () {
+      const canvas = document.getElementById("globe3d");
+      if (!canvas) return;
+
+      const gl = canvas.getContext("webgl", { alpha: true, antialias: true });
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      function createEarthTexture() {
+        const texCanvas = document.createElement("canvas");
+        texCanvas.width = 256;
+        texCanvas.height = 128;
+        const tctx = texCanvas.getContext("2d");
+        const w = texCanvas.width;
+        const h = texCanvas.height;
+        const img = tctx.createImageData(w, h);
+        const d = img.data;
+
+        function hash(x, y) {
+          const n = Math.sin(x * 127.1 + y * 311.7) * 43758.5453123;
+          return n - Math.floor(n);
+        }
+
+        function smoothNoise(x, y) {
+          const ix = Math.floor(x);
+          const iy = Math.floor(y);
+          const fx = x - ix;
+          const fy = y - iy;
+          const ux = fx * fx * (3 - 2 * fx);
+          const uy = fy * fy * (3 - 2 * fy);
+          const a = hash(ix, iy);
+          const b = hash(ix + 1, iy);
+          const c = hash(ix, iy + 1);
+          const d1 = hash(ix + 1, iy + 1);
+          return a + (b - a) * ux + (c - a) * uy + (a - b - c + d1) * ux * uy;
+        }
+
+        function fbm(x, y) {
+          let val = 0;
+          let amp = 0.5;
+          let freq = 1;
+          for (let i = 0; i < 4; i++) {
+            val += amp * smoothNoise(x * freq, y * freq);
+            freq *= 2.02;
+            amp *= 0.5;
+          }
+          return val;
+        }
+
+        const blobs = [
+          { u: 0.22, v: 0.34, ru: 0.11, rv: 0.14 },
+          { u: 0.29, v: 0.62, ru: 0.065, rv: 0.18 },
+          { u: 0.50, v: 0.26, ru: 0.065, rv: 0.09 },
+          { u: 0.52, v: 0.54, ru: 0.08, rv: 0.18 },
+          { u: 0.66, v: 0.32, ru: 0.16, rv: 0.14 },
+          { u: 0.68, v: 0.45, ru: 0.045, rv: 0.08 },
+          { u: 0.79, v: 0.70, ru: 0.07, rv: 0.08 },
+        ];
+
+        for (let y = 0; y < h; y++) {
+          const v = y / (h - 1);
+          const latAbs = Math.abs(v - 0.5) * 2;
+          for (let x = 0; x < w; x++) {
+            const u = x / (w - 1);
+            const idx = (y * w + x) * 4;
+
+            let landMask = 0;
+            for (let b = 0; b < blobs.length; b++) {
+              const bl = blobs[b];
+              let du = Math.abs(u - bl.u);
+              if (du > 0.5) du = 1 - du;
+              const dv = (v - bl.v) / bl.rv;
+              const dist = Math.sqrt((du / bl.ru) ** 2 + dv * dv);
+              if (dist < 1.25) {
+                landMask = Math.max(landMask, 1 - dist / 1.25);
+              }
+            }
+
+            const n = fbm(u * 14, v * 7);
+            const elevation = landMask * 0.85 + (n - 0.42) * 0.65;
+
+            let rCol, gCol, bCol;
+            if (latAbs > 0.86 + (n - 0.5) * 0.08) {
+              rCol = 226;
+              gCol = 236;
+              bCol = 245;
+            } else if (elevation > 0.36) {
+              const t = Math.min(1, (elevation - 0.36) / 0.45);
+              const arid = Math.max(0, 1 - Math.abs(latAbs - 0.28) * 5);
+              rCol = Math.round(58 + t * 85 + arid * 55);
+              gCol = Math.round(126 + t * 35 - arid * 22);
+              bCol = Math.round(68 + t * 20 + arid * 12);
+            } else {
+              const depth = Math.max(0, Math.min(1, (0.36 - elevation) / 0.36));
+              rCol = Math.round(28 - depth * 16);
+              gCol = Math.round(118 - depth * 68);
+              bCol = Math.round(196 - depth * 92);
+            }
+
+            d[idx] = rCol;
+            d[idx + 1] = gCol;
+            d[idx + 2] = bCol;
+            d[idx + 3] = 255;
+          }
+        }
+
+        tctx.putImageData(img, 0, 0);
+        return texCanvas;
+      }
+
+      if (!gl) return;
+
+      const vsSource = `
+        attribute vec3 aPos;
+        attribute vec2 aTex;
+        uniform float uRot;
+        varying vec2 vTex;
+        varying vec3 vNormal;
+        void main() {
+          float c = cos(uRot);
+          float s = sin(uRot);
+          vec3 rotPos = vec3(
+            aPos.x * c + aPos.z * s,
+            aPos.y,
+            -aPos.x * s + aPos.z * c
+          );
+          vTex = aTex;
+          vNormal = normalize(rotPos);
+          gl_Position = vec4(rotPos.xy, -rotPos.z * 0.5, 1.0);
+        }
+      `;
+
+      const fsSource = `
+        precision mediump float;
+        uniform sampler2D uTex;
+        uniform vec3 uLightDir;
+        uniform float uAmbient;
+        uniform float uSpecStrength;
+        uniform vec3 uLightTint;
+        varying vec2 vTex;
+        varying vec3 vNormal;
+        void main() {
+          vec3 texCol = texture2D(uTex, vTex).rgb;
+          vec3 n = normalize(vNormal);
+          float diff = max(0.0, dot(n, normalize(uLightDir)));
+          vec3 viewDir = vec3(0.0, 0.0, 1.0);
+          vec3 halfVec = normalize(normalize(uLightDir) + viewDir);
+          float spec = pow(max(0.0, dot(n, halfVec)), 22.0) * uSpecStrength;
+          vec3 lit = texCol * (uAmbient + diff * 0.85) * uLightTint + vec3(spec) * uLightTint;
+          gl_FragColor = vec4(lit, 1.0);
+        }
+      `;
+
+      function compileShader(type, src) {
+        const sh = gl.createShader(type);
+        gl.shaderSource(sh, src);
+        gl.compileShader(sh);
+        return sh;
+      }
+
+      const prog = gl.createProgram();
+      gl.attachShader(prog, compileShader(gl.VERTEX_SHADER, vsSource));
+      gl.attachShader(prog, compileShader(gl.FRAGMENT_SHADER, fsSource));
+      gl.linkProgram(prog);
+      gl.useProgram(prog);
+
+      const latSegs = 24;
+      const lonSegs = 36;
+      const positions = [];
+      const texCoords = [];
+      const indices = [];
+
+      for (let y = 0; y <= latSegs; y++) {
+        const v = y / latSegs;
+        const phi = v * Math.PI;
+        const sinPhi = Math.sin(phi);
+        const cosPhi = Math.cos(phi);
+
+        for (let x = 0; x <= lonSegs; x++) {
+          const u = x / lonSegs;
+          const theta = u * Math.PI * 2;
+          const px = sinPhi * Math.cos(theta);
+          const py = cosPhi;
+          const pz = sinPhi * Math.sin(theta);
+
+          positions.push(px * 0.96, py * 0.96, pz * 0.96);
+          texCoords.push(1.0 - u, 1.0 - v);
+        }
+      }
+
+      for (let y = 0; y < latSegs; y++) {
+        for (let x = 0; x < lonSegs; x++) {
+          const a = y * (lonSegs + 1) + x;
+          const b = a + lonSegs + 1;
+          indices.push(a, b, a + 1, b, b + 1, a + 1);
+        }
+      }
+
+      const posBuf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+      const aPos = gl.getAttribLocation(prog, "aPos");
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);
+
+      const texBuf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, texBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoords), gl.STATIC_DRAW);
+      const aTex = gl.getAttribLocation(prog, "aTex");
+      gl.enableVertexAttribArray(aTex);
+      gl.vertexAttribPointer(aTex, 2, gl.FLOAT, false, 0, 0);
+
+      const idxBuf = gl.createBuffer();
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, idxBuf);
+      gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+
+      const texture = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, createEarthTexture());
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+      const uRot = gl.getUniformLocation(prog, "uRot");
+      const uLightDir = gl.getUniformLocation(prog, "uLightDir");
+      const uAmbient = gl.getUniformLocation(prog, "uAmbient");
+      const uSpecStrength = gl.getUniformLocation(prog, "uSpecStrength");
+      const uLightTint = gl.getUniformLocation(prog, "uLightTint");
+
+      gl.enable(gl.DEPTH_TEST);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+
+      let rot = 0.6;
+
+      function draw() {
+        const h = skyClock.getHour();
+        const { dayAmount, goldenAmount, sunAngle } = skyClock.getLightingState(h);
+
+        const lx = -Math.cos(sunAngle) * 0.72;
+        const ly = 0.25 + Math.max(0, Math.sin(sunAngle)) * 0.45;
+        const lz = 0.55 + dayAmount * 0.25;
+
+        const ambient = 0.14 + dayAmount * 0.22;
+        const spec = 0.12 + dayAmount * 0.28;
+
+        const nightTint = [0.68, 0.78, 1.05];
+        const dayTint = [1.05, 1.04, 1.0];
+        const goldenTint = [1.22, 0.92, 0.74];
+
+        const baseR = nightTint[0] + (dayTint[0] - nightTint[0]) * dayAmount;
+        const baseG = nightTint[1] + (dayTint[1] - nightTint[1]) * dayAmount;
+        const baseB = nightTint[2] + (dayTint[2] - nightTint[2]) * dayAmount;
+
+        const tintR = baseR + (goldenTint[0] - baseR) * goldenAmount * 0.75;
+        const tintG = baseG + (goldenTint[1] - baseG) * goldenAmount * 0.75;
+        const tintB = baseB + (goldenTint[2] - baseB) * goldenAmount * 0.75;
+
+        gl.clearColor(0, 0, 0, 0);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.uniform1f(uRot, rot);
+        gl.uniform3f(uLightDir, lx, ly, lz);
+        gl.uniform1f(uAmbient, ambient);
+        gl.uniform1f(uSpecStrength, spec);
+        gl.uniform3f(uLightTint, tintR, tintG, tintB);
+        gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+      }
+
+      function loop() {
+        if (!document.hidden) {
+          if (!reducedMotion) {
+            rot = (rot + 0.025) % (Math.PI * 2);
+          }
+          draw();
+        }
+        requestAnimationFrame(loop);
+      }
+
+      draw();
+      requestAnimationFrame(loop);
+    })();
+
     /* 8-Way Sprite Swap + Dizzy / Annoyed Easter Egg */
     (function () {
       const avatar = document.getElementById("brandAvatar");
@@ -802,7 +1330,6 @@
         }, 2200);
       }
 
-      // Click / tap 3 times quickly -> Annoyed
       avatar.addEventListener("click", (e) => {
         e.stopPropagation();
         if (isReacting) return;
@@ -819,7 +1346,6 @@
         }
       });
 
-      // Only activate 8-way sprite mode if avatar-sheet.png exists & loads
       const sheet = new Image();
       sheet.onload = () => {
         avatar.classList.add("sprite-ready");
@@ -831,15 +1357,15 @@
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
         const POSITIONS = {
-          "0": "100% 50%",   // Right
-          "1": "100% 100%",  // Bottom-Right
-          "2": "50% 100%",   // Bottom
-          "3": "0% 100%",    // Bottom-Left
-          "4": "0% 50%",     // Left
-          "-4": "0% 50%",     // Left
-          "-3": "0% 0%",      // Top-Left
-          "-2": "50% 0%",     // Top
-          "-1": "100% 0%",    // Top-Right
+          "0": "100% 50%",
+          "1": "100% 100%",
+          "2": "50% 100%",
+          "3": "0% 100%",
+          "4": "0% 50%",
+          "-4": "0% 50%",
+          "-3": "0% 0%",
+          "-2": "50% 0%",
+          "-1": "100% 0%",
         };
 
         const DEADZONE = 28;
@@ -874,7 +1400,6 @@
           const sector = Math.round(angle / 45);
           setPos(POSITIONS[String(sector)] || "50% 50%");
 
-          // Measure continuous angular spin around the avatar
           if (lastAngle !== null) {
             let delta = angle - lastAngle;
             if (delta > 180) delta -= 360;
@@ -887,7 +1412,6 @@
               lastAngle = null;
             }, 650);
 
-            // ~2.5 full rotations (900°) -> Dizzy
             if (spinAccum >= 900) {
               triggerReaction("dizzy");
               return;
@@ -939,9 +1463,9 @@
           targets = words;
         } else {
           const roll = Math.random();
-          if (roll < 0.38) targets = [words[0]];       // Manav only
-          else if (roll < 0.76) targets = [words[1]];  // Chaudhari only
-          else targets = words;                        // Full name
+          if (roll < 0.38) targets = [words[0]];
+          else if (roll < 0.76) targets = [words[1]];
+          else targets = words;
         }
 
         targets.forEach((el) => {
