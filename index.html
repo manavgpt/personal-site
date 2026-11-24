@@ -17,20 +17,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
-  <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap"
     rel="stylesheet">
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
-
 
   <style>
     :root {
@@ -81,15 +69,6 @@
       gap: 36px;
     }
 
-    p {
-      font-size: 15px;
-      line-height: 1.6;
-      color: var(--fg-muted);
-      letter-spacing: -0.01em;
-      text-align: justify;
-    }
-
-
     /* Meta Bar */
     .meta-bar {
       display: flex;
@@ -107,6 +86,7 @@
       gap: 10px;
       color: var(--fg);
       font-weight: 500;
+      cursor: default;
     }
 
     .brand-avatar {
@@ -118,12 +98,194 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
 
     .brand-avatar img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+
+    /* Spider-Verse Name Glitch Effect */
+    .brand-name {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45em;
+      position: relative;
+    }
+
+    .glitch-word {
+      position: relative;
+      display: inline-block;
+      will-change: transform, filter;
+    }
+
+    .glitch-word::before,
+    .glitch-word::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    /* Mode 1: Horizontal Slice Shear + CMY Ghost */
+    .glitch-word.glitch-slice {
+      color: transparent;
+      animation: g-slice-base 360ms steps(1, end) forwards;
+    }
+
+    .glitch-word.glitch-slice::before {
+      color: var(--fg);
+      opacity: 1;
+      clip-path: inset(0 0 48% 0);
+      animation: g-slice-top 360ms steps(1, end) forwards;
+    }
+
+    .glitch-word.glitch-slice::after {
+      color: var(--fg);
+      opacity: 1;
+      clip-path: inset(52% 0 0 0);
+      animation: g-slice-bot 360ms steps(1, end) forwards;
+    }
+
+    @keyframes g-slice-base {
+      0%, 45% { color: transparent; }
+      55% { color: var(--fg); text-shadow: -2.5px 1px 0 #00f0ff, 2.5px -1px 0 #ff0080, 0 2px 0 #ffe600; }
+      80% { color: var(--fg); text-shadow: 1.5px -1px 0 #00f0ff, -1.5px 1px 0 #ff0080; }
+      100% { color: var(--fg); text-shadow: none; }
+    }
+
+    @keyframes g-slice-top {
+      0% { transform: translate(-3px, -1.5px); color: var(--fg); opacity: 1; }
+      30% { transform: translate(2.5px, -1px) skewX(-6deg); color: #00f0ff; opacity: 1; }
+      55% { transform: translate(-2px, 1px); color: #ff0080; opacity: 0.85; clip-path: inset(0 0 0 0); mix-blend-mode: screen; }
+      85%, 100% { opacity: 0; transform: none; }
+    }
+
+    @keyframes g-slice-bot {
+      0% { transform: translate(3.5px, 1.5px); color: var(--fg); opacity: 1; }
+      30% { transform: translate(-2.5px, 1px) skewX(6deg); color: #ffe600; opacity: 1; }
+      55% { transform: translate(2px, -1px); color: #00f0ff; opacity: 0.85; clip-path: inset(0 0 0 0); mix-blend-mode: screen; }
+      85%, 100% { opacity: 0; transform: none; }
+    }
+
+    /* Mode 2: CMY Chromatic Split */
+    .glitch-word.glitch-cmy {
+      animation: g-cmy-base 420ms steps(1, end) forwards;
+    }
+
+    .glitch-word.glitch-cmy::before {
+      color: #00f0ff;
+      mix-blend-mode: screen;
+      animation: g-cmy-cyan 420ms steps(1, end) forwards;
+    }
+
+    .glitch-word.glitch-cmy::after {
+      color: #ff0080;
+      mix-blend-mode: screen;
+      animation: g-cmy-mag 420ms steps(1, end) forwards;
+    }
+
+    @keyframes g-cmy-base {
+      0% { transform: translate(0, 0); text-shadow: 2px 2px 0 #ffe600; }
+      25% { transform: translate(-1.5px, 0.5px) skewX(-4deg); text-shadow: -2px 2px 0 #ffe600; }
+      50% { transform: translate(1.5px, -0.5px); text-shadow: 2px -1.5px 0 #ffe600; }
+      75% { transform: translate(-0.5px, 0); text-shadow: -1.5px 1px 0 #00f0ff, 1.5px -1px 0 #ff0080; }
+      100% { transform: none; text-shadow: none; }
+    }
+
+    @keyframes g-cmy-cyan {
+      0% { opacity: 0.9; transform: translate(-3px, -1.5px); }
+      25% { opacity: 0.95; transform: translate(3px, 1px) clip-path(none); }
+      50% { opacity: 0.85; transform: translate(-2px, 1.5px); }
+      75% { opacity: 0.7; transform: translate(-1.5px, 0); }
+      100% { opacity: 0; transform: none; }
+    }
+
+    @keyframes g-cmy-mag {
+      0% { opacity: 0.9; transform: translate(3px, 1.5px); }
+      25% { opacity: 0.95; transform: translate(-3px, -1px); }
+      50% { opacity: 0.85; transform: translate(2.5px, -1.5px); }
+      75% { opacity: 0.7; transform: translate(1.5px, 0); }
+      100% { opacity: 0; transform: none; }
+    }
+
+    /* Mode 3: Comic Halftone + Color Block Burst */
+    .glitch-word.glitch-comic {
+      animation: g-comic-base 480ms steps(1, end) forwards;
+    }
+
+    .glitch-word.glitch-comic::before {
+      content: "";
+      inset: -4px -6px;
+      background-image:
+        radial-gradient(#ff0080 1.2px, transparent 1.2px),
+        radial-gradient(#00f0ff 1.2px, transparent 1.2px),
+        radial-gradient(#ffe600 1px, transparent 1px);
+      background-size: 6px 6px, 7px 7px, 5px 5px;
+      background-position: 0 0, 3px 2px, 1px 4px;
+      mix-blend-mode: screen;
+      animation: g-comic-dots 480ms steps(1, end) forwards;
+    }
+
+    .glitch-word.glitch-comic::after {
+      content: attr(data-text);
+      mix-blend-mode: screen;
+      animation: g-comic-block 480ms steps(1, end) forwards;
+    }
+
+    @keyframes g-comic-base {
+      0% { transform: skewX(-8deg); text-shadow: -3px -2px 0 #ff0080, 3px 2px 0 #00f0ff; }
+      22% { transform: translate(2px, -1px) skewX(6deg); text-shadow: 2px 2px 0 #ffe600, -2px -1px 0 #00f0ff; }
+      48% {
+        background: linear-gradient(115deg, #22c55e 0 36%, #3b82f6 36% 68%, #f97316 68% 100%);
+        color: #000000;
+        padding: 0 3px;
+        margin: 0 -3px;
+        transform: skewX(-10deg) scale(1.03);
+        text-shadow: none;
+      }
+      72% {
+        background: transparent;
+        color: var(--fg);
+        padding: 0;
+        margin: 0;
+        transform: translate(-1px, 0);
+        text-shadow: -2px 0 0 #00f0ff, 2px 0 0 #ff0080, 0 1.5px 0 #ffe600;
+      }
+      100% {
+        background: transparent;
+        color: var(--fg);
+        padding: 0;
+        margin: 0;
+        transform: none;
+        text-shadow: none;
+      }
+    }
+
+    @keyframes g-comic-dots {
+      0% { opacity: 0.9; transform: translate(-2px, 1px); clip-path: inset(0 15% 20% 0); }
+      22% { opacity: 1; transform: translate(3px, -2px); clip-path: inset(10% 0 0 10%); }
+      48% { opacity: 0.45; transform: translate(-1px, 2px); clip-path: inset(0 0 0 0); }
+      72%, 100% { opacity: 0; transform: none; }
+    }
+
+    @keyframes g-comic-block {
+      0% { opacity: 0.9; color: #00f0ff; transform: translate(2.5px, -2px); clip-path: inset(0 0 50% 0); }
+      22% { opacity: 0.9; color: #ff0080; transform: translate(-3px, 2px); clip-path: inset(45% 0 0 0); }
+      48% { opacity: 0; }
+      72% { opacity: 0.8; color: #ffe600; transform: translate(1.5px, 1px); clip-path: inset(0 0 0 0); }
+      100% { opacity: 0; transform: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .glitch-word,
+      .glitch-word::before,
+      .glitch-word::after {
+        animation: none !important;
+      }
     }
 
     .status {
@@ -142,7 +304,6 @@
     }
 
     @keyframes pulse {
-
       0%,
       100% {
         opacity: 1;
@@ -168,20 +329,12 @@
       font-weight: 500;
       line-height: 1.08;
       letter-spacing: -0.04em;
+      font-optical-sizing: auto;
       background: linear-gradient(180deg, #FFFFFF 0%, #A1A1AA 100%);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
       padding-bottom: 2px;
-      /* prevents descenders like 'g' from clipping */
-    }
-
-    font-size: clamp(36px, 5.8vw, 48px);
-    font-weight: 400;
-    line-height: 1.08;
-    letter-spacing: -0.025em;
-    font-optical-sizing: auto;
-    color: var(--fg);
     }
 
     h1 em {
@@ -193,6 +346,7 @@
       line-height: 1.6;
       color: var(--fg-muted);
       letter-spacing: -0.01em;
+      text-align: justify;
     }
 
     /* Clean Links */
@@ -283,11 +437,14 @@
   <main class="container">
     <!-- Meta -->
     <div class="meta-bar">
-      <div class="brand">
+      <div class="brand" id="brandTrigger">
         <div class="brand-avatar">
           <img src="./idle.png" alt="Manav" onerror="this.style.display='none'">
         </div>
-        <span>Manav Chaudhari</span>
+        <span class="brand-name" aria-label="Manav Chaudhari">
+          <span class="glitch-word" data-text="Manav">Manav</span>
+          <span class="glitch-word" data-text="Chaudhari">Chaudhari</span>
+        </span>
       </div>
 
       <div class="status">
@@ -320,7 +477,6 @@
         <span>archive</span><span class="arrow">↗</span>
       </a>
 
-
       <!-- <span class="live-clock" id="live-clock" title="Local time (IST)"></span> -->
     </div>
   </main>
@@ -331,6 +487,71 @@
   </div>
 
   <script>
+    /* Spider-Verse Intermittent Name Glitch */
+    (function () {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      const words = Array.from(document.querySelectorAll(".glitch-word"));
+      const trigger = document.getElementById("brandTrigger");
+      if (!words.length) return;
+
+      const modes = [
+        { cls: "glitch-slice", dur: 380 },
+        { cls: "glitch-cmy", dur: 440 },
+        { cls: "glitch-comic", dur: 500 },
+      ];
+
+      let busy = false;
+      let timer = null;
+
+      function fireGlitch(forceBoth) {
+        if (busy || document.hidden) return;
+        busy = true;
+
+        const mode = modes[Math.floor(Math.random() * modes.length)];
+        let targets;
+
+        if (forceBoth) {
+          targets = words;
+        } else {
+          const roll = Math.random();
+          if (roll < 0.38) targets = [words[0]];       // Manav only
+          else if (roll < 0.76) targets = [words[1]];  // Chaudhari only
+          else targets = words;                        // Full name
+        }
+
+        targets.forEach((el) => {
+          el.classList.remove("glitch-slice", "glitch-cmy", "glitch-comic");
+          void el.offsetWidth; // restart animation cleanly
+          el.classList.add(mode.cls);
+        });
+
+        setTimeout(() => {
+          targets.forEach((el) => el.classList.remove(mode.cls));
+          busy = false;
+        }, mode.dur);
+      }
+
+      function scheduleNext() {
+        clearTimeout(timer);
+        const delay = 3000 + Math.random() * 3500; // every 3s – 6.5s
+        timer = setTimeout(() => {
+          fireGlitch(false);
+          scheduleNext();
+        }, delay);
+      }
+
+      // First subtle glitch shortly after load, then random loop
+      setTimeout(() => {
+        fireGlitch(true);
+        scheduleNext();
+      }, 1400);
+
+      if (trigger) {
+        trigger.addEventListener("mouseenter", () => fireGlitch(false));
+      }
+    })();
+
     /* Live Clock (IST) */
     /*
     const clockEl = document.getElementById("live-clock");
