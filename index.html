@@ -13,33 +13,52 @@
   <link rel="apple-touch-icon" sizes="180x180" href="images/active.png?v=14">
   <link rel="preload" as="image" href="images/inactive.png?v=14">
   <link rel="preload" as="image" href="images/avatar-sheet.png">
-
   <link rel="preload" as="image" href="images/dizzy.png">
   <link rel="preload" as="image" href="images/poked.png">
-
 
   <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap"
     rel="stylesheet">
 
   <style>
+    /* Self-hosted Amiamie (download from velvetyne.fr and place in ./fonts/) */
+    @font-face {
+      font-family: "Amiamie";
+      src: url("fonts/Amiamie-Regular.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Amiamie";
+      src: url("fonts/Amiamie-Medium.woff2") format("woff2");
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
     :root {
       --bg: #000000;
       --card-bg: #0A0A0C;
       --border: rgba(255, 255, 255, 0.08);
       --border-hover: rgba(255, 255, 255, 0.16);
+      --grid-line: rgba(255, 255, 255, 0.14);
 
       --fg: #EDEDED;
       --fg-muted: #888888;
       --fg-faint: #444444;
 
       --accent: #E5A93C;
+      --col-width: 740px;
 
       --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-nav: "Amiamie", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: "JetBrains Mono", monospace;
+      --font-serif: "Newsreader", Georgia, serif;
 
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -50,48 +69,452 @@
       padding: 0;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     html,
     body {
       width: 100%;
-      height: 100%;
+      min-height: 100%;
       background-color: var(--bg);
       color: var(--fg);
       font-family: var(--font-sans);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+      overflow-x: clip;
     }
 
-    /* Centered Minimalist Unit */
+    /* Full-Width Bar -> Column-Locked Floating Rectangle on Scroll */
+    .glass-nav-wrap {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 40;
+      display: flex;
+      justify-content: center;
+      padding: 0;
+      pointer-events: none;
+      transition: padding 0.42s var(--ease);
+    }
+
+    .glass-nav-wrap.is-scrolled {
+      padding: 14px 24px 0;
+    }
+
+    .glass-nav {
+      --gx: 50%;
+      --gy: 0%;
+      pointer-events: auto;
+      width: 100%;
+      max-width: 100%;
+      padding: 18px 0;
+      border-radius: 0px;
+      background:
+        radial-gradient(280px circle at var(--gx) var(--gy), rgba(255, 255, 255, 0.07), transparent 70%),
+        rgba(8, 8, 10, 0.82);
+      backdrop-filter: blur(18px) saturate(145%);
+      -webkit-backdrop-filter: blur(18px) saturate(145%);
+      border: 1px solid transparent;
+      border-bottom: 1px dashed var(--grid-line);
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+      font-family: var(--font-nav);
+      font-size: 15px;
+      transition:
+        max-width 0.42s var(--ease),
+        padding 0.42s var(--ease),
+        border-radius 0.42s var(--ease),
+        border-color 0.32s var(--ease),
+        background-color 0.32s var(--ease),
+        box-shadow 0.42s var(--ease);
+    }
+
+    .glass-nav-wrap.is-scrolled .glass-nav {
+      max-width: var(--col-width);
+      padding: 14px 0;
+      border-radius: 2px;
+      background:
+        radial-gradient(280px circle at var(--gx) var(--gy), rgba(255, 255, 255, 0.09), transparent 70%),
+        rgba(12, 12, 15, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.72);
+    }
+
+    /* Keeps navbar links locked to the exact page column width & original height */
+    .glass-nav-inner {
+      width: 100%;
+      max-width: var(--col-width);
+      min-height: 34px;
+      margin: 0 auto;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .glass-brand {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 400;
+      font-optical-sizing: auto;
+      letter-spacing: -0.025em;
+      line-height: 1;
+      color: #ffffff;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .glass-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .glass-links a {
+      font-family: var(--font-nav);
+      color: #A1A1AA;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      padding-bottom: 2px;
+      border-bottom: 1.5px solid transparent;
+      transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+      white-space: nowrap;
+    }
+
+    .glass-links a:hover {
+      color: #ffffff;
+    }
+
+    .glass-links a.is-active {
+      color: #ffffff;
+      border-bottom-color: #ffffff;
+    }
+
+    /* Main Architectural Column with Vertical Dotted Rails */
     .container {
       width: 100%;
-      max-width: 520px;
+      max-width: var(--col-width);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding-top: 72px;
+      padding-bottom: 96px;
+      border-left: 1px dashed var(--grid-line);
+      border-right: 1px dashed var(--grid-line);
       display: flex;
       flex-direction: column;
-      gap: 36px;
     }
 
-    /* Meta Bar */
-    .meta-bar {
+    .view-hidden {
+      display: none !important;
+    }
+
+    /* Individual Section Bands with Full-Width Horizontal Dotted Dividers */
+    .band {
+      position: relative;
+      padding: 40px 28px;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 20px;
+      scroll-margin-top: 90px;
+    }
+
+    .band::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      border-bottom: 1px dashed var(--grid-line);
+      pointer-events: none;
+    }
+
+    /* Live IST Pixel Sky Banner */
+    .band-banner {
+      padding: 0;
+      height: 220px;
+      background: #060912;
+      overflow: hidden;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Subtle inner vignette so banner sits naturally inside the dark grid */
+    .band-banner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      box-shadow: inset 0 0 28px rgba(0, 0, 0, 0.35);
+    }
+
+    .pixel-sky-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      cursor: pointer;
+    }
+
+    .sky-pill {
+      position: absolute;
+      right: 12px;
+      bottom: 10px;
+      z-index: 5;
+      display: inline-flex;
       align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(6, 8, 14, 0.62);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: rgba(237, 237, 237, 0.85);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: background 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
+    }
+
+    .sky-pill:hover {
+      background: rgba(12, 16, 26, 0.82);
+      border-color: rgba(255, 255, 255, 0.28);
+      color: #ffffff;
+    }
+
+    .sky-pill-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #93c5fd;
+    }
+
+    .sky-pill.is-day .sky-pill-dot {
+      background: #fcd34d;
+    }
+
+    .sky-pill.is-dawn .sky-pill-dot,
+    .sky-pill.is-dusk .sky-pill-dot {
+      background: #fb923c;
+    }
+
+    /* Profile Header Band */
+    .band-profile {
+      padding-top: 36px;
+      padding-bottom: 36px;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .profile-left {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      cursor: default;
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .profile-name {
+      font-family: var(--font-serif);
+      font-size: clamp(32px, 5vw, 42px);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      font-optical-sizing: auto;
+      color: #ffffff;
+    }
+
+    .profile-role {
       font-family: var(--font-mono);
       font-size: 13.5px;
-      letter-spacing: 0.04em;
       color: var(--fg-muted);
+      letter-spacing: 0.01em;
     }
 
-    .brand {
+    .profile-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #66666E;
+      letter-spacing: 0.02em;
+    }
+
+    .band-footer {
+      padding-top: 28px;
+      padding-bottom: 28px;
+    }
+
+    /* Contact View */
+    .contact-header-band {
+      padding: 26px 28px;
+    }
+
+    .contact-header-band::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      background: repeating-linear-gradient(-45deg,
+          rgba(255, 255, 255, 0.03) 0px,
+          rgba(255, 255, 255, 0.03) 1px,
+          transparent 1px,
+          transparent 8px);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .contact-header-band .contact-title-bg {
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .contact-page-title {
+      font-family: var(--font-serif);
+      font-size: 34px;
+      font-weight: 400;
+      line-height: 1;
+      color: #ffffff;
+      letter-spacing: -0.025em;
+    }
+
+    .contact-subhead {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--fg);
+      letter-spacing: -0.02em;
+    }
+
+    .inbox-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      width: fit-content;
+      max-width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #08080A;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .inbox-icon-box {
+      width: 34px;
+      height: 34px;
+      border-radius: 7px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--fg-muted);
+      flex-shrink: 0;
+    }
+
+    .inbox-address {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--fg);
+      letter-spacing: 0.01em;
+      padding: 0 4px;
+      user-select: all;
+    }
+
+    .inbox-copy-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 7px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--fg-muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease);
+    }
+
+    .inbox-copy-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .social-pills {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 12px;
+      margin-top: 6px;
+    }
+
+    .social-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: #08080A;
+      border: 1px solid rgba(255, 255, 255, 0.12);
       color: var(--fg);
-      font-weight: 500;
-      cursor: default;
+      text-decoration: none;
+      font-family: var(--font-sans);
+      font-size: 13.5px;
+      transition: border-color 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease);
+    }
+
+    .social-pill svg {
+      color: var(--fg-muted);
+      transition: color 0.2s var(--ease);
+    }
+
+    .social-pill .arrow {
+      font-size: 12px;
+      color: var(--fg-muted);
+      transition: transform 0.2s var(--ease), color 0.2s var(--ease);
+    }
+
+    .social-pill:hover {
+      border-color: rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+    }
+
+    .social-pill:hover svg,
+    .social-pill:hover .arrow {
+      color: #ffffff;
+    }
+
+    .social-pill:hover .arrow {
+      transform: translate(2px, -2px);
     }
 
     /* 8-Way Sprite Avatar + Easter Egg Pill */
@@ -104,9 +527,10 @@
     }
 
     .brand-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
+      width: 84px;
+      height: 84px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
       overflow: hidden;
       background-color: var(--card-bg);
       background-image: url("images/idle.png");
@@ -125,7 +549,6 @@
       background-position: 50% 50%;
     }
 
-    /* Reaction override: show annoyed/inactive.png cleanly */
     /* Reaction overrides */
     .brand-avatar.is-reacting {
       background-size: 88% !important;
@@ -142,7 +565,6 @@
       background-image: url("images/poked.png") !important;
       animation: avatar-shake 360ms ease-in-out;
     }
-
 
     @keyframes avatar-dizzy {
       0% {
@@ -224,8 +646,9 @@
     .brand-name {
       display: inline-flex;
       align-items: center;
-      gap: 0.45em;
+      gap: 0.26em;
       position: relative;
+      flex-wrap: wrap;
     }
 
     .glitch-word {
@@ -563,19 +986,25 @@
 
     @media (prefers-reduced-motion: reduce) {
 
+      .glass-nav-wrap,
+      .glass-nav,
       .brand-avatar.is-dizzy,
       .brand-avatar.is-annoyed,
       .glitch-word,
       .glitch-word::before,
       .glitch-word::after {
         animation: none !important;
+        transition: none !important;
       }
     }
 
     .status {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--fg-muted);
     }
 
     .status-dot {
@@ -605,25 +1034,21 @@
     .content-block {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
-    h1 {
-      font-family: "Newsreader", Georgia, serif;
-      font-size: clamp(34px, 5.5vw, 46px);
-      font-weight: 500;
-      line-height: 1.08;
-      letter-spacing: -0.04em;
+    .hero-heading {
+      font-family: var(--font-serif);
+      font-size: clamp(26px, 4vw, 32px);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
       font-optical-sizing: auto;
       background: linear-gradient(180deg, #FFFFFF 0%, #A1A1AA 100%);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
       padding-bottom: 2px;
-    }
-
-    h1 em {
-      font-style: italic;
     }
 
     p {
@@ -634,13 +1059,92 @@
       text-align: justify;
     }
 
+    /* Portfolio Sections */
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--fg-faint);
+      font-weight: 500;
+    }
+
+    .work-list {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px dashed var(--border);
+    }
+
+    .work-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px dashed var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s var(--ease);
+    }
+
+    .work-row:last-child {
+      border-bottom: none;
+      padding-bottom: 4px;
+    }
+
+    .work-row:hover {
+      border-bottom-color: var(--border-hover);
+    }
+
+    .work-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--fg);
+      margin-bottom: 4px;
+    }
+
+    .work-desc {
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: var(--fg-muted);
+      text-align: left;
+    }
+
+    .work-meta {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--fg-muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .work-row .arrow {
+      display: inline-block;
+      transition: transform 0.2s var(--ease);
+    }
+
+    .work-row:hover .arrow {
+      transform: translate(2px, -2px);
+      color: var(--fg);
+    }
+
+    .inline-link {
+      color: var(--fg);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border-hover);
+      padding-bottom: 1px;
+      transition: border-color 0.2s var(--ease);
+    }
+
+    .inline-link:hover {
+      border-bottom-color: var(--fg);
+    }
+
     /* Clean Links */
     .links-row {
       display: flex;
       align-items: center;
-      gap: 20px;
-      padding-top: 12px;
-      border-top: 1px solid var(--border);
+      gap: 24px;
       font-size: 13.5px;
       flex-wrap: wrap;
     }
@@ -702,53 +1206,302 @@
       transform: translateX(-50%) translateY(0);
       opacity: 1;
     }
+
+    @media (max-width: 640px) {
+      .container {
+        border-left: none;
+        border-right: none;
+        padding-top: 64px;
+      }
+
+      .band {
+        padding: 32px 18px;
+      }
+
+      .band-banner {
+        padding: 0;
+        height: 164px;
+      }
+
+      .sky-pill {
+        right: 10px;
+        bottom: 8px;
+        font-size: 9.5px;
+        padding: 3px 8px;
+      }
+
+      .band-profile {
+        padding-top: 28px;
+        padding-bottom: 28px;
+      }
+
+      .profile-left {
+        gap: 16px;
+      }
+
+      .brand-avatar {
+        width: 68px;
+        height: 68px;
+        border-radius: 14px;
+      }
+
+      .contact-header-band {
+        padding: 22px 18px;
+      }
+
+      .glass-nav {
+        padding: 14px 0;
+      }
+
+      .glass-nav-wrap.is-scrolled {
+        padding: 10px 14px 0;
+      }
+
+      .glass-nav-wrap.is-scrolled .glass-nav {
+        padding: 12px 0;
+      }
+
+      .glass-nav-inner {
+        min-height: 28px;
+        padding: 0 18px;
+        gap: 14px;
+      }
+
+      .glass-brand {
+        font-size: 22px;
+      }
+
+      .glass-links {
+        gap: 16px;
+      }
+
+      .glass-links a {
+        font-size: 14px;
+      }
+
+      .inbox-card {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .inbox-address {
+        font-size: 13px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .work-row {
+        flex-direction: column;
+        gap: 6px;
+      }
+    }
   </style>
 </head>
 
-<body>
-  <main class="container">
-    <!-- Meta -->
-    <div class="meta-bar">
-      <div class="brand" id="brandTrigger">
-        <div class="avatar-wrap">
-          <div class="brand-avatar" id="brandAvatar" role="img" aria-label="Manav"></div>
-          <span class="avatar-pill" id="avatarPill" aria-live="polite"></span>
+<body id="top">
+  <!-- Full-Width Bar -> Column-Locked Floating Rectangle Navbar -->
+  <header class="glass-nav-wrap" id="navWrap" aria-label="Primary">
+    <nav class="glass-nav" id="glassNav">
+      <div class="glass-nav-inner">
+        <a class="glass-brand" href="#top" data-nav="home">manav</a>
+        <div class="glass-links">
+          <a href="#work" data-nav="work">work</a>
+          <a href="#now" data-nav="now">now</a>
+          <a href="./web-archive/">archive</a>
+          <a href="#contact" id="navContactLink" data-nav="contact">contact</a>
         </div>
-        <span class="brand-name" aria-label="Manav Chaudhari">
-          <span class="glitch-word" data-text="Manav">Manav</span>
-          <span class="glitch-word" data-text="Chaudhari">Chaudhari</span>
-        </span>
       </div>
+    </nav>
+  </header>
 
-      <div class="status">
-        <span class="status-dot"></span>
-        <span>in progress</span>
-      </div>
+  <main class="container">
+    <!-- HOME VIEW -->
+    <div id="homeView">
+      <!-- Live IST 16-bit Pixel Sky Banner -->
+      <section class="band band-banner" aria-label="Live Indian Standard Time pixel sky">
+        <canvas class="pixel-sky-canvas" id="pixelSky" width="370" height="110"></canvas>
+        <!-- <button class="sky-pill" id="skyModeBtn" type="button" title="Click to preview dawn, day, dusk &amp; night">
+          <span class="sky-pill-dot" aria-hidden="true"></span>
+          <span id="skyModeLabel">ist</span>
+        </button> -->
+      </section>
+
+      <!-- Profile Header Band -->
+      <section class="band band-profile">
+        <div class="profile-header">
+          <div class="profile-left" id="brandTrigger">
+            <div class="avatar-wrap">
+              <div class="brand-avatar" id="brandAvatar" role="img" aria-label="Manav"></div>
+              <span class="avatar-pill" id="avatarPill" aria-live="polite"></span>
+            </div>
+
+            <div class="profile-info">
+              <h1 class="profile-name brand-name" aria-label="Manav Chaudhari">
+                <span class="glitch-word" data-text="Manav">Manav</span>
+                <span class="glitch-word" data-text="Chaudhari">Chaudhari</span>
+              </h1>
+              <div class="profile-role">cs grad &amp; builder</div>
+              <div class="profile-meta">
+                <span>India</span>
+                <span>·</span>
+                <span class="status">
+                  <span class="status-dot"></span>
+                  <span>in progress</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Intro Band -->
+      <section class="band">
+        <div class="content-block">
+          <h2 class="hero-heading">this site is being built</h2>
+          <p>
+            i'm currently putting together my new personal website.
+            curating projects, writing, and refining the details.
+            coming soon.
+          </p>
+        </div>
+      </section>
+
+      <!-- Selected Work Band -->
+      <section class="band" id="work">
+        <h2 class="section-label">selected work</h2>
+        <div class="work-list">
+          <a class="work-row" href="#top">
+            <div>
+              <div class="work-title">manav.here</div>
+              <p class="work-desc">a quiet personal site with cursor head-tracking, small surprises, and notes as they
+                take shape.</p>
+            </div>
+            <span class="work-meta">wip <span class="arrow">↗</span></span>
+          </a>
+
+          <a class="work-row" href="./web-archive/">
+            <div>
+              <div class="work-title">early sketches &amp; pages</div>
+              <p class="work-desc">past experiments, layout studies, and older versions kept in one place.</p>
+            </div>
+            <span class="work-meta">archive <span class="arrow">↗</span></span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Now Band -->
+      <section class="band" id="now">
+        <h2 class="section-label">now</h2>
+        <p>
+          heads-down on full-time exam prep while slowly shaping this site piece by piece.
+          you can follow along on my <a class="inline-link" href="./journey/">journey page</a>.
+        </p>
+      </section>
+
+      <!-- Links Band -->
+      <footer class="band band-footer">
+        <div class="links-row">
+          <button class="link-item copy-btn" id="copyBtn" type="button" title="Click to copy email">
+            <span>hello@manav.here</span>
+          </button>
+
+          <a class="link-item" href="https://github.com/manavgpt" target="_blank" rel="noopener">
+            <span>github</span><span class="arrow">↗</span>
+          </a>
+
+          <a class="link-item" href="https://x.com/manavgpt" target="_blank" rel="noopener">
+            <span>twitter</span><span class="arrow">↗</span>
+          </a>
+
+          <a class="link-item" href="./web-archive/">
+            <span>archive</span><span class="arrow">↗</span>
+          </a>
+        </div>
+      </footer>
     </div>
 
-    <!-- Core Message -->
-    <div class="content-block">
-      <h1>this site is being built</h1>
-      <p>
-        i'm currently putting together my new personal website.
-        curating projects, writing, and refining the details.
-        coming soon.
-      </p>
-    </div>
+    <!-- CONTACT VIEW -->
+    <div id="contactView" class="view-hidden">
+      <section class="band contact-header-band">
+        <div class="contact-title-bg" aria-hidden="true"></div>
+        <h1 class="contact-page-title">Contact</h1>
+      </section>
 
-    <!-- Links -->
-    <div class="links-row">
-      <button class="link-item copy-btn" id="copyBtn" type="button" title="Click to copy email">
-        <span>hello@manav.here</span>
-      </button>
+      <section class="band">
+        <h2 class="contact-subhead">Direct Inbox</h2>
 
-      <a class="link-item" href="https://x.com/manavgpt" target="_blank" rel="noopener">
-        <span>twitter</span><span class="arrow">↗</span>
-      </a>
+        <div class="inbox-card">
+          <span class="inbox-icon-box" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+          </span>
+          <span class="inbox-address">hello@manav.here</span>
+          <button class="inbox-copy-btn" id="contactCopyBtn" type="button" aria-label="Copy email address"
+            title="Copy email">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </button>
+        </div>
 
-      <a class="link-item" href="./web-archive/">
-        <span>archive</span><span class="arrow">↗</span>
-      </a>
+        <div class="social-pills">
+          <a class="social-pill" href="https://github.com/manavgpt" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+            </svg>
+            <span>GitHub</span>
+            <span class="arrow">↗</span>
+          </a>
+
+          <a class="social-pill" href="https://x.com/manavgpt" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            <span>Twitter</span>
+            <span class="arrow">↗</span>
+          </a>
+
+          <a class="social-pill" href="mailto:hello@manav.here">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+            <span>Mail</span>
+            <span class="arrow">↗</span>
+          </a>
+
+          <a class="social-pill" href="./web-archive/">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 8v13H3V8"></path>
+              <path d="M1 3h22v5H1z"></path>
+              <path d="M10 12h4"></path>
+            </svg>
+            <span>Archive</span>
+            <span class="arrow">↗</span>
+          </a>
+
+          <a class="social-pill" href="./journey/">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            <span>Journey</span>
+            <span class="arrow">↗</span>
+          </a>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -758,6 +1511,908 @@
   </div>
 
   <script>
+    /* Live IST 16-Bit Pixel Sky — Enhanced Twin-Mountain & Winding River Scene */
+    (function () {
+      const canvas = document.getElementById("pixelSky");
+      const modeBtn = document.getElementById("skyModeBtn");
+      const modeLabel = document.getElementById("skyModeLabel");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const W = 370;
+      const H = 110;
+      const HORIZON = 54;
+      canvas.width = W;
+      canvas.height = H;
+      ctx.imageSmoothingEnabled = false;
+
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const MODES = [
+        { key: "live", hour: null, label: null },
+        { key: "dawn", hour: 6.25, label: "dawn · preview" },
+        { key: "day", hour: 12.5, label: "day · preview" },
+        { key: "dusk", hour: 18.1, label: "dusk · preview" },
+        { key: "night", hour: 22.5, label: "night · preview" },
+      ];
+      let modeIdx = 0;
+
+      /* Curated 16-bit palettes with rich shadow/highlight steps */
+      const PALETTES = {
+        night: {
+          sky: ["#050812", "#090f21", "#0f1933", "#162445", "#1f3057"],
+          cloud: "#18243f",
+          cloudHi: "#26385e",
+          mLeftDark: "#0d1c21",
+          mLeftMid: "#13292e",
+          mLeftHi: "#1d3b40",
+          mRightDark: "#111830",
+          mRightMid: "#182242",
+          mRightHi: "#24335e",
+          grassTop: "#13241c",
+          grassMid: "#0e1c16",
+          grassBot: "#091410",
+          grassTuft: "#1a3025",
+          bankDark: "#151b22",
+          bankLight: "#252e38",
+          riverDark: "#0c1a33",
+          riverMid: "#13284a",
+          riverHi: "#1f3d6b",
+          sparkle: "#b8d6ff",
+          houseLWall: "#453237",
+          houseLShade: "#332327",
+          houseLRoof: "#5e4b32",
+          houseLRoofHi: "#755f40",
+          houseRWall: "#544734",
+          houseRShade: "#3d3324",
+          houseRRoof: "#4f2a27",
+          houseRRoofHi: "#663834",
+          door: "#211615",
+          wood: "#2e221d",
+          treeDark: "#091410",
+          treeMid: "#0f2119",
+          treeHi: "#173024",
+          flower: "#5b6d8a",
+        },
+        dawn: {
+          sky: ["#242e52", "#4e476b", "#966470", "#d48c74", "#f5c28e"],
+          cloud: "#a86f73",
+          cloudHi: "#f7cfa6",
+          mLeftDark: "#1d453b",
+          mLeftMid: "#2c6151",
+          mLeftHi: "#44856c",
+          mRightDark: "#343961",
+          mRightMid: "#4a4f7d",
+          mRightHi: "#686ea3",
+          grassTop: "#4b7348",
+          grassMid: "#3a5e3a",
+          grassBot: "#2a472c",
+          grassTuft: "#5d8a56",
+          bankDark: "#383d42",
+          bankLight: "#545b61",
+          riverDark: "#355c85",
+          riverMid: "#4979a8",
+          riverHi: "#73a4cf",
+          sparkle: "#ffebd1",
+          houseLWall: "#a66458",
+          houseLShade: "#824b42",
+          houseLRoof: "#cfa051",
+          houseLRoofHi: "#e6ba6e",
+          houseRWall: "#cca362",
+          houseRShade: "#a37e46",
+          houseRRoof: "#a64c3d",
+          houseRRoofHi: "#c26151",
+          door: "#4a2c24",
+          wood: "#5c4234",
+          treeDark: "#1b3622",
+          treeMid: "#294d30",
+          treeHi: "#3d6b42",
+          flower: "#f2c68f",
+        },
+        day: {
+          sky: ["#3d76ad", "#5b95c9", "#82b4de", "#afd2ed", "#dce9f2"],
+          cloud: "#d7e8f5",
+          cloudHi: "#f7fbff",
+          mLeftDark: "#226348",
+          mLeftMid: "#2f7d5a",
+          mLeftHi: "#4aa176",
+          mRightDark: "#3c4e8a",
+          mRightMid: "#4f64a8",
+          mRightHi: "#7187cc",
+          grassTop: "#5f994a",
+          grassMid: "#4b823c",
+          grassBot: "#3a6b2f",
+          grassTuft: "#75b359",
+          bankDark: "#4a5259",
+          bankLight: "#6b757d",
+          riverDark: "#2d71ab",
+          riverMid: "#3e8cc7",
+          riverHi: "#6db8eb",
+          sparkle: "#f2faff",
+          houseLWall: "#cc7060",
+          houseLShade: "#a35346",
+          houseLRoof: "#e3b64f",
+          houseLRoofHi: "#f5ce73",
+          houseRWall: "#e3b859",
+          houseRShade: "#bd933e",
+          houseRRoof: "#bf523d",
+          houseRRoofHi: "#d96a55",
+          door: "#5c392a",
+          wood: "#704d38",
+          treeDark: "#1e4724",
+          treeMid: "#2c6131",
+          treeHi: "#428244",
+          flower: "#fff099",
+        },
+        dusk: {
+          sky: ["#161b3b", "#3d2c57", "#87455e", "#c96e5b", "#eb9e67"],
+          cloud: "#8c4f61",
+          cloudHi: "#f0a978",
+          mLeftDark: "#173832",
+          mLeftMid: "#234f45",
+          mLeftHi: "#386e5f",
+          mRightDark: "#282952",
+          mRightMid: "#3a3a6b",
+          mRightHi: "#55548f",
+          grassTop: "#36543a",
+          grassMid: "#29422e",
+          grassBot: "#1c3021",
+          grassTuft: "#476b49",
+          bankDark: "#2d3038",
+          bankLight: "#454954",
+          riverDark: "#2c4970",
+          riverMid: "#3c608c",
+          riverHi: "#6186b3",
+          sparkle: "#ffd9ab",
+          houseLWall: "#824c48",
+          houseLShade: "#633734",
+          houseLRoof: "#b08241",
+          houseLRoofHi: "#c99955",
+          houseRWall: "#a3804e",
+          houseRShade: "#806238",
+          houseRRoof: "#823a31",
+          houseRRoofHi: "#9e4d42",
+          door: "#38211c",
+          wood: "#4d352a",
+          treeDark: "#122619",
+          treeMid: "#1c3824",
+          treeHi: "#2b4f33",
+          flower: "#e8a87c",
+        },
+      };
+
+      function hexToRgb(hex) {
+        const n = parseInt(hex.slice(1), 16);
+        return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+      }
+
+      function lerpHex(a, b, t) {
+        const ra = hexToRgb(a);
+        const rb = hexToRgb(b);
+        const r = Math.round(ra[0] + (rb[0] - ra[0]) * t);
+        const g = Math.round(ra[1] + (rb[1] - ra[1]) * t);
+        const bl = Math.round(ra[2] + (rb[2] - ra[2]) * t);
+        return `rgb(${r},${g},${bl})`;
+      }
+
+      function mixPalettes(p1, p2, t) {
+        const out = { sky: [] };
+        for (let i = 0; i < p1.sky.length; i++) {
+          out.sky.push(lerpHex(p1.sky[i], p2.sky[i], t));
+        }
+        Object.keys(p1).forEach((k) => {
+          if (k !== "sky") out[k] = lerpHex(p1[k], p2[k], t);
+        });
+        return out;
+      }
+
+      function getISTDate() {
+        const now = new Date();
+        const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+        return new Date(utcMs + 5.5 * 3600000);
+      }
+
+      function getHourAndPhase() {
+        const mode = MODES[modeIdx];
+        const ist = getISTDate();
+        const liveHour = ist.getHours() + ist.getMinutes() / 60 + ist.getSeconds() / 3600;
+        const h = mode.hour === null ? liveHour : mode.hour;
+
+        let pal;
+        let phase;
+        if (h >= 5 && h < 6.5) {
+          pal = mixPalettes(PALETTES.night, PALETTES.dawn, (h - 5) / 1.5);
+          phase = "dawn";
+        } else if (h >= 6.5 && h < 8.5) {
+          pal = mixPalettes(PALETTES.dawn, PALETTES.day, (h - 6.5) / 2);
+          phase = h < 7.3 ? "dawn" : "day";
+        } else if (h >= 8.5 && h < 16.5) {
+          pal = PALETTES.day;
+          phase = "day";
+        } else if (h >= 16.5 && h < 18.2) {
+          pal = mixPalettes(PALETTES.day, PALETTES.dusk, (h - 16.5) / 1.7);
+          phase = "dusk";
+        } else if (h >= 18.2 && h < 20) {
+          pal = mixPalettes(PALETTES.dusk, PALETTES.night, (h - 18.2) / 1.8);
+          phase = h < 19.1 ? "dusk" : "night";
+        } else {
+          pal = PALETTES.night;
+          phase = "night";
+        }
+
+        const isDay = h >= 5.75 && h < 18.75;
+        let starAlpha = 0;
+        if (h >= 18.5 && h < 20) starAlpha = (h - 18.5) / 1.5;
+        else if (h >= 20 || h < 5) starAlpha = 1;
+        else if (h >= 5 && h < 6.3) starAlpha = 1 - (h - 5) / 1.3;
+
+        let lampAlpha = 0;
+        if (h >= 17.5 && h < 19) lampAlpha = (h - 17.5) / 1.5;
+        else if (h >= 19 || h < 5.5) lampAlpha = 1;
+        else if (h >= 5.5 && h < 6.8) lampAlpha = 1 - (h - 5.5) / 1.3;
+
+        return { h, pal, phase, isDay, starAlpha, lampAlpha, ist };
+      }
+
+      /* Deterministic RNG */
+      let seed = 9187;
+      function rand() {
+        seed = (seed * 16807) % 2147483647;
+        return (seed - 1) / 2147483646;
+      }
+
+      /* Stars */
+      const stars = [];
+      for (let i = 0; i < 58; i++) {
+        stars.push({
+          x: Math.floor(rand() * W),
+          y: Math.floor(2 + rand() * 36),
+          phase: rand() * Math.PI * 2,
+          speed: 0.02 + rand() * 0.035,
+          big: rand() > 0.85,
+        });
+      }
+
+      /* Fluffy 16-bit clouds */
+      const clouds = [
+        { x: 26, y: 12, w: 34, speed: 0.04 },
+        { x: 148, y: 8, w: 40, speed: 0.028 },
+        { x: 274, y: 14, w: 32, speed: 0.036 },
+      ];
+
+      /* Flying birds */
+      const birds = [];
+      for (let i = 0; i < 7; i++) {
+        birds.push({
+          x: rand() * W,
+          y: 8 + rand() * 22,
+          speed: 0.22 + rand() * 0.16,
+          flapPhase: rand() * Math.PI * 2,
+          dir: rand() > 0.25 ? 1 : -1,
+        });
+      }
+
+      /* Shooting stars */
+      const shootingStars = [];
+      function spawnShootingStar(sx, sy) {
+        shootingStars.push({
+          x: sx ?? (50 + Math.random() * 220),
+          y: sy ?? (4 + Math.random() * 14),
+          vx: 2.1,
+          vy: 0.55,
+          life: 1,
+        });
+      }
+
+      /* Winding S-curve river geometry */
+      function getRiverSpan(y) {
+        const t = Math.max(0, (y - HORIZON) / (H - HORIZON));
+        const cx = 185 + Math.sin(t * Math.PI * 2.55 + 0.35) * (12 + t * 36) - t * 10;
+        const halfW = 3 + Math.pow(t, 1.32) * 40;
+        return { left: Math.round(cx - halfW), right: Math.round(cx + halfW), cx };
+      }
+
+      /* River sparkles */
+      const sparkles = [];
+      for (let i = 0; i < 52; i++) {
+        sparkles.push({
+          t: rand(),
+          offset: (rand() - 0.5) * 1.55,
+          speed: 0.002 + rand() * 0.0026,
+          phase: rand() * Math.PI * 2,
+          len: rand() > 0.55 ? 3 : 2,
+        });
+      }
+
+      /* Grass tufts & tiny wildflowers on the banks */
+      const bankDetails = [];
+      for (let i = 0; i < 42; i++) {
+        const y = HORIZON + 4 + Math.floor(rand() * (H - HORIZON - 7));
+        const span = getRiverSpan(y);
+        const leftSide = rand() > 0.5;
+        const x = leftSide
+          ? 6 + Math.floor(rand() * Math.max(8, span.left - 14))
+          : span.right + 8 + Math.floor(rand() * Math.max(8, W - span.right - 14));
+        if (x > 4 && x < W - 4) {
+          bankDetails.push({ x, y, flower: rand() > 0.68 });
+        }
+      }
+
+      /* People on the banks */
+      const walkers = [
+        { x: 84, minX: 68, maxX: 112, y: 74, speed: 0.055, dir: 1, shirt: "#e3c5a8", pants: "#3d4f6b", legPhase: 0 },
+        { x: 278, minX: 258, maxX: 306, y: 84, speed: 0.06, dir: -1, shirt: "#b8d0e8", pants: "#384554", legPhase: 1.6 },
+      ];
+      const seatedPeople = [
+        { x: 96, y: 92, shirt: "#d9b48f", pants: "#3b4859" },
+        { x: 102, y: 92, shirt: "#a8bfd6", pants: "#333d4a" },
+        { x: 272, y: 69, shirt: "#d4c3b0", pants: "#403c4a" },
+      ];
+
+      /* Night fireflies */
+      const fireflies = [];
+      for (let i = 0; i < 16; i++) {
+        const leftSide = rand() > 0.5;
+        fireflies.push({
+          x: leftSide ? 14 + rand() * 105 : 252 + rand() * 104,
+          y: 62 + rand() * 40,
+          phase: rand() * Math.PI * 2,
+          drift: 0.015 + rand() * 0.02,
+        });
+      }
+
+      function px(x, y, w, h, color) {
+        ctx.fillStyle = color;
+        ctx.fillRect(Math.round(x), Math.round(y), w, h);
+      }
+
+      function mountainY(x, peakX, peakY, halfSpan) {
+        const d = Math.abs(x - peakX) / halfSpan;
+        if (d >= 1) return HORIZON + 2;
+        const shape = Math.pow(1 - d * d, 1.12);
+        return Math.round(HORIZON - (HORIZON - peakY) * shape);
+      }
+
+      function drawCloud(x, y, w, cMain, cHi) {
+        const cx = Math.round(x);
+        const cy = Math.round(y);
+        px(cx + 6, cy, w - 12, 1, cHi);
+        px(cx + 3, cy + 1, w - 6, 2, cHi);
+        px(cx + 1, cy + 3, w - 2, 2, cMain);
+        px(cx, cy + 5, w, 2, cMain);
+        px(cx + 4, cy + 7, w - 8, 1, cMain);
+      }
+
+      function drawSunWithRays(cx, cy, tick) {
+        /* Warm horizon bloom */
+        ctx.fillStyle = "rgba(255, 224, 145, 0.14)";
+        ctx.beginPath();
+        ctx.arc(cx, cy, 32, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "rgba(255, 232, 165, 0.22)";
+        ctx.beginPath();
+        ctx.arc(cx, cy, 20, 0, Math.PI * 2);
+        ctx.fill();
+
+        /* Crisp pixel sunbeams */
+        const rayAngles = [-2.6, -2.35, -2.08, -1.82, -1.57, -1.32, -1.06, -0.79, -0.54];
+        const pulse = Math.sin(tick * 0.04) * 1.1;
+        for (let i = 0; i < rayAngles.length; i++) {
+          const ang = rayAngles[i];
+          const inner = 16;
+          const outer = (i % 2 === 0 ? 24 : 28) + pulse;
+          for (let r = inner; r <= outer; r += 1) {
+            const rx = Math.round(cx + Math.cos(ang) * r);
+            const ry = Math.round(cy + Math.sin(ang) * r);
+            px(rx, ry, 2, 1, r < outer - 3 ? "#ffe07d" : "#f5a245");
+          }
+        }
+
+        /* Layered pixel sun disc */
+        const radius = 12;
+        for (let dy = -radius; dy <= radius; dy++) {
+          for (let dx = -radius; dx <= radius; dx++) {
+            const d2 = dx * dx + dy * dy;
+            if (d2 <= radius * radius) {
+              const col = d2 <= 49 ? "#fff8cc" : d2 <= 100 ? "#ffd966" : "#f5ab3d";
+              px(cx + dx, cy + dy, 1, 1, col);
+            }
+          }
+        }
+      }
+
+      function drawMoon(cx, cy) {
+        ctx.fillStyle = "rgba(205, 225, 255, 0.08)";
+        ctx.beginPath();
+        ctx.arc(cx, cy, 18, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "rgba(220, 235, 255, 0.15)";
+        ctx.beginPath();
+        ctx.arc(cx, cy, 11, 0, Math.PI * 2);
+        ctx.fill();
+
+        const r = 6;
+        for (let dy = -r; dy <= r; dy++) {
+          for (let dx = -r; dx <= r; dx++) {
+            const d2 = dx * dx + dy * dy;
+            if (d2 <= r * r + 2) {
+              const isShadow = dx > 1 && dy < 2 && (dx - 3) * (dx - 3) + (dy + 1) * (dy + 1) < 12;
+              const isCrater = (dx === -3 && dy === 1) || (dx === -1 && dy === -3) || (dx === 1 && dy === 3);
+              px(cx + dx, cy + dy, 1, 1, isShadow ? "#b0c4e6" : isCrater ? "#d4e1f5" : "#f5f8ff");
+            }
+          }
+        }
+      }
+
+      function drawTree(x, y, pal, scale) {
+        const s = scale || 1;
+        /* Trunk */
+        px(x, y - 2, 2, 3, pal.wood);
+        /* Layered pine/foliage tiers */
+        px(x - 3 * s, y - 4 * s, 8 * s, 3 * s, pal.treeDark);
+        px(x - 2 * s, y - 6 * s, 6 * s, 3 * s, pal.treeMid);
+        px(x - 1 * s, y - 8 * s, 4 * s, 2 * s, pal.treeHi);
+        px(x, y - 9 * s, 2 * s, 1 * s, pal.treeHi);
+      }
+
+      function drawLeftCottage(x, y, w, h, pal, lampAlpha, hasSmoke, tick) {
+        /* Ground shadow */
+        px(x - 1, y + h, w + 2, 1, pal.grassBot);
+        /* Main wall + side shadow */
+        px(x, y, w, h, pal.houseLWall);
+        px(x + w - 3, y, 3, h, pal.houseLShade);
+        /* Roof shadow eave */
+        px(x, y, w, 1, pal.houseLShade);
+
+        /* Pitched shingled roof */
+        for (let r = 0; r < 6; r++) {
+          const rw = w + 4 - r * 2;
+          if (rw < 4) break;
+          px(x - 2 + r, y - 1 - r, rw, 1, r % 2 === 0 ? pal.houseLRoof : pal.houseLRoofHi);
+        }
+
+        /* Chimney + gentle rising smoke */
+        if (hasSmoke) {
+          px(x + w - 5, y - 8, 2, 3, pal.houseLShade);
+          const sOff = Math.floor(tick * 0.05 + x) % 8;
+          ctx.fillStyle = "rgba(225, 232, 242, 0.28)";
+          ctx.fillRect(x + w - 5 + (sOff > 3 ? 1 : 0), y - 10 - (sOff % 4), 2, 1);
+          ctx.fillRect(x + w - 4 + (sOff > 4 ? 1 : 0), y - 13 - ((sOff + 1) % 4), 2, 1);
+        }
+
+        /* Framed windows */
+        const winCol = lampAlpha > 0.15
+          ? `rgba(255, 212, 118, ${0.45 + lampAlpha * 0.55})`
+          : "#2a3b4f";
+        px(x + 3, y + 3, 3, 3, winCol);
+        if (w >= 18) {
+          px(x + 9, y + 3, 3, 3, winCol);
+        }
+
+        if (lampAlpha > 0.25) {
+          ctx.fillStyle = `rgba(255, 200, 100, ${(lampAlpha * 0.16).toFixed(2)})`;
+          ctx.fillRect(x + 2, y + h, w - 4, 2);
+        }
+      }
+
+      function drawRightCottage(x, y, pal, lampAlpha, tick) {
+        const w = 26;
+        const h = 13;
+        /* Stone plinth & ground shadow */
+        px(x - 2, y + h, w + 4, 2, pal.bankDark);
+        px(x - 1, y + h, w + 2, 1, pal.bankLight);
+        /* Main warm wall + shaded side */
+        px(x, y, w, h, pal.houseRWall);
+        px(x + w - 4, y, 4, h, pal.houseRShade);
+        px(x, y, w, 1, pal.houseRShade);
+
+        /* Pitched tiled roof */
+        for (let r = 0; r < 8; r++) {
+          const rw = w + 6 - r * 2;
+          if (rw < 6) break;
+          px(x - 3 + r, y - 1 - r, rw, 1, r % 2 === 0 ? pal.houseRRoof : pal.houseRRoofHi);
+        }
+
+        /* Chimney + smoke */
+        px(x + 5, y - 10, 2, 4, pal.houseRRoof);
+        const sOff = Math.floor(tick * 0.05) % 8;
+        ctx.fillStyle = "rgba(225, 232, 242, 0.28)";
+        ctx.fillRect(x + 5 + (sOff > 3 ? 1 : 0), y - 12 - (sOff % 4), 2, 1);
+        ctx.fillRect(x + 6 + (sOff > 4 ? 1 : 0), y - 15 - ((sOff + 1) % 4), 2, 1);
+
+        /* Arched wooden doorway */
+        px(x + 10, y + 6, 6, 7, pal.door);
+        px(x + 11, y + 5, 4, 1, pal.door);
+        px(x + 12, y + 4, 2, 1, pal.door);
+
+        /* Side windows */
+        const winCol = lampAlpha > 0.15
+          ? `rgba(255, 212, 118, ${0.45 + lampAlpha * 0.55})`
+          : "#2a3b4f";
+        px(x + 3, y + 5, 4, 4, winCol);
+        px(x + 19, y + 5, 4, 4, winCol);
+
+        /* Warm spill onto plinth & grass at night */
+        if (lampAlpha > 0.25) {
+          ctx.fillStyle = `rgba(255, 200, 100, ${(lampAlpha * 0.2).toFixed(2)})`;
+          ctx.fillRect(x + 2, y + h + 2, w - 4, 2);
+        }
+      }
+
+      function drawPerson(x, y, shirt, pants, walking, step) {
+        const ix = Math.round(x);
+        const iy = Math.round(y);
+        /* Head */
+        px(ix, iy - 5, 2, 2, "#f0d4b8");
+        /* Torso */
+        px(ix, iy - 3, 2, 2, shirt);
+        /* Legs */
+        if (walking) {
+          const stride = Math.sin(step) > 0.25 ? 1 : 0;
+          px(ix - stride, iy - 1, 1, 2, pants);
+          px(ix + 1 + stride, iy - 1, 1, 2, pants);
+        } else {
+          px(ix, iy - 1, 2, 2, pants);
+        }
+      }
+
+      function updateModePill(info) {
+        if (!modeLabel || !modeBtn) return;
+        const mode = MODES[modeIdx];
+        if (mode.label) {
+          modeLabel.textContent = mode.label;
+        } else {
+          let hr = info.ist.getHours();
+          const min = String(info.ist.getMinutes()).padStart(2, "0");
+          const ampm = hr >= 12 ? "pm" : "am";
+          hr = hr % 12 || 12;
+          modeLabel.textContent = `${hr}:${min} ${ampm} ist`;
+        }
+        modeBtn.classList.remove("is-day", "is-dawn", "is-dusk", "is-night");
+        modeBtn.classList.add(`is-${info.phase}`);
+      }
+
+      let tick = 0;
+
+      function render() {
+        const info = getHourAndPhase();
+        const { pal, isDay, starAlpha, lampAlpha } = info;
+
+        /* 1. Multi-band pixel sky with 2-row dither seams */
+        const bandH = Math.ceil(HORIZON / pal.sky.length);
+        for (let i = 0; i < pal.sky.length; i++) {
+          const y0 = i * bandH;
+          px(0, y0, W, bandH + 1, pal.sky[i]);
+          if (i < pal.sky.length - 1) {
+            const seamY = y0 + bandH - 1;
+            ctx.fillStyle = pal.sky[i + 1];
+            for (let x = (i % 2); x < W; x += 2) {
+              ctx.fillRect(x, seamY, 1, 1);
+            }
+          }
+        }
+
+        /* 2. Twinkling stars & shooting stars (night) */
+        if (starAlpha > 0.02) {
+          for (let i = 0; i < stars.length; i++) {
+            const s = stars[i];
+            const tw = 0.45 + 0.55 * Math.sin(tick * s.speed + s.phase);
+            ctx.fillStyle = `rgba(235, 243, 255, ${(starAlpha * tw * 0.88).toFixed(2)})`;
+            ctx.fillRect(s.x, s.y, 1, 1);
+            if (s.big && tw > 0.82) {
+              ctx.fillStyle = `rgba(200, 220, 255, ${(starAlpha * 0.35).toFixed(2)})`;
+              ctx.fillRect(s.x - 1, s.y, 3, 1);
+              ctx.fillRect(s.x, s.y - 1, 1, 3);
+            }
+          }
+
+          if (!reducedMotion && Math.random() < 0.0025 && shootingStars.length < 2) {
+            spawnShootingStar();
+          }
+          for (let i = shootingStars.length - 1; i >= 0; i--) {
+            const st = shootingStars[i];
+            ctx.fillStyle = `rgba(245, 250, 255, ${(st.life * starAlpha).toFixed(2)})`;
+            ctx.fillRect(Math.round(st.x), Math.round(st.y), 2, 1);
+            ctx.fillStyle = `rgba(180, 210, 255, ${(st.life * starAlpha * 0.45).toFixed(2)})`;
+            ctx.fillRect(Math.round(st.x - 4), Math.round(st.y - 1), 4, 1);
+            if (!reducedMotion) {
+              st.x += st.vx;
+              st.y += st.vy;
+              st.life -= 0.02;
+            }
+            if (st.life <= 0 || st.x > W) shootingStars.splice(i, 1);
+          }
+        }
+
+        /* 3. Sun behind twin mountains (day) OR Moon on top of sky (night) */
+        if (isDay) {
+          drawSunWithRays(185, 38, tick);
+        } else {
+          drawMoon(185, 14);
+        }
+
+        /* 4. Calm drifting pixel clouds */
+        for (let i = 0; i < clouds.length; i++) {
+          const cl = clouds[i];
+          if (!reducedMotion) {
+            cl.x += cl.speed;
+            if (cl.x > W + 14) cl.x = -cl.w - 10;
+          }
+          drawCloud(cl.x, cl.y, cl.w, pal.cloud, pal.cloudHi);
+        }
+
+        /* 5. Shaded Twin Mountains (drawn OVER the sun so sun peeks from behind) */
+        /* Right mountain (indigo-blue tones, sunlit on left-facing valley slope) */
+        for (let x = 165; x < W; x++) {
+          const my = mountainY(x, 268, 18, 114);
+          if (my < HORIZON) {
+            const hSpan = HORIZON - my;
+            const col = x < 252 ? pal.mRightHi : x < 276 ? pal.mRightMid : pal.mRightDark;
+            px(x, my, 1, hSpan, col);
+          }
+        }
+        /* Left mountain (emerald-green tones, sunlit on right-facing valley slope) */
+        for (let x = 0; x <= 194; x++) {
+          const my = mountainY(x, 106, 20, 100);
+          if (my < HORIZON) {
+            const hSpan = HORIZON - my;
+            const col = x > 120 ? pal.mLeftHi : x > 92 ? pal.mLeftMid : pal.mLeftDark;
+            px(x, my, 1, hSpan, col);
+          }
+        }
+
+        /* 6. Flying pixel birds (day, dawn, dusk) */
+        if (starAlpha < 0.7) {
+          const birdAlpha = Math.max(0, 1 - starAlpha * 1.4);
+          ctx.fillStyle = `rgba(18, 24, 34, ${(birdAlpha * 0.8).toFixed(2)})`;
+          for (let i = 0; i < birds.length; i++) {
+            const b = birds[i];
+            if (!reducedMotion) {
+              b.x += b.speed * b.dir;
+              if (b.x > W + 10) b.x = -10;
+              if (b.x < -10) b.x = W + 10;
+            }
+            const bx = Math.round(b.x);
+            const by = Math.round(b.y + Math.sin(tick * 0.04 + b.flapPhase) * 1);
+            const wingUp = Math.sin(tick * 0.16 + b.flapPhase) > 0;
+            ctx.fillRect(bx, by, 2, 1);
+            ctx.fillRect(bx - 2, wingUp ? by - 1 : by + 1, 2, 1);
+            ctx.fillRect(bx + 2, wingUp ? by - 1 : by + 1, 2, 1);
+          }
+        }
+
+        /* 7. Layered Grassy Banks */
+        px(0, HORIZON, W, 17, pal.grassTop);
+        px(0, HORIZON + 17, W, 19, pal.grassMid);
+        px(0, HORIZON + 36, W, H - (HORIZON + 36), pal.grassBot);
+
+        /* Dither seams on grass */
+        ctx.fillStyle = pal.grassMid;
+        for (let x = 0; x < W; x += 2) ctx.fillRect(x, HORIZON + 16, 1, 1);
+        ctx.fillStyle = pal.grassBot;
+        for (let x = 1; x < W; x += 2) ctx.fillRect(x, HORIZON + 35, 1, 1);
+
+        /* Tiny grass tufts & wildflowers */
+        for (let i = 0; i < bankDetails.length; i++) {
+          const d = bankDetails[i];
+          px(d.x, d.y, 2, 1, pal.grassTuft);
+          if (d.flower) px(d.x, d.y - 1, 1, 1, pal.flower);
+        }
+
+        /* 8. Winding S-Curve River with two-tone shoreline lip */
+        for (let y = HORIZON; y < H; y++) {
+          const span = getRiverSpan(y);
+          const w = Math.max(3, span.right - span.left);
+
+          /* Two-tone shaded bank edge */
+          px(span.left - 3, y, 2, 1, pal.bankLight);
+          px(span.left - 1, y, 1, 1, pal.bankDark);
+          px(span.right, y, 1, 1, pal.bankDark);
+          px(span.right + 1, y, 2, 1, pal.bankLight);
+
+          /* Water depth layers */
+          px(span.left, y, w, 1, pal.riverDark);
+          if (w > 4) px(span.left + 2, y, w - 4, 1, pal.riverMid);
+
+          /* Shimmering center current */
+          const hiW = Math.max(1, Math.round(w * 0.42));
+          const sway = Math.round(Math.sin(tick * 0.055 + y * 0.2) * 1.5);
+          px(Math.round(span.cx - hiW / 2) + sway, y, hiW, 1, pal.riverHi);
+        }
+
+        /* Animated flowing river sparkles */
+        for (let i = 0; i < sparkles.length; i++) {
+          const sp = sparkles[i];
+          if (!reducedMotion) {
+            sp.t += sp.speed;
+            if (sp.t >= 1) sp.t = 0.02;
+          }
+          const y = Math.round(HORIZON + sp.t * (H - HORIZON - 1));
+          const span = getRiverSpan(y);
+          const halfW = Math.max(1, (span.right - span.left) * 0.42);
+          const sx = Math.round(span.cx + sp.offset * halfW);
+          if (sx > span.left + 2 && sx < span.right - 3) {
+            const shimmer = 0.25 + 0.75 * Math.pow((Math.sin(tick * 0.1 + sp.phase) + 1) * 0.5, 2);
+            ctx.globalAlpha = shimmer * 0.88;
+            px(sx, y, sp.len, 1, pal.sparkle);
+          }
+        }
+        ctx.globalAlpha = 1;
+
+        /* Tiny wooden dock on the right foreground bank */
+        const dockY = 82;
+        const dockEdge = getRiverSpan(dockY).right;
+        px(dockEdge - 5, dockY, 8, 2, pal.wood);
+        px(dockEdge - 5, dockY + 2, 1, 2, pal.bankDark);
+        px(dockEdge - 1, dockY + 2, 1, 2, pal.bankDark);
+
+        /* 9. Trees & Cozy Cottages on the Banks */
+        drawTree(10, 58, pal, 1);
+        drawTree(78, 57, pal, 1);
+        drawTree(292, 57, pal, 1);
+        drawTree(354, 60, pal, 1);
+
+        /* Left bank: two cottages side-by-side */
+        drawLeftCottage(46, 54, 15, 8, pal, lampAlpha, false, tick);
+        drawLeftCottage(18, 53, 22, 10, pal, lampAlpha, true, tick);
+
+        /* Right bank: larger cottage with arched door */
+        drawRightCottage(312, 52, pal, lampAlpha, tick);
+
+        /* 10. People on the grassy banks */
+        for (let i = 0; i < seatedPeople.length; i++) {
+          const p = seatedPeople[i];
+          drawPerson(p.x, p.y, p.shirt, p.pants, false, 0);
+        }
+        for (let i = 0; i < walkers.length; i++) {
+          const w = walkers[i];
+          if (!reducedMotion) {
+            w.x += w.speed * w.dir;
+            if (w.x > w.maxX) w.dir = -1;
+            if (w.x < w.minX) w.dir = 1;
+          }
+          drawPerson(w.x, w.y, w.shirt, w.pants, true, tick * 0.14 + w.legPhase);
+        }
+
+        /* Warm bank lantern + fireflies at dusk/night */
+        if (lampAlpha > 0.2) {
+          ctx.fillStyle = `rgba(255, 200, 100, ${(lampAlpha * 0.28).toFixed(2)})`;
+          ctx.fillRect(89, 89, 5, 5);
+          ctx.fillStyle = `rgba(255, 228, 156, ${lampAlpha.toFixed(2)})`;
+          ctx.fillRect(91, 91, 1, 1);
+
+          for (let i = 0; i < fireflies.length; i++) {
+            const ff = fireflies[i];
+            const pulse = Math.max(0, Math.sin(tick * 0.07 + ff.phase));
+            if (pulse > 0.35) {
+              const fx = Math.round(ff.x + Math.sin(tick * ff.drift + ff.phase) * 4);
+              const fy = Math.round(ff.y + Math.cos(tick * ff.drift * 1.3 + ff.phase) * 2);
+              ctx.fillStyle = `rgba(255, 228, 132, ${(pulse * lampAlpha * 0.8).toFixed(2)})`;
+              ctx.fillRect(fx, fy, 1, 1);
+            }
+          }
+        }
+
+        if (tick % 30 === 0) updateModePill(info);
+      }
+
+      /* Clicking the sky spawns a shooting star (night) or a bird (day) */
+      canvas.addEventListener("pointerdown", (e) => {
+        if (reducedMotion) return;
+        const rect = canvas.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * W;
+        const y = ((e.clientY - rect.top) / rect.height) * H;
+        const info = getHourAndPhase();
+        if (info.starAlpha > 0.25) {
+          spawnShootingStar(Math.min(x, W - 24), Math.min(y, 28));
+        } else {
+          birds.push({
+            x,
+            y: Math.max(6, Math.min(y, 32)),
+            speed: 0.24 + Math.random() * 0.14,
+            flapPhase: Math.random() * Math.PI * 2,
+            dir: Math.random() > 0.5 ? 1 : -1,
+          });
+          if (birds.length > 14) birds.shift();
+        }
+      });
+
+      /* Clicking the pill cycles Live IST -> Dawn -> Day -> Dusk -> Night */
+      if (modeBtn) {
+        modeBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          modeIdx = (modeIdx + 1) % MODES.length;
+          updateModePill(getHourAndPhase());
+          if (reducedMotion) render();
+        });
+      }
+
+      function loop() {
+        if (!document.hidden) {
+          tick += 1;
+          render();
+        }
+        requestAnimationFrame(loop);
+      }
+
+      updateModePill(getHourAndPhase());
+      render();
+      if (!reducedMotion) {
+        requestAnimationFrame(loop);
+      }
+    })();
+
+    /* View Switcher (Home <-> Contact) */
+    (function () {
+      const homeView = document.getElementById("homeView");
+      const contactView = document.getElementById("contactView");
+      const contactLink = document.getElementById("navContactLink");
+      if (!homeView || !contactView) return;
+
+      function syncView() {
+        const isContact = window.location.hash === "#contact";
+        homeView.classList.toggle("view-hidden", isContact);
+        contactView.classList.toggle("view-hidden", !isContact);
+        if (contactLink) contactLink.classList.toggle("is-active", isContact);
+
+        if (isContact) {
+          window.scrollTo({ top: 0, behavior: "instant" });
+        }
+      }
+
+      document.querySelectorAll("[data-nav]").forEach((link) => {
+        link.addEventListener("click", (e) => {
+          const target = link.getAttribute("data-nav");
+          if (target === "contact") {
+            e.preventDefault();
+            if (window.location.hash !== "#contact") {
+              history.pushState(null, "", "#contact");
+            }
+            syncView();
+          } else {
+            const wasContact = window.location.hash === "#contact";
+            if (wasContact) {
+              e.preventDefault();
+              const hash = target === "home" ? "#top" : `#${target}`;
+              history.pushState(null, "", hash);
+              syncView();
+              const el = document.getElementById(target === "home" ? "top" : target);
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            }
+          }
+        });
+      });
+
+      window.addEventListener("hashchange", syncView);
+      syncView();
+    })();
+
+    /* Scroll-Morphing Navbar + Specular Sheen */
+    (function () {
+      const navWrap = document.getElementById("navWrap");
+      const nav = document.getElementById("glassNav");
+
+      function updateNavOnScroll() {
+        if (!navWrap) return;
+        navWrap.classList.toggle("is-scrolled", window.scrollY > 24);
+      }
+
+      updateNavOnScroll();
+      window.addEventListener("scroll", updateNavOnScroll, { passive: true });
+
+      if (nav) {
+        nav.addEventListener("pointermove", (e) => {
+          if (e.pointerType !== "mouse") return;
+          const r = nav.getBoundingClientRect();
+          nav.style.setProperty("--gx", `${e.clientX - r.left}px`);
+          nav.style.setProperty("--gy", `${e.clientY - r.top}px`);
+        }, { passive: true });
+      }
+    })();
+
     /* 8-Way Sprite Swap + Dizzy / Annoyed Easter Egg */
     (function () {
       const avatar = document.getElementById("brandAvatar");
@@ -802,7 +2457,6 @@
         }, 2200);
       }
 
-      // Click / tap 3 times quickly -> Annoyed
       avatar.addEventListener("click", (e) => {
         e.stopPropagation();
         if (isReacting) return;
@@ -819,7 +2473,6 @@
         }
       });
 
-      // Only activate 8-way sprite mode if avatar-sheet.png exists & loads
       const sheet = new Image();
       sheet.onload = () => {
         avatar.classList.add("sprite-ready");
@@ -836,10 +2489,10 @@
           "2": "50% 100%",   // Bottom
           "3": "0% 100%",    // Bottom-Left
           "4": "0% 50%",     // Left
-          "-4": "0% 50%",     // Left
-          "-3": "0% 0%",      // Top-Left
-          "-2": "50% 0%",     // Top
-          "-1": "100% 0%",    // Top-Right
+          "-4": "0% 50%",    // Left
+          "-3": "0% 0%",     // Top-Left
+          "-2": "50% 0%",    // Top
+          "-1": "100% 0%",   // Top-Right
         };
 
         const DEADZONE = 28;
@@ -874,7 +2527,6 @@
           const sector = Math.round(angle / 45);
           setPos(POSITIONS[String(sector)] || "50% 50%");
 
-          // Measure continuous angular spin around the avatar
           if (lastAngle !== null) {
             let delta = angle - lastAngle;
             if (delta > 180) delta -= 360;
@@ -887,7 +2539,6 @@
               lastAngle = null;
             }, 650);
 
-            // ~2.5 full rotations (900°) -> Dizzy
             if (spinAccum >= 900) {
               triggerReaction("dizzy");
               return;
@@ -1008,8 +2659,9 @@
       }
     });
 
-    /* Copy Email */
+    /* Copy Email (Home Footer + Contact Inbox) */
     const copyBtn = document.getElementById("copyBtn");
+    const contactCopyBtn = document.getElementById("contactCopyBtn");
     const toast = document.getElementById("toast");
     const toastMsg = document.getElementById("toastMsg");
     let toastTimer = null;
@@ -1025,19 +2677,18 @@
     }
 
     const email = "hello@manav.here";
-    copyBtn.addEventListener("click", () => {
+    function copyEmail() {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(email).then(() => {
           showToast(`Copied ${email}`);
-        }).catch(() => fallbackPrompt());
+        }).catch(() => showToast(email));
       } else {
-        fallbackPrompt();
+        showToast(email);
       }
-    });
-
-    function fallbackPrompt() {
-      showToast(email);
     }
+
+    if (copyBtn) copyBtn.addEventListener("click", copyEmail);
+    if (contactCopyBtn) contactCopyBtn.addEventListener("click", copyEmail);
   </script>
 </body>
 
