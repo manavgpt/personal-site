@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Manav Chaudhari</title>
+  <title>finally, you found me!</title>
   <meta name="description" content="Manav Chaudhari — Currently building my new portfolio.">
   <meta name="theme-color" content="#000000">
 
@@ -24,28 +24,12 @@
     rel="stylesheet">
 
   <style>
-    /* Self-hosted Amiamie (download from velvetyne.fr and place in ./fonts/) */
-    @font-face {
-      font-family: "Amiamie";
-      src: url("fonts/Amiamie-Regular.woff2") format("woff2");
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "Amiamie";
-      src: url("fonts/Amiamie-Medium.woff2") format("woff2");
-      font-weight: 500;
-      font-style: normal;
-      font-display: swap;
-    }
-
     :root {
       --bg: #000000;
       --card-bg: #0A0A0C;
       --border: rgba(255, 255, 255, 0.08);
       --border-hover: rgba(255, 255, 255, 0.16);
+      --grid-line: rgba(255, 255, 255, 0.14);
 
       --fg: #EDEDED;
       --fg-muted: #888888;
@@ -55,7 +39,7 @@
       --col-width: 740px;
 
       --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --font-nav: "Amiamie", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-nav: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
       --font-brand: "Instrument Serif", Georgia, serif;
       --font-mono: "JetBrains Mono", monospace;
       --font-serif: "Newsreader", Georgia, serif;
@@ -82,6 +66,7 @@
       font-family: var(--font-sans);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      overflow-x: clip;
     }
 
     /* Full-Width Bar -> Column-Locked Floating Rectangle on Scroll */
@@ -116,7 +101,7 @@
       backdrop-filter: blur(18px) saturate(145%);
       -webkit-backdrop-filter: blur(18px) saturate(145%);
       border: 1px solid transparent;
-      border-bottom-color: rgba(255, 255, 255, 0.1);
+      border-bottom: 1px dashed var(--grid-line);
       box-shadow: 0 0 0 rgba(0, 0, 0, 0);
       font-family: var(--font-nav);
       font-size: 15px;
@@ -136,31 +121,26 @@
       background:
         radial-gradient(280px circle at var(--gx) var(--gy), rgba(255, 255, 255, 0.09), transparent 70%),
         rgba(12, 12, 15, 0.88);
-      border-color: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.14);
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.72);
     }
 
-    /* Keeps navbar links locked to the exact page column width */
+    /* Keeps navbar links locked to the exact page column width & original height */
     .glass-nav-inner {
       width: 100%;
       max-width: var(--col-width);
+      min-height: 34px;
       margin: 0 auto;
-      padding: 0 24px;
+      padding: 0 28px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 24px;
     }
 
-    .glass-nav-right {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-    }
-
     .glass-brand {
       font-family: var(--font-brand);
-      font-size: 22px;
+      font-size: 28px;
       font-weight: 400;
       letter-spacing: -0.01em;
       line-height: 1;
@@ -182,7 +162,9 @@
       font-size: 15px;
       font-weight: 400;
       letter-spacing: -0.01em;
-      transition: color 0.2s var(--ease);
+      padding-bottom: 2px;
+      border-bottom: 1.5px solid transparent;
+      transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
       white-space: nowrap;
     }
 
@@ -190,35 +172,211 @@
       color: #ffffff;
     }
 
-    .glass-cta {
-      background: rgba(255, 255, 255, 0.06);
-      color: var(--fg);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 999px;
-      padding: 7px 16px;
-      font-family: var(--font-nav);
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
-    }
-
-    .glass-cta:hover {
-      background: rgba(255, 255, 255, 0.14);
-      border-color: rgba(255, 255, 255, 0.28);
+    .glass-links a.is-active {
       color: #ffffff;
+      border-bottom-color: #ffffff;
     }
 
-    /* Main Column (Matches Navbar Inner Width) */
+    /* Main Architectural Column with Vertical Dotted Rails */
     .container {
       width: 100%;
       max-width: var(--col-width);
+      min-height: 100vh;
       margin: 0 auto;
-      padding: 132px 24px 160px;
+      padding-top: 72px;
+      padding-bottom: 96px;
+      border-left: 1px dashed var(--grid-line);
+      border-right: 1px dashed var(--grid-line);
       display: flex;
       flex-direction: column;
-      gap: 48px;
+    }
+
+    .view-hidden {
+      display: none !important;
+    }
+
+    /* Individual Section Bands with Full-Width Horizontal Dotted Dividers */
+    .band {
+      position: relative;
+      padding: 40px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      scroll-margin-top: 90px;
+    }
+
+    .band::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      border-bottom: 1px dashed var(--grid-line);
+      pointer-events: none;
+    }
+
+    .band-hero {
+      padding-top: 52px;
+      gap: 32px;
+    }
+
+    .band-footer {
+      padding-top: 28px;
+      padding-bottom: 28px;
+    }
+
+    /* Contact View */
+    .contact-header-band {
+      padding: 26px 28px;
+    }
+
+    /* Subtle diagonal hatch in the outer gutters beside the Contact header */
+    .contact-header-band::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      background: repeating-linear-gradient(-45deg,
+          rgba(255, 255, 255, 0.03) 0px,
+          rgba(255, 255, 255, 0.03) 1px,
+          transparent 1px,
+          transparent 8px);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .contact-header-band .contact-title-bg {
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .contact-page-title {
+      font-family: var(--font-brand);
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+
+    .contact-subhead {
+      font-family: var(--font-brand);
+      font-size: 28px;
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--fg);
+      letter-spacing: -0.01em;
+    }
+
+    .inbox-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      width: fit-content;
+      max-width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #08080A;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .inbox-icon-box {
+      width: 34px;
+      height: 34px;
+      border-radius: 7px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--fg-muted);
+      flex-shrink: 0;
+    }
+
+    .inbox-address {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--fg);
+      letter-spacing: 0.01em;
+      padding: 0 4px;
+      user-select: all;
+    }
+
+    .inbox-copy-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 7px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--fg-muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease);
+    }
+
+    .inbox-copy-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .social-pills {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .social-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: #08080A;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--fg);
+      text-decoration: none;
+      font-family: var(--font-sans);
+      font-size: 13.5px;
+      transition: border-color 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease);
+    }
+
+    .social-pill svg {
+      color: var(--fg-muted);
+      transition: color 0.2s var(--ease);
+    }
+
+    .social-pill .arrow {
+      font-size: 12px;
+      color: var(--fg-muted);
+      transition: transform 0.2s var(--ease), color 0.2s var(--ease);
+    }
+
+    .social-pill:hover {
+      border-color: rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+    }
+
+    .social-pill:hover svg,
+    .social-pill:hover .arrow {
+      color: #ffffff;
+    }
+
+    .social-pill:hover .arrow {
+      transform: translate(2px, -2px);
     }
 
     /* Meta Bar */
@@ -783,13 +941,6 @@
     }
 
     /* Portfolio Sections */
-    .section {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      scroll-margin-top: 100px;
-    }
-
     .section-label {
       font-family: var(--font-mono);
       font-size: 11.5px;
@@ -802,7 +953,7 @@
     .work-list {
       display: flex;
       flex-direction: column;
-      border-top: 1px solid var(--border);
+      border-top: 1px dashed var(--border);
     }
 
     .work-row {
@@ -810,11 +961,16 @@
       justify-content: space-between;
       align-items: baseline;
       gap: 16px;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border);
+      padding: 18px 0;
+      border-bottom: 1px dashed var(--border);
       text-decoration: none;
       color: inherit;
       transition: border-color 0.2s var(--ease);
+    }
+
+    .work-row:last-child {
+      border-bottom: none;
+      padding-bottom: 4px;
     }
 
     .work-row:hover {
@@ -869,9 +1025,7 @@
     .links-row {
       display: flex;
       align-items: center;
-      gap: 20px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
+      gap: 24px;
       font-size: 13.5px;
       flex-wrap: wrap;
     }
@@ -935,6 +1089,20 @@
     }
 
     @media (max-width: 640px) {
+      .container {
+        border-left: none;
+        border-right: none;
+        padding-top: 64px;
+      }
+
+      .band {
+        padding: 32px 18px;
+      }
+
+      .contact-header-band {
+        padding: 22px 18px;
+      }
+
       .glass-nav {
         padding: 14px 0;
       }
@@ -948,6 +1116,7 @@
       }
 
       .glass-nav-inner {
+        min-height: 28px;
         padding: 0 18px;
         gap: 14px;
       }
@@ -956,7 +1125,6 @@
         font-size: 24px;
       }
 
-      .glass-nav-right,
       .glass-links {
         gap: 16px;
       }
@@ -965,9 +1133,15 @@
         font-size: 14px;
       }
 
-      .glass-cta {
-        padding: 5px 12px;
+      .inbox-card {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .inbox-address {
         font-size: 13px;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .work-row {
@@ -983,94 +1157,173 @@
   <header class="glass-nav-wrap" id="navWrap" aria-label="Primary">
     <nav class="glass-nav" id="glassNav">
       <div class="glass-nav-inner">
-        <a class="glass-brand" href="#top">Manav</a>
-        <div class="glass-nav-right">
-          <div class="glass-links">
-            <a href="#work">work</a>
-            <a href="#now">now</a>
-            <a href="./web-archive/">archive</a>
-          </div>
-          <button class="glass-cta" id="navCopyBtn" type="button">email</button>
+        <a class="glass-brand" href="#top" data-nav="home">manav</a>
+        <div class="glass-links">
+          <a href="#work" data-nav="work">work</a>
+          <a href="#now" data-nav="now">now</a>
+          <a href="./web-archive/">archive</a>
+          <a href="#contact" id="navContactLink" data-nav="contact">contact</a>
         </div>
       </div>
     </nav>
   </header>
 
   <main class="container">
-    <!-- Meta -->
-    <div class="meta-bar">
-      <div class="brand" id="brandTrigger">
-        <div class="avatar-wrap">
-          <div class="brand-avatar" id="brandAvatar" role="img" aria-label="Manav"></div>
-          <span class="avatar-pill" id="avatarPill" aria-live="polite"></span>
+    <!-- HOME VIEW -->
+    <div id="homeView">
+      <!-- Hero Band -->
+      <section class="band band-hero">
+        <div class="meta-bar">
+          <div class="brand" id="brandTrigger">
+            <div class="avatar-wrap">
+              <div class="brand-avatar" id="brandAvatar" role="img" aria-label="Manav"></div>
+              <span class="avatar-pill" id="avatarPill" aria-live="polite"></span>
+            </div>
+            <span class="brand-name" aria-label="Manav Chaudhari">
+              <span class="glitch-word" data-text="Manav">Manav</span>
+              <span class="glitch-word" data-text="Chaudhari">Chaudhari</span>
+            </span>
+          </div>
+
+          <div class="status">
+            <span class="status-dot"></span>
+            <span>in progress</span>
+          </div>
         </div>
-        <span class="brand-name" aria-label="Manav Chaudhari">
-          <span class="glitch-word" data-text="Manav">Manav</span>
-          <span class="glitch-word" data-text="Chaudhari">Chaudhari</span>
-        </span>
-      </div>
 
-      <div class="status">
-        <span class="status-dot"></span>
-        <span>in progress</span>
-      </div>
+        <div class="content-block">
+          <h1>this site is being built</h1>
+          <p>
+            i'm currently putting together my new personal website.
+            curating projects, writing, and refining the details.
+            coming soon.
+          </p>
+        </div>
+      </section>
+
+      <!-- Selected Work Band -->
+      <section class="band" id="work">
+        <h2 class="section-label">selected work</h2>
+        <div class="work-list">
+          <a class="work-row" href="#top">
+            <div>
+              <div class="work-title">manav.here</div>
+              <p class="work-desc">a quiet personal site with cursor head-tracking, small surprises, and notes as they
+                take shape.</p>
+            </div>
+            <span class="work-meta">wip <span class="arrow">↗</span></span>
+          </a>
+
+          <a class="work-row" href="./web-archive/">
+            <div>
+              <div class="work-title">early sketches &amp; pages</div>
+              <p class="work-desc">past experiments, layout studies, and older versions kept in one place.</p>
+            </div>
+            <span class="work-meta">archive <span class="arrow">↗</span></span>
+          </a>
+        </div>
+      </section>
+
+      <!-- Now Band -->
+      <section class="band" id="now">
+        <h2 class="section-label">now</h2>
+        <p>
+          heads-down on full-time exam prep while slowly shaping this site piece by piece.
+          you can follow along on my <a class="inline-link" href="./journey/">journey page</a>.
+        </p>
+      </section>
+
+      <!-- Links Band -->
+      <footer class="band band-footer">
+        <div class="links-row">
+          <button class="link-item copy-btn" id="copyBtn" type="button" title="Click to copy email">
+            <span>hello@manav.here</span>
+          </button>
+
+          <a class="link-item" href="https://x.com/manavgpt" target="_blank" rel="noopener">
+            <span>twitter</span><span class="arrow">↗</span>
+          </a>
+
+          <a class="link-item" href="./web-archive/">
+            <span>archive</span><span class="arrow">↗</span>
+          </a>
+        </div>
+      </footer>
     </div>
 
-    <!-- Core Message -->
-    <div class="content-block">
-      <h1>this site is being built</h1>
-      <p>
-        i'm currently putting together my new personal website.
-        curating projects, writing, and refining the details.
-        coming soon.
-      </p>
-    </div>
+    <!-- CONTACT VIEW -->
+    <div id="contactView" class="view-hidden">
+      <section class="band contact-header-band">
+        <div class="contact-title-bg" aria-hidden="true"></div>
+        <h1 class="contact-page-title">Contact</h1>
+      </section>
 
-    <!-- Selected Work -->
-    <section class="section" id="work">
-      <h2 class="section-label">selected work</h2>
-      <div class="work-list">
-        <a class="work-row" href="#top">
-          <div>
-            <div class="work-title">manav.here</div>
-            <p class="work-desc">a quiet personal site with cursor head-tracking, small surprises, and notes as they
-              take shape.</p>
-          </div>
-          <span class="work-meta">wip <span class="arrow">↗</span></span>
-        </a>
+      <section class="band">
+        <h2 class="contact-subhead">Direct Inbox</h2>
 
-        <a class="work-row" href="./web-archive/">
-          <div>
-            <div class="work-title">early sketches &amp; pages</div>
-            <p class="work-desc">past experiments, layout studies, and older versions kept in one place.</p>
-          </div>
-          <span class="work-meta">archive <span class="arrow">↗</span></span>
-        </a>
-      </div>
-    </section>
+        <div class="inbox-card">
+          <span class="inbox-icon-box" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+          </span>
+          <span class="inbox-address">hello@manav.here</span>
+          <button class="inbox-copy-btn" id="contactCopyBtn" type="button" aria-label="Copy email address"
+            title="Copy email">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </button>
+        </div>
 
-    <!-- Now -->
-    <section class="section" id="now">
-      <h2 class="section-label">now</h2>
-      <p>
-        heads-down on full-time exam prep while slowly shaping this site piece by piece.
-        you can follow along on my <a class="inline-link" href="./journey/">journey page</a>.
-      </p>
-    </section>
+        <div class="social-pills">
+          <a class="social-pill" href="https://x.com/manavgpt" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            <span>Twitter</span>
+            <span class="arrow">↗</span>
+          </a>
 
-    <!-- Links -->
-    <div class="links-row">
-      <button class="link-item copy-btn" id="copyBtn" type="button" title="Click to copy email">
-        <span>hello@manav.here</span>
-      </button>
+          <a class="social-pill" href="mailto:hello@manav.here">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+            <span>Mail</span>
+            <span class="arrow">↗</span>
+          </a>
 
-      <a class="link-item" href="https://x.com/manavgpt" target="_blank" rel="noopener">
-        <span>twitter</span><span class="arrow">↗</span>
-      </a>
+          <a class="social-pill" href="./web-archive/">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 8v13H3V8"></path>
+              <path d="M1 3h22v5H1z"></path>
+              <path d="M10 12h4"></path>
+            </svg>
+            <span>Archive</span>
+            <span class="arrow">↗</span>
+          </a>
 
-      <a class="link-item" href="./web-archive/">
-        <span>archive</span><span class="arrow">↗</span>
-      </a>
+          <a class="social-pill" href="./journey/">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            <span>Journey</span>
+            <span class="arrow">↗</span>
+          </a>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -1080,11 +1333,55 @@
   </div>
 
   <script>
-    /* Scroll-Morphing Navbar + Specular Sheen + Email Proxy */
+    /* View Switcher (Home <-> Contact) */
+    (function () {
+      const homeView = document.getElementById("homeView");
+      const contactView = document.getElementById("contactView");
+      const contactLink = document.getElementById("navContactLink");
+      if (!homeView || !contactView) return;
+
+      function syncView() {
+        const isContact = window.location.hash === "#contact";
+        homeView.classList.toggle("view-hidden", isContact);
+        contactView.classList.toggle("view-hidden", !isContact);
+        if (contactLink) contactLink.classList.toggle("is-active", isContact);
+
+        if (isContact) {
+          window.scrollTo({ top: 0, behavior: "instant" });
+        }
+      }
+
+      document.querySelectorAll("[data-nav]").forEach((link) => {
+        link.addEventListener("click", (e) => {
+          const target = link.getAttribute("data-nav");
+          if (target === "contact") {
+            e.preventDefault();
+            if (window.location.hash !== "#contact") {
+              history.pushState(null, "", "#contact");
+            }
+            syncView();
+          } else {
+            const wasContact = window.location.hash === "#contact";
+            if (wasContact) {
+              e.preventDefault();
+              const hash = target === "home" ? "#top" : `#${target}`;
+              history.pushState(null, "", hash);
+              syncView();
+              const el = document.getElementById(target === "home" ? "top" : target);
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            }
+          }
+        });
+      });
+
+      window.addEventListener("hashchange", syncView);
+      syncView();
+    })();
+
+    /* Scroll-Morphing Navbar + Specular Sheen */
     (function () {
       const navWrap = document.getElementById("navWrap");
       const nav = document.getElementById("glassNav");
-      const navCopy = document.getElementById("navCopyBtn");
 
       function updateNavOnScroll() {
         if (!navWrap) return;
@@ -1101,13 +1398,6 @@
           nav.style.setProperty("--gx", `${e.clientX - r.left}px`);
           nav.style.setProperty("--gy", `${e.clientY - r.top}px`);
         }, { passive: true });
-      }
-
-      if (navCopy) {
-        navCopy.addEventListener("click", () => {
-          const mainCopy = document.getElementById("copyBtn");
-          if (mainCopy) mainCopy.click();
-        });
       }
     })();
 
@@ -1357,8 +1647,9 @@
       }
     });
 
-    /* Copy Email */
+    /* Copy Email (Home Footer + Contact Inbox) */
     const copyBtn = document.getElementById("copyBtn");
+    const contactCopyBtn = document.getElementById("contactCopyBtn");
     const toast = document.getElementById("toast");
     const toastMsg = document.getElementById("toastMsg");
     let toastTimer = null;
@@ -1374,19 +1665,18 @@
     }
 
     const email = "hello@manav.here";
-    copyBtn.addEventListener("click", () => {
+    function copyEmail() {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(email).then(() => {
           showToast(`Copied ${email}`);
-        }).catch(() => fallbackPrompt());
+        }).catch(() => showToast(email));
       } else {
-        fallbackPrompt();
+        showToast(email);
       }
-    });
-
-    function fallbackPrompt() {
-      showToast(email);
     }
+
+    if (copyBtn) copyBtn.addEventListener("click", copyEmail);
+    if (contactCopyBtn) contactCopyBtn.addEventListener("click", copyEmail);
   </script>
 </body>
 
