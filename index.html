@@ -9,13 +9,13 @@
   <meta name="theme-color" content="#000000">
 
   <!-- Favicons -->
-  <link id="favicon" rel="icon" type="image/png" sizes="192x192" href="./active.png?v=14">
-  <link rel="apple-touch-icon" sizes="180x180" href="./active.png?v=14">
-  <link rel="preload" as="image" href="./inactive.png?v=14">
-  <link rel="preload" as="image" href="./avatar-sheet.png">
+  <link id="favicon" rel="icon" type="image/png" sizes="192x192" href="images/active.png?v=14">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/active.png?v=14">
+  <link rel="preload" as="image" href="images/inactive.png?v=14">
+  <link rel="preload" as="image" href="images/avatar-sheet.png">
 
-  <link rel="preload" as="image" href="dizzy.png">
-  <link rel="preload" as="image" href="poked.png">
+  <link rel="preload" as="image" href="images/dizzy.png">
+  <link rel="preload" as="image" href="images/poked.png">
 
 
   <!-- Typography -->
@@ -109,7 +109,7 @@
       border-radius: 50%;
       overflow: hidden;
       background-color: var(--card-bg);
-      background-image: url("./idle.png");
+      background-image: url("images/idle.png");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -120,7 +120,7 @@
     }
 
     .brand-avatar.sprite-ready {
-      background-image: url("./avatar-sheet.png");
+      background-image: url("images/avatar-sheet.png");
       background-size: 300% 300%;
       background-position: 50% 50%;
     }
@@ -134,12 +134,12 @@
     }
 
     .brand-avatar.is-dizzy {
-      background-image: url("./dizzy.png") !important;
+      background-image: url("images/dizzy.png") !important;
       animation: avatar-dizzy 520ms ease-in-out;
     }
 
     .brand-avatar.is-annoyed {
-      background-image: url("./poked.png") !important;
+      background-image: url("images/poked.png") !important;
       animation: avatar-shake 360ms ease-in-out;
     }
 
@@ -825,7 +825,7 @@
         avatar.classList.add("sprite-ready");
         initTracking();
       };
-      sheet.src = "./avatar-sheet.png";
+      sheet.src = "images/avatar-sheet.png";
 
       function initTracking() {
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -991,7 +991,7 @@
 
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
-        if (favicon) favicon.href = "./inactive.png?v=14";
+        if (favicon) favicon.href = "images/inactive.png?v=14";
         messageIndex = 0;
         document.title = inactiveMessages[messageIndex];
 
@@ -1001,7 +1001,7 @@
           document.title = inactiveMessages[messageIndex];
         }, 2700);
       } else {
-        if (favicon) favicon.href = "./active.png?v=14";
+        if (favicon) favicon.href = "images/active.png?v=14";
         clearInterval(inactiveInterval);
         inactiveInterval = null;
         document.title = "finally, you found me!";
