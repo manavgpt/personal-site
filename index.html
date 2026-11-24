@@ -14,6 +14,10 @@
   <link rel="preload" as="image" href="./inactive.png?v=14">
   <link rel="preload" as="image" href="./avatar-sheet.png">
 
+  <link rel="preload" as="image" href="dizzy.png">
+  <link rel="preload" as="image" href="poked.png">
+
+
   <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -90,27 +94,131 @@
       cursor: default;
     }
 
-    /* 8-Way Sprite Avatar */
+    /* 8-Way Sprite Avatar + Easter Egg Pill */
+    .avatar-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
     .brand-avatar {
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      /* border: 1px solid var(--border); */
       overflow: hidden;
-      flex-shrink: 0;
       background-color: var(--card-bg);
       background-image: url("./idle.png");
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: border-color 0.2s var(--ease);
     }
 
     .brand-avatar.sprite-ready {
-      background-image: url("avatar-sheet.png");
+      background-image: url("./avatar-sheet.png");
       background-size: 300% 300%;
       background-position: 50% 50%;
     }
 
+    /* Reaction override: show annoyed/inactive.png cleanly */
+    /* Reaction overrides */
+    .brand-avatar.is-reacting {
+      background-size: 88% !important;
+      background-position: center !important;
+      border-color: var(--accent);
+    }
+
+    .brand-avatar.is-dizzy {
+      background-image: url("./dizzy.png") !important;
+      animation: avatar-dizzy 520ms ease-in-out;
+    }
+
+    .brand-avatar.is-annoyed {
+      background-image: url("./poked.png") !important;
+      animation: avatar-shake 360ms ease-in-out;
+    }
+
+
+    @keyframes avatar-dizzy {
+      0% {
+        transform: rotate(0deg) scale(1);
+      }
+
+      20% {
+        transform: rotate(-14deg) scale(1.06);
+      }
+
+      45% {
+        transform: rotate(12deg) scale(1.04);
+      }
+
+      70% {
+        transform: rotate(-7deg) scale(1.02);
+      }
+
+      88% {
+        transform: rotate(4deg) scale(1);
+      }
+
+      100% {
+        transform: rotate(0deg) scale(1);
+      }
+    }
+
+    @keyframes avatar-shake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20% {
+        transform: translateX(-3px) rotate(-4deg);
+      }
+
+      40% {
+        transform: translateX(3px) rotate(4deg);
+      }
+
+      60% {
+        transform: translateX(-2px) rotate(-2deg);
+      }
+
+      80% {
+        transform: translateX(2px) rotate(2deg);
+      }
+    }
+
+    .avatar-pill {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px) scale(0.95);
+      opacity: 0;
+      pointer-events: none;
+      white-space: nowrap;
+      background: #141417;
+      border: 1px solid var(--border-hover);
+      color: var(--fg);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.02em;
+      padding: 4px 10px;
+      border-radius: 99px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.75);
+      transition: opacity 0.2s var(--ease), transform 0.22s var(--ease);
+      z-index: 20;
+    }
+
+    .avatar-pill.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
 
     /* Spider-Verse Name Glitch Effect */
     .brand-name {
@@ -455,6 +563,8 @@
 
     @media (prefers-reduced-motion: reduce) {
 
+      .brand-avatar.is-dizzy,
+      .brand-avatar.is-annoyed,
       .glitch-word,
       .glitch-word::before,
       .glitch-word::after {
@@ -568,19 +678,6 @@
       font-weight: 500;
     }
 
-    /* Live Clock */
-    /*
-    .live-clock {
-      margin-left: auto;
-      font-family: var(--font-mono);
-      font-size: 11.5px;
-      letter-spacing: 0.04em;
-      color: var(--fg-muted);
-      font-variant-numeric: tabular-nums;
-      white-space: nowrap;
-    }
-    */
-
     /* Clean Minimal Toast */
     .toast {
       position: fixed;
@@ -613,7 +710,10 @@
     <!-- Meta -->
     <div class="meta-bar">
       <div class="brand" id="brandTrigger">
-        <div class="brand-avatar" id="brandAvatar" role="img" aria-label="Manav"></div>
+        <div class="avatar-wrap">
+          <div class="brand-avatar" id="brandAvatar" role="img" aria-label="Manav"></div>
+          <span class="avatar-pill" id="avatarPill" aria-live="polite"></span>
+        </div>
         <span class="brand-name" aria-label="Manav Chaudhari">
           <span class="glitch-word" data-text="Manav">Manav</span>
           <span class="glitch-word" data-text="Chaudhari">Chaudhari</span>
@@ -649,8 +749,6 @@
       <a class="link-item" href="./web-archive/">
         <span>archive</span><span class="arrow">↗</span>
       </a>
-
-      <!-- <span class="live-clock" id="live-clock" title="Local time (IST)"></span> -->
     </div>
   </main>
 
@@ -660,12 +758,68 @@
   </div>
 
   <script>
-    /* 8-Way Sprite Swap (Cursor Tracking) */
+    /* 8-Way Sprite Swap + Dizzy / Annoyed Easter Egg */
     (function () {
       const avatar = document.getElementById("brandAvatar");
+      const pill = document.getElementById("avatarPill");
       if (!avatar) return;
 
-      // Only activate sprite mode if avatar-sheet.png exists & loads
+      const DIZZY_LINES = ["dizzy.", "whoa.", "chill.", "easy there."];
+      const ANNOYED_LINES = ["hey.", "stop poking.", "really?", "busy."];
+
+      let isReacting = false;
+      let reactTimer = null;
+      let lastAngle = null;
+      let spinAccum = 0;
+      let spinDecayTimer = null;
+      let clickCount = 0;
+      let clickResetTimer = null;
+
+      function triggerReaction(type) {
+        if (isReacting) return;
+        isReacting = true;
+        spinAccum = 0;
+        lastAngle = null;
+        clickCount = 0;
+
+        const lines = type === "dizzy" ? DIZZY_LINES : ANNOYED_LINES;
+        const msg = lines[Math.floor(Math.random() * lines.length)];
+
+        avatar.classList.remove("is-dizzy", "is-annoyed");
+        void avatar.offsetWidth;
+        avatar.classList.add("is-reacting", type === "dizzy" ? "is-dizzy" : "is-annoyed");
+
+        if (pill) {
+          pill.textContent = msg;
+          pill.classList.add("show");
+        }
+
+        clearTimeout(reactTimer);
+        reactTimer = setTimeout(() => {
+          avatar.classList.remove("is-reacting", "is-dizzy", "is-annoyed");
+          if (pill) pill.classList.remove("show");
+          isReacting = false;
+        }, 2200);
+      }
+
+      // Click / tap 3 times quickly -> Annoyed
+      avatar.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (isReacting) return;
+
+        clickCount += 1;
+        clearTimeout(clickResetTimer);
+
+        if (clickCount >= 3) {
+          triggerReaction("annoyed");
+        } else {
+          clickResetTimer = setTimeout(() => {
+            clickCount = 0;
+          }, 1100);
+        }
+      });
+
+      // Only activate 8-way sprite mode if avatar-sheet.png exists & loads
       const sheet = new Image();
       sheet.onload = () => {
         avatar.classList.add("sprite-ready");
@@ -676,7 +830,6 @@
       function initTracking() {
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-        // 3x3 sprite grid positions keyed by 45° sector (-4 to 4)
         const POSITIONS = {
           "0": "100% 50%",   // Right
           "1": "100% 100%",  // Bottom-Right
@@ -689,7 +842,7 @@
           "-1": "100% 0%",    // Top-Right
         };
 
-        const DEADZONE = 28; // px radius around avatar center -> look straight
+        const DEADZONE = 28;
         let lastPos = "50% 50%";
         let rafId = null;
         let mx = 0;
@@ -703,6 +856,8 @@
 
         function update() {
           rafId = null;
+          if (isReacting) return;
+
           const rect = avatar.getBoundingClientRect();
           const cx = rect.left + rect.width / 2;
           const cy = rect.top + rect.height / 2;
@@ -711,12 +866,34 @@
 
           if (Math.hypot(dx, dy) < DEADZONE) {
             setPos("50% 50%");
+            lastAngle = null;
             return;
           }
 
           const angle = Math.atan2(dy, dx) * (180 / Math.PI);
           const sector = Math.round(angle / 45);
           setPos(POSITIONS[String(sector)] || "50% 50%");
+
+          // Measure continuous angular spin around the avatar
+          if (lastAngle !== null) {
+            let delta = angle - lastAngle;
+            if (delta > 180) delta -= 360;
+            if (delta < -180) delta += 360;
+
+            spinAccum += Math.abs(delta);
+            clearTimeout(spinDecayTimer);
+            spinDecayTimer = setTimeout(() => {
+              spinAccum = 0;
+              lastAngle = null;
+            }, 650);
+
+            // ~2.5 full rotations (900°) -> Dizzy
+            if (spinAccum >= 900) {
+              triggerReaction("dizzy");
+              return;
+            }
+          }
+          lastAngle = angle;
         }
 
         window.addEventListener("pointermove", (e) => {
@@ -726,7 +903,11 @@
           if (!rafId) rafId = requestAnimationFrame(update);
         }, { passive: true });
 
-        document.addEventListener("pointerleave", () => setPos("50% 50%"));
+        document.addEventListener("pointerleave", () => {
+          lastAngle = null;
+          spinAccum = 0;
+          if (!isReacting) setPos("50% 50%");
+        });
       }
     })();
 
