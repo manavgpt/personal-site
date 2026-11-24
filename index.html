@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
   <meta charset="utf-8">
@@ -44,13 +44,34 @@
     :root {
       --bg: #000000;
       --card-bg: #0A0A0C;
+      --surface-elevated: #141417;
       --border: rgba(255, 255, 255, 0.08);
       --border-hover: rgba(255, 255, 255, 0.16);
+      --border-strong: rgba(255, 255, 255, 0.28);
       --grid-line: rgba(255, 255, 255, 0.14);
 
       --fg: #EDEDED;
+      --fg-white: #FFFFFF;
       --fg-muted: #888888;
       --fg-faint: #444444;
+      --nav-link: #A1A1AA;
+      --meta-muted: #777780;
+
+      --nav-bg: rgba(8, 8, 10, 0.82);
+      --nav-bg-scrolled: rgba(12, 12, 15, 0.88);
+      --nav-sheen: rgba(255, 255, 255, 0.07);
+      --nav-sheen-scrolled: rgba(255, 255, 255, 0.09);
+      --nav-border-scrolled: rgba(255, 255, 255, 0.14);
+      --hover-fill: rgba(255, 255, 255, 0.05);
+      --subtle-fill: rgba(255, 255, 255, 0.03);
+      --hatch-line: rgba(255, 255, 255, 0.03);
+      --shadow-float: 0 18px 40px rgba(0, 0, 0, 0.72);
+      --shadow-pill: 0 8px 20px rgba(0, 0, 0, 0.75);
+      --shadow-toast: 0 12px 30px rgba(0, 0, 0, 0.8);
+
+      --hero-grad-start: #FFFFFF;
+      --hero-grad-end: #A1A1AA;
+      --comic-ink: #000000;
 
       --accent: #E5A93C;
       --col-width: 740px;
@@ -61,6 +82,39 @@
       --font-serif: "Newsreader", Georgia, serif;
 
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    :root[data-theme="light"] {
+      --bg: #FAF9F6;
+      --card-bg: #F2F0EB;
+      --surface-elevated: #FFFFFF;
+      --border: rgba(17, 17, 19, 0.10);
+      --border-hover: rgba(17, 17, 19, 0.22);
+      --border-strong: rgba(17, 17, 19, 0.34);
+      --grid-line: rgba(17, 17, 19, 0.16);
+
+      --fg: #141416;
+      --fg-white: #0B0B0D;
+      --fg-muted: #5C5C64;
+      --fg-faint: #8E8E96;
+      --nav-link: #5E5E66;
+      --meta-muted: #666670;
+
+      --nav-bg: rgba(250, 249, 246, 0.84);
+      --nav-bg-scrolled: rgba(246, 244, 239, 0.92);
+      --nav-sheen: rgba(17, 17, 19, 0.04);
+      --nav-sheen-scrolled: rgba(17, 17, 19, 0.05);
+      --nav-border-scrolled: rgba(17, 17, 19, 0.15);
+      --hover-fill: rgba(17, 17, 19, 0.04);
+      --subtle-fill: rgba(17, 17, 19, 0.025);
+      --hatch-line: rgba(17, 17, 19, 0.04);
+      --shadow-float: 0 18px 40px rgba(17, 17, 19, 0.10);
+      --shadow-pill: 0 8px 20px rgba(17, 17, 19, 0.12);
+      --shadow-toast: 0 12px 30px rgba(17, 17, 19, 0.14);
+
+      --hero-grad-start: #111113;
+      --hero-grad-end: #575760;
+      --comic-ink: #FFFFFF;
     }
 
     * {
@@ -83,6 +137,44 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       overflow-x: clip;
+    }
+
+    /* Clean Blur-Fade Theme Transition */
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      mix-blend-mode: normal;
+    }
+
+    ::view-transition-old(root) {
+      animation: theme-blur-out 420ms ease-in-out both;
+    }
+
+    ::view-transition-new(root) {
+      animation: theme-blur-in 420ms ease-in-out both;
+    }
+
+    @keyframes theme-blur-out {
+      from {
+        opacity: 1;
+        filter: blur(0px);
+      }
+
+      to {
+        opacity: 0;
+        filter: blur(10px);
+      }
+    }
+
+    @keyframes theme-blur-in {
+      from {
+        opacity: 0;
+        filter: blur(10px);
+      }
+
+      to {
+        opacity: 1;
+        filter: blur(0px);
+      }
     }
 
     /* Full-Width Bar -> Column-Locked Floating Rectangle on Scroll */
@@ -112,8 +204,8 @@
       padding: 18px 0;
       border-radius: 0px;
       background:
-        radial-gradient(280px circle at var(--gx) var(--gy), rgba(255, 255, 255, 0.07), transparent 70%),
-        rgba(8, 8, 10, 0.82);
+        radial-gradient(280px circle at var(--gx) var(--gy), var(--nav-sheen), transparent 70%),
+        var(--nav-bg);
       backdrop-filter: blur(18px) saturate(145%);
       -webkit-backdrop-filter: blur(18px) saturate(145%);
       border: 1px solid transparent;
@@ -135,10 +227,10 @@
       padding: 14px 0;
       border-radius: 2px;
       background:
-        radial-gradient(280px circle at var(--gx) var(--gy), rgba(255, 255, 255, 0.09), transparent 70%),
-        rgba(12, 12, 15, 0.88);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.72);
+        radial-gradient(280px circle at var(--gx) var(--gy), var(--nav-sheen-scrolled), transparent 70%),
+        var(--nav-bg-scrolled);
+      border: 1px solid var(--nav-border-scrolled);
+      box-shadow: var(--shadow-float);
     }
 
     /* Keeps navbar links locked to the exact page column width & original height */
@@ -161,7 +253,7 @@
       font-optical-sizing: auto;
       letter-spacing: -0.025em;
       line-height: 1;
-      color: #ffffff;
+      color: var(--fg-white);
       text-decoration: none;
       white-space: nowrap;
     }
@@ -169,12 +261,12 @@
     .glass-links {
       display: flex;
       align-items: center;
-      gap: 28px;
+      gap: 24px;
     }
 
     .glass-links a {
       font-family: var(--font-nav);
-      color: #A1A1AA;
+      color: var(--nav-link);
       text-decoration: none;
       font-size: 15px;
       font-weight: 400;
@@ -186,12 +278,37 @@
     }
 
     .glass-links a:hover {
-      color: #ffffff;
+      color: var(--fg-white);
     }
 
     .glass-links a.is-active {
-      color: #ffffff;
-      border-bottom-color: #ffffff;
+      color: var(--fg-white);
+      border-bottom-color: var(--fg-white);
+    }
+
+    .theme-toggle-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--subtle-fill);
+      color: var(--nav-link);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: color 0.2s var(--ease), background 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.2s var(--ease);
+    }
+
+    .theme-toggle-btn:hover {
+      color: var(--fg-white);
+      background: var(--hover-fill);
+      border-color: var(--border-hover);
+    }
+
+    .theme-toggle-btn:active {
+      transform: scale(0.92);
     }
 
     /* Main Architectural Column with Vertical Dotted Rails */
@@ -236,21 +353,26 @@
     /* Live IST Pixel Sky Banner */
     .band-banner {
       padding: 0;
-      height: 220px;
+      height: 176px;
       background: #060912;
       overflow: hidden;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* Subtle inner vignette so banner sits naturally inside the dark grid */
+
+
     .band-banner::before {
       content: "";
       position: absolute;
       inset: 0;
       pointer-events: none;
       z-index: 2;
-      box-shadow: inset 0 0 28px rgba(0, 0, 0, 0.35);
+      box-shadow:
+        inset 0 14px 22px rgba(0, 0, 0, 0.28),
+        inset 0 -14px 22px rgba(0, 0, 0, 0.35),
+        inset 18px 0 26px rgba(0, 0, 0, 0.25),
+        inset -18px 0 26px rgba(0, 0, 0, 0.25);
     }
 
     .pixel-sky-canvas {
@@ -272,11 +394,11 @@
       gap: 6px;
       padding: 4px 10px;
       border-radius: 999px;
-      background: rgba(6, 8, 14, 0.62);
+      background: rgba(6, 8, 14, 0.65);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.14);
-      color: rgba(237, 237, 237, 0.85);
+      color: rgba(237, 237, 237, 0.88);
       font-family: var(--font-mono);
       font-size: 10.5px;
       letter-spacing: 0.03em;
@@ -285,7 +407,7 @@
     }
 
     .sky-pill:hover {
-      background: rgba(12, 16, 26, 0.82);
+      background: rgba(12, 16, 26, 0.85);
       border-color: rgba(255, 255, 255, 0.28);
       color: #ffffff;
     }
@@ -340,7 +462,7 @@
       line-height: 1.05;
       letter-spacing: -0.03em;
       font-optical-sizing: auto;
-      color: #ffffff;
+      color: var(--fg-white);
     }
 
     .profile-role {
@@ -356,7 +478,7 @@
       gap: 8px;
       font-family: var(--font-mono);
       font-size: 12px;
-      color: #777780;
+      color: var(--meta-muted);
       letter-spacing: 0.02em;
     }
 
@@ -393,8 +515,8 @@
       transform: translateX(-50%);
       width: 100vw;
       background: repeating-linear-gradient(-45deg,
-          rgba(255, 255, 255, 0.03) 0px,
-          rgba(255, 255, 255, 0.03) 1px,
+          var(--hatch-line) 0px,
+          var(--hatch-line) 1px,
           transparent 1px,
           transparent 8px);
       z-index: -1;
@@ -414,7 +536,7 @@
       font-size: 34px;
       font-weight: 400;
       line-height: 1;
-      color: #ffffff;
+      color: var(--fg-white);
       letter-spacing: -0.025em;
     }
 
@@ -435,16 +557,16 @@
       max-width: 100%;
       padding: 10px 12px;
       border-radius: 10px;
-      background: #08080A;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
     }
 
     .inbox-icon-box {
       width: 34px;
       height: 34px;
       border-radius: 7px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      background: var(--subtle-fill);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -465,8 +587,8 @@
       width: 34px;
       height: 34px;
       border-radius: 7px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      background: var(--subtle-fill);
       color: var(--fg-muted);
       display: inline-flex;
       align-items: center;
@@ -477,9 +599,9 @@
     }
 
     .inbox-copy-btn:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.22);
+      color: var(--fg-white);
+      background: var(--hover-fill);
+      border-color: var(--border-hover);
     }
 
     .social-pills {
@@ -496,8 +618,8 @@
       gap: 8px;
       padding: 9px 16px;
       border-radius: 999px;
-      background: #08080A;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: var(--card-bg);
+      border: 1px solid var(--border);
       color: var(--fg);
       text-decoration: none;
       font-family: var(--font-sans);
@@ -517,14 +639,14 @@
     }
 
     .social-pill:hover {
-      border-color: rgba(255, 255, 255, 0.28);
-      background: rgba(255, 255, 255, 0.05);
-      color: #ffffff;
+      border-color: var(--border-strong);
+      background: var(--hover-fill);
+      color: var(--fg-white);
     }
 
     .social-pill:hover svg,
     .social-pill:hover .arrow {
-      color: #ffffff;
+      color: var(--fg-white);
     }
 
     .social-pill:hover .arrow {
@@ -544,9 +666,9 @@
       width: 84px;
       height: 84px;
       border-radius: 18px;
-      /* border: 1px solid rgba(255, 255, 255, 0.14); */
+      /* border: 1px solid var(--border-hover); */
       overflow: hidden;
-      background-color: var(--card-bg);
+      /* background-color: var(--card-bg); */
       background-image: url("images/idle.png");
       background-size: cover;
       background-position: center;
@@ -638,7 +760,7 @@
       opacity: 0;
       pointer-events: none;
       white-space: nowrap;
-      background: #141417;
+      background: var(--surface-elevated);
       border: 1px solid var(--border-hover);
       color: var(--fg);
       font-family: var(--font-mono);
@@ -646,7 +768,7 @@
       letter-spacing: 0.02em;
       padding: 4px 10px;
       border-radius: 99px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.75);
+      box-shadow: var(--shadow-pill);
       transition: opacity 0.2s var(--ease), transform 0.22s var(--ease);
       z-index: 20;
     }
@@ -914,7 +1036,7 @@
 
       48% {
         background: linear-gradient(115deg, #22c55e 0 36%, #3b82f6 36% 68%, #f97316 68% 100%);
-        color: #000000;
+        color: var(--comic-ink);
         padding: 0 3px;
         margin: 0 -3px;
         transform: skewX(-10deg) scale(1.03);
@@ -1006,7 +1128,10 @@
       .brand-avatar.is-annoyed,
       .glitch-word,
       .glitch-word::before,
-      .glitch-word::after {
+      .glitch-word::after,
+      .theme-halftone-overlay.is-spreading,
+      ::view-transition-old(root),
+      ::view-transition-new(root) {
         animation: none !important;
         transition: none !important;
       }
@@ -1058,7 +1183,7 @@
       line-height: 1.15;
       letter-spacing: -0.03em;
       font-optical-sizing: auto;
-      background: linear-gradient(180deg, #FFFFFF 0%, #A1A1AA 100%);
+      background: linear-gradient(180deg, var(--hero-grad-start) 0%, var(--hero-grad-end) 100%);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -1204,14 +1329,14 @@
       transform: translateX(-50%) translateY(16px);
       opacity: 0;
       pointer-events: none;
-      background: #141417;
+      background: var(--surface-elevated);
       border: 1px solid var(--border-hover);
       color: var(--fg);
       font-size: 12.5px;
       font-family: var(--font-mono);
       padding: 8px 16px;
       border-radius: 99px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
+      box-shadow: var(--shadow-toast);
       transition: transform 0.25s var(--ease), opacity 0.25s;
       z-index: 100;
     }
@@ -1234,7 +1359,8 @@
 
       .band-banner {
         padding: 0;
-        height: 164px;
+        height: auto;
+        aspect-ratio: 370 / 88;
       }
 
       .sky-pill {
@@ -1278,7 +1404,7 @@
       .glass-nav-inner {
         min-height: 28px;
         padding: 0 18px;
-        gap: 14px;
+        gap: 10px;
       }
 
       .glass-brand {
@@ -1286,11 +1412,16 @@
       }
 
       .glass-links {
-        gap: 16px;
+        gap: 12px;
       }
 
       .glass-links a {
         font-size: 14px;
+      }
+
+      .theme-toggle-btn {
+        width: 26px;
+        height: 26px;
       }
 
       .inbox-card {
@@ -1313,6 +1444,9 @@
 </head>
 
 <body id="top">
+  <!-- Halftone CMY Ring Overlay -->
+  <!-- Halftone CMY Ring Overlay -->
+  <div class="theme-halftone-overlay" id="themeHalftoneOverlay" aria-hidden="true"></div>
   <!-- Full-Width Bar -> Column-Locked Floating Rectangle Navbar -->
   <header class="glass-nav-wrap" id="navWrap" aria-label="Primary">
     <nav class="glass-nav" id="glassNav">
@@ -1323,6 +1457,28 @@
           <a href="#now" data-nav="now">now</a>
           <a href="./web-archive/">archive</a>
           <a href="#contact" id="navContactLink" data-nav="contact">contact</a>
+          <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Toggle light or dark theme"
+            title="Toggle light/dark theme">
+            <!-- Sun icon (shown in dark mode) -->
+            <svg id="iconSun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2"></path>
+              <path d="M12 20v2"></path>
+              <path d="m4.93 4.93 1.41 1.41"></path>
+              <path d="m17.66 17.66 1.41 1.41"></path>
+              <path d="M2 12h2"></path>
+              <path d="M20 12h2"></path>
+              <path d="m6.34 17.66-1.41 1.41"></path>
+              <path d="m19.07 4.93-1.41 1.41"></path>
+            </svg>
+            <!-- Moon icon (shown in light mode) -->
+            <svg id="iconMoon" class="view-hidden" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"
+              aria-hidden="true">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+            </svg>
+          </button>
         </div>
       </div>
     </nav>
@@ -1333,7 +1489,7 @@
     <div id="homeView">
       <!-- Live IST 16-bit Pixel Sky Banner -->
       <section class="band band-banner" aria-label="Live Indian Standard Time pixel sky">
-        <canvas class="pixel-sky-canvas" id="pixelSky" width="370" height="110"></canvas>
+        <canvas class="pixel-sky-canvas" id="pixelSky" width="370" height="88"></canvas>
         <!-- <button class="sky-pill" id="skyModeBtn" type="button" title="Click to preview dawn, day, dusk &amp; night">
           <span class="sky-pill-dot" aria-hidden="true"></span>
           <span id="skyModeLabel">ist</span>
@@ -1358,7 +1514,7 @@
               <div class="profile-meta">
                 <span class="location-tag">
                   <canvas class="globe-3d" id="globe3d" width="64" height="64" aria-hidden="true"></canvas>
-                  <span>Bengalaru, India</span>
+                  <span>Bengaluru, India</span>
                 </span>
                 <!-- <span>·</span>
                 <span class="status">
@@ -1527,7 +1683,116 @@
   </div>
 
   <script>
-    /* WebGL 3D Earth Globe Before "India" */
+    /* Halftone CMY Iris Theme Switcher */
+    /* Clean Blur-Fade Theme Switcher */
+    (function () {
+      const btn = document.getElementById("themeToggleBtn");
+      const iconSun = document.getElementById("iconSun");
+      const iconMoon = document.getElementById("iconMoon");
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      const root = document.documentElement;
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      function syncThemeUI(theme) {
+        root.setAttribute("data-theme", theme);
+        if (iconSun) iconSun.classList.toggle("view-hidden", theme === "light");
+        if (iconMoon) iconMoon.classList.toggle("view-hidden", theme !== "light");
+        if (metaTheme) metaTheme.setAttribute("content", theme === "light" ? "#FAF9F6" : "#000000");
+      }
+
+      let initialTheme = "dark";
+      try {
+        const saved = localStorage.getItem("theme");
+        if (saved === "light" || saved === "dark") {
+          initialTheme = saved;
+        } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
+          initialTheme = "light";
+        }
+      } catch (_) { }
+      syncThemeUI(initialTheme);
+
+      if (btn) {
+        btn.addEventListener("click", () => {
+          const current = root.getAttribute("data-theme") === "light" ? "light" : "dark";
+          const next = current === "dark" ? "light" : "dark";
+
+          try {
+            localStorage.setItem("theme", next);
+          } catch (_) { }
+
+          if (reducedMotion || typeof document.startViewTransition !== "function") {
+            syncThemeUI(next);
+            return;
+          }
+
+          document.startViewTransition(() => {
+            syncThemeUI(next);
+          });
+        });
+      }
+    })();
+
+    /* Shared IST Clock & Preview State for Pixel Sky + 3D Globe */
+    const skyClock = (function () {
+      const MODES = [
+        { key: "live", hour: null, label: null },
+        { key: "dawn", hour: 6.25, label: "dawn · preview" },
+        { key: "day", hour: 12.5, label: "day · preview" },
+        { key: "dusk", hour: 18.1, label: "dusk · preview" },
+        { key: "night", hour: 22.5, label: "night · preview" },
+      ];
+      let modeIdx = 0;
+
+      function getISTDate() {
+        const now = new Date();
+        const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+        return new Date(utcMs + 5.5 * 3600000);
+      }
+
+      function getHour() {
+        const mode = MODES[modeIdx];
+        const ist = getISTDate();
+        const liveHour = ist.getHours() + ist.getMinutes() / 60 + ist.getSeconds() / 3600;
+        return {
+          h: mode.hour === null ? liveHour : mode.hour,
+          mode: MODES[modeIdx],
+          ist,
+        };
+      }
+
+      function cycleMode() {
+        modeIdx = (modeIdx + 1) % MODES.length;
+        return getHour();
+      }
+
+      function getLightingState(h) {
+        let dayAmount = 0;
+        let goldenAmount = 0;
+
+        if (h >= 5 && h < 7.5) {
+          const t = (h - 5) / 2.5;
+          dayAmount = t;
+          goldenAmount = Math.sin(t * Math.PI);
+        } else if (h >= 7.5 && h < 16.5) {
+          dayAmount = 1;
+          goldenAmount = 0;
+        } else if (h >= 16.5 && h < 19.5) {
+          const t = (h - 16.5) / 3;
+          dayAmount = 1 - t;
+          goldenAmount = Math.sin(t * Math.PI);
+        } else {
+          dayAmount = 0;
+          goldenAmount = 0;
+        }
+
+        const sunAngle = ((h - 6) / 12) * Math.PI;
+        return { dayAmount, goldenAmount, sunAngle };
+      }
+
+      return { getHour, cycleMode, getLightingState };
+    })();
+
+    /* WebGL 3D Earth Globe Before "India" (Time-Dynamic Lighting) */
     (function () {
       const canvas = document.getElementById("globe3d");
       if (!canvas) return;
@@ -1662,17 +1927,21 @@
       const fsSource = `
         precision mediump float;
         uniform sampler2D uTex;
+        uniform vec3 uLightDir;
+        uniform float uAmbient;
+        uniform float uSpecStrength;
+        uniform vec3 uLightTint;
         varying vec2 vTex;
         varying vec3 vNormal;
         void main() {
           vec3 texCol = texture2D(uTex, vTex).rgb;
-          vec3 lightDir = normalize(vec3(-0.55, 0.5, 0.75));
-          float diff = max(0.24, dot(normalize(vNormal), lightDir));
+          vec3 n = normalize(vNormal);
+          float diff = max(0.0, dot(n, normalize(uLightDir)));
           vec3 viewDir = vec3(0.0, 0.0, 1.0);
-          vec3 halfVec = normalize(lightDir + viewDir);
-          float spec = pow(max(0.0, dot(normalize(vNormal), halfVec)), 24.0) * 0.32;
-          vec3 col = texCol * diff + vec3(spec);
-          gl_FragColor = vec4(col, 1.0);
+          vec3 halfVec = normalize(normalize(uLightDir) + viewDir);
+          float spec = pow(max(0.0, dot(n, halfVec)), 22.0) * uSpecStrength;
+          vec3 lit = texCol * (uAmbient + diff * 0.85) * uLightTint + vec3(spec) * uLightTint;
+          gl_FragColor = vec4(lit, 1.0);
         }
       `;
 
@@ -1748,33 +2017,63 @@
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
       const uRot = gl.getUniformLocation(prog, "uRot");
+      const uLightDir = gl.getUniformLocation(prog, "uLightDir");
+      const uAmbient = gl.getUniformLocation(prog, "uAmbient");
+      const uSpecStrength = gl.getUniformLocation(prog, "uSpecStrength");
+      const uLightTint = gl.getUniformLocation(prog, "uLightTint");
+
       gl.enable(gl.DEPTH_TEST);
       gl.viewport(0, 0, canvas.width, canvas.height);
 
       let rot = 0.6;
 
       function draw() {
+        const { h } = skyClock.getHour();
+        const { dayAmount, goldenAmount, sunAngle } = skyClock.getLightingState(h);
+
+        const lx = -Math.cos(sunAngle) * 0.72;
+        const ly = 0.25 + Math.max(0, Math.sin(sunAngle)) * 0.45;
+        const lz = 0.55 + dayAmount * 0.25;
+
+        const ambient = 0.14 + dayAmount * 0.22;
+        const spec = 0.12 + dayAmount * 0.28;
+
+        const nightTint = [0.68, 0.78, 1.05];
+        const dayTint = [1.05, 1.04, 1.0];
+        const goldenTint = [1.22, 0.92, 0.74];
+
+        const baseR = nightTint[0] + (dayTint[0] - nightTint[0]) * dayAmount;
+        const baseG = nightTint[1] + (dayTint[1] - nightTint[1]) * dayAmount;
+        const baseB = nightTint[2] + (dayTint[2] - nightTint[2]) * dayAmount;
+
+        const tintR = baseR + (goldenTint[0] - baseR) * goldenAmount * 0.75;
+        const tintG = baseG + (goldenTint[1] - baseG) * goldenAmount * 0.75;
+        const tintB = baseB + (goldenTint[2] - baseB) * goldenAmount * 0.75;
+
         gl.clearColor(0, 0, 0, 0);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.uniform1f(uRot, rot);
+        gl.uniform3f(uLightDir, lx, ly, lz);
+        gl.uniform1f(uAmbient, ambient);
+        gl.uniform1f(uSpecStrength, spec);
+        gl.uniform3f(uLightTint, tintR, tintG, tintB);
         gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
       }
 
       function loop() {
         if (!document.hidden && !reducedMotion) {
           rot = (rot + 0.025) % (Math.PI * 2);
-          draw();
         }
+        draw();
         requestAnimationFrame(loop);
       }
 
       draw();
-      if (!reducedMotion) {
-        requestAnimationFrame(loop);
-      }
+      requestAnimationFrame(loop);
     })();
 
-    /* Live IST 16-Bit Pixel Sky — Triangular Peaks with Softly Curved Summits & Winding River */
+    /* Live IST 16-Bit Pixel Sky — Layered Ridges, Depth & Flying Birds */
+    /* Live IST 16-Bit Pixel Sky — 370x88 (Exact 2x for 740x176) */
     (function () {
       const canvas = document.getElementById("pixelSky");
       const modeBtn = document.getElementById("skyModeBtn");
@@ -1784,163 +2083,177 @@
       if (!ctx) return;
 
       const W = 370;
-      const H = 110;
-      const HORIZON = 54;
+      const H = 88;
       canvas.width = W;
       canvas.height = H;
       ctx.imageSmoothingEnabled = false;
 
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      const MODES = [
-        { key: "live", hour: null, label: null },
-        { key: "dawn", hour: 6.25, label: "dawn · preview" },
-        { key: "day", hour: 12.5, label: "day · preview" },
-        { key: "dusk", hour: 18.1, label: "dusk · preview" },
-        { key: "night", hour: 22.5, label: "night · preview" },
-      ];
-      let modeIdx = 0;
-
       const PALETTES = {
         night: {
-          sky: ["#050812", "#090f21", "#0f1933", "#162445", "#1f3057"],
-          cloud: "#18243f",
-          cloudHi: "#26385e",
-          mLeftDark: "#0d1c21",
-          mLeftMid: "#13292e",
-          mLeftHi: "#1d3b40",
-          mRightDark: "#111830",
-          mRightMid: "#182242",
-          mRightHi: "#24335e",
-          grassTop: "#13241c",
-          grassMid: "#0e1c16",
-          grassBot: "#091410",
-          grassTuft: "#1a3025",
-          bankDark: "#151b22",
-          bankLight: "#252e38",
-          riverDark: "#0c1a33",
-          riverMid: "#13284a",
-          riverHi: "#1f3d6b",
-          sparkle: "#b8d6ff",
-          houseLWall: "#453237",
-          houseLShade: "#332327",
-          houseLRoof: "#5e4b32",
-          houseLRoofHi: "#755f40",
-          houseRWall: "#544734",
-          houseRShade: "#3d3324",
-          houseRRoof: "#4f2a27",
-          houseRRoofHi: "#663834",
-          door: "#211615",
-          wood: "#2e221d",
-          treeDark: "#091410",
-          treeMid: "#0f2119",
-          treeHi: "#173024",
-          flower: "#5b6d8a",
+          sky: ["#050812", "#091024", "#101c38", "#18284d", "#223663"],
+          mist: "rgba(38, 58, 96, 0.34)",
+          cloud: "#192642",
+          cloudHi: "#2a3e66",
+          ridgeFar: "#0d162b",
+          mLeftDark: "#0a161c",
+          mLeftMid: "#12242b",
+          mLeftHi: "#1b363f",
+          mLeftSnow: "#2a4652",
+          mRightDark: "#0c1329",
+          mRightMid: "#151f3d",
+          mRightHi: "#21315c",
+          mRightSnow: "#334778",
+          foothill: "#0f1c1a",
+          grassTop: "#14261d",
+          grassMid: "#0e1d16",
+          grassBot: "#09140f",
+          grassTuft: "#1e382b",
+          bankDark: "#12171f",
+          bankLight: "#28323d",
+          riverDark: "#0b1930",
+          riverMid: "#12284a",
+          riverHi: "#214070",
+          sparkle: "#c4deff",
+          houseLWall: "#473338",
+          houseLShade: "#302125",
+          houseLRoof: "#614d33",
+          houseLRoofHi: "#7d6443",
+          houseRWall: "#574935",
+          houseRShade: "#3b3122",
+          houseRRoof: "#522b28",
+          houseRRoofHi: "#6e3c38",
+          door: "#1f1413",
+          wood: "#2b1f1a",
+          treeDark: "#08120e",
+          treeMid: "#0e2118",
+          treeHi: "#173326",
+          bird: "#dce8ff",
+          flower: "#657999",
         },
         dawn: {
-          sky: ["#242e52", "#4e476b", "#966470", "#d48c74", "#f5c28e"],
-          cloud: "#a86f73",
-          cloudHi: "#f7cfa6",
-          mLeftDark: "#1d453b",
-          mLeftMid: "#2c6151",
-          mLeftHi: "#44856c",
-          mRightDark: "#343961",
-          mRightMid: "#4a4f7d",
-          mRightHi: "#686ea3",
-          grassTop: "#4b7348",
-          grassMid: "#3a5e3a",
+          sky: ["#232d52", "#4c466e", "#946373", "#d48b76", "#f5c490"],
+          mist: "rgba(245, 196, 144, 0.25)",
+          cloud: "#a86e75",
+          cloudHi: "#fae0be",
+          ridgeFar: "#4d3c5c",
+          mLeftDark: "#183b33",
+          mLeftMid: "#27594b",
+          mLeftHi: "#3f8068",
+          mLeftSnow: "#f5c99b",
+          mRightDark: "#2c3159",
+          mRightMid: "#434875",
+          mRightHi: "#646ba3",
+          mRightSnow: "#f7cfa8",
+          foothill: "#274032",
+          grassTop: "#4d7849",
+          grassMid: "#3b613b",
           grassBot: "#2a472c",
-          grassTuft: "#5d8a56",
-          bankDark: "#383d42",
-          bankLight: "#545b61",
-          riverDark: "#355c85",
-          riverMid: "#4979a8",
-          riverHi: "#73a4cf",
-          sparkle: "#ffebd1",
-          houseLWall: "#a66458",
-          houseLShade: "#824b42",
-          houseLRoof: "#cfa051",
-          houseLRoofHi: "#e6ba6e",
-          houseRWall: "#cca362",
-          houseRShade: "#a37e46",
-          houseRRoof: "#a64c3d",
-          houseRRoofHi: "#c26151",
-          door: "#4a2c24",
-          wood: "#5c4234",
-          treeDark: "#1b3622",
-          treeMid: "#294d30",
-          treeHi: "#3d6b42",
-          flower: "#f2c68f",
+          grassTuft: "#63945b",
+          bankDark: "#33383d",
+          bankLight: "#596169",
+          riverDark: "#335982",
+          riverMid: "#4778a8",
+          riverHi: "#76a9d6",
+          sparkle: "#fff0d6",
+          houseLWall: "#ad675a",
+          houseLShade: "#7d463d",
+          houseLRoof: "#d4a353",
+          houseLRoofHi: "#edc072",
+          houseRWall: "#d1a764",
+          houseRShade: "#9e7940",
+          houseRRoof: "#ab4e3e",
+          houseRRoofHi: "#c96655",
+          door: "#452820",
+          wood: "#573d2f",
+          treeDark: "#18331f",
+          treeMid: "#264a2d",
+          treeHi: "#3d6e43",
+          bird: "#261b29",
+          flower: "#f7cf97",
         },
         day: {
-          sky: ["#3d76ad", "#5b95c9", "#82b4de", "#afd2ed", "#dce9f2"],
-          cloud: "#d7e8f5",
-          cloudHi: "#f7fbff",
-          mLeftDark: "#226348",
-          mLeftMid: "#2f7d5a",
-          mLeftHi: "#4aa176",
-          mRightDark: "#3c4e8a",
-          mRightMid: "#4f64a8",
-          mRightHi: "#7187cc",
-          grassTop: "#5f994a",
-          grassMid: "#4b823c",
-          grassBot: "#3a6b2f",
-          grassTuft: "#75b359",
-          bankDark: "#4a5259",
-          bankLight: "#6b757d",
-          riverDark: "#2d71ab",
-          riverMid: "#3e8cc7",
-          riverHi: "#6db8eb",
-          sparkle: "#f2faff",
-          houseLWall: "#cc7060",
-          houseLShade: "#a35346",
-          houseLRoof: "#e3b64f",
-          houseLRoofHi: "#f5ce73",
-          houseRWall: "#e3b859",
-          houseRShade: "#bd933e",
-          houseRRoof: "#bf523d",
-          houseRRoofHi: "#d96a55",
-          door: "#5c392a",
-          wood: "#704d38",
-          treeDark: "#1e4724",
-          treeMid: "#2c6131",
-          treeHi: "#428244",
-          flower: "#fff099",
+          sky: ["#3973ab", "#5994c9", "#82b5e0", "#b2d5f0", "#e1edf5"],
+          mist: "rgba(225, 237, 245, 0.26)",
+          cloud: "#d9eaf7",
+          cloudHi: "#fcfeff",
+          ridgeFar: "#6c92b8",
+          mLeftDark: "#1a573e",
+          mLeftMid: "#287352",
+          mLeftHi: "#469e74",
+          mLeftSnow: "#e8f5ee",
+          mRightDark: "#32447d",
+          mRightMid: "#465b9e",
+          mRightHi: "#6d85cc",
+          mRightSnow: "#e8eefc",
+          foothill: "#3b6e3e",
+          grassTop: "#639e4c",
+          grassMid: "#4d853d",
+          grassBot: "#3b6b2f",
+          grassTuft: "#7dba5e",
+          bankDark: "#434b52",
+          bankLight: "#727c85",
+          riverDark: "#296ca6",
+          riverMid: "#3c8ac7",
+          riverHi: "#72bdf0",
+          sparkle: "#f5fcff",
+          houseLWall: "#d17362",
+          houseLShade: "#9e4e41",
+          houseLRoof: "#e8ba51",
+          houseLRoofHi: "#fad478",
+          houseRWall: "#e8bd5d",
+          houseRShade: "#b88d37",
+          houseRRoof: "#c4543f",
+          houseRRoofHi: "#e06e58",
+          door: "#573526",
+          wood: "#6e4a35",
+          treeDark: "#1a4221",
+          treeMid: "#295e30",
+          treeHi: "#458747",
+          bird: "#1a2430",
+          flower: "#fff2a1",
         },
         dusk: {
-          sky: ["#161b3b", "#3d2c57", "#87455e", "#c96e5b", "#eb9e67"],
-          cloud: "#8c4f61",
-          cloudHi: "#f0a978",
-          mLeftDark: "#173832",
-          mLeftMid: "#234f45",
-          mLeftHi: "#386e5f",
-          mRightDark: "#282952",
-          mRightMid: "#3a3a6b",
-          mRightHi: "#55548f",
-          grassTop: "#36543a",
+          sky: ["#151a3b", "#3c2b59", "#874460", "#cb6d5c", "#eda168"],
+          mist: "rgba(237, 161, 104, 0.23)",
+          cloud: "#8c4e63",
+          cloudHi: "#f5b282",
+          ridgeFar: "#3b2c4d",
+          mLeftDark: "#122e28",
+          mLeftMid: "#1d453b",
+          mLeftHi: "#326656",
+          mLeftSnow: "#ebaa7e",
+          mRightDark: "#202145",
+          mRightMid: "#30305e",
+          mRightHi: "#4d4c85",
+          mRightSnow: "#e8a482",
+          foothill: "#1d3625",
+          grassTop: "#37573b",
           grassMid: "#29422e",
           grassBot: "#1c3021",
-          grassTuft: "#476b49",
-          bankDark: "#2d3038",
-          bankLight: "#454954",
-          riverDark: "#2c4970",
-          riverMid: "#3c608c",
-          riverHi: "#6186b3",
-          sparkle: "#ffd9ab",
-          houseLWall: "#824c48",
-          houseLShade: "#633734",
-          houseLRoof: "#b08241",
-          houseLRoofHi: "#c99955",
-          houseRWall: "#a3804e",
-          houseRShade: "#806238",
-          houseRRoof: "#823a31",
-          houseRRoofHi: "#9e4d42",
-          door: "#38211c",
-          wood: "#4d352a",
-          treeDark: "#122619",
-          treeMid: "#1c3824",
-          treeHi: "#2b4f33",
-          flower: "#e8a87c",
+          grassTuft: "#4c734e",
+          bankDark: "#282b33",
+          bankLight: "#4a4f5c",
+          riverDark: "#29456b",
+          riverMid: "#3a5d8a",
+          riverHi: "#638ab8",
+          sparkle: "#ffe0b5",
+          houseLWall: "#874d48",
+          houseLShade: "#5e322f",
+          houseLRoof: "#b58543",
+          houseLRoofHi: "#d19f58",
+          houseRWall: "#a88350",
+          houseRShade: "#7a5c34",
+          houseRRoof: "#873b31",
+          houseRRoofHi: "#a65044",
+          door: "#331d18",
+          wood: "#473026",
+          treeDark: "#0f2116",
+          treeMid: "#193320",
+          treeHi: "#2a4f32",
+          bird: "#1c1424",
+          flower: "#f0b084",
         },
       };
 
@@ -1969,52 +2282,60 @@
         return out;
       }
 
-      function getISTDate() {
-        const now = new Date();
-        const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
-        return new Date(utcMs + 5.5 * 3600000);
-      }
-
-      function getHourAndPhase() {
-        const mode = MODES[modeIdx];
-        const ist = getISTDate();
-        const liveHour = ist.getHours() + ist.getMinutes() / 60 + ist.getSeconds() / 3600;
-        const h = mode.hour === null ? liveHour : mode.hour;
+      function getSceneState() {
+        const { h, mode, ist } = skyClock.getHour();
 
         let pal;
         let phase;
-        if (h >= 5 && h < 6.5) {
-          pal = mixPalettes(PALETTES.night, PALETTES.dawn, (h - 5) / 1.5);
+        let transitionT = 0;
+        let sunX = 185;
+        let sunY = 32;
+
+        if (h >= 5 && h < 7) {
+          transitionT = (h - 5) / 2;
+          pal = mixPalettes(PALETTES.night, PALETTES.dawn, transitionT);
           phase = "dawn";
-        } else if (h >= 6.5 && h < 8.5) {
-          pal = mixPalettes(PALETTES.dawn, PALETTES.day, (h - 6.5) / 2);
-          phase = h < 7.3 ? "dawn" : "day";
+          sunX = Math.round(135 + transitionT * 50);
+          sunY = Math.round(38 - transitionT * 6);
+        } else if (h >= 7 && h < 8.5) {
+          transitionT = (h - 7) / 1.5;
+          pal = mixPalettes(PALETTES.dawn, PALETTES.day, transitionT);
+          phase = "day";
+          sunX = 185;
+          sunY = 32;
         } else if (h >= 8.5 && h < 16.5) {
+          const dayProgress = (h - 8.5) / 8;
           pal = PALETTES.day;
           phase = "day";
+          sunX = Math.round(168 + dayProgress * 34);
+          sunY = Math.round(32 - Math.sin(dayProgress * Math.PI) * 3);
         } else if (h >= 16.5 && h < 18.2) {
-          pal = mixPalettes(PALETTES.day, PALETTES.dusk, (h - 16.5) / 1.7);
+          transitionT = (h - 16.5) / 1.7;
+          pal = mixPalettes(PALETTES.day, PALETTES.dusk, transitionT);
           phase = "dusk";
+          sunX = Math.round(185 + transitionT * 18);
+          sunY = Math.round(32 + transitionT * 6);
         } else if (h >= 18.2 && h < 20) {
-          pal = mixPalettes(PALETTES.dusk, PALETTES.night, (h - 18.2) / 1.8);
-          phase = h < 19.1 ? "dusk" : "night";
+          transitionT = (h - 18.2) / 1.8;
+          pal = mixPalettes(PALETTES.dusk, PALETTES.night, transitionT);
+          phase = transitionT < 0.5 ? "dusk" : "night";
         } else {
           pal = PALETTES.night;
           phase = "night";
         }
 
-        const isDay = h >= 5.75 && h < 18.75;
+        const isDay = h >= 5.75 && h < 18.4;
         let starAlpha = 0;
-        if (h >= 18.5 && h < 20) starAlpha = (h - 18.5) / 1.5;
-        else if (h >= 20 || h < 5) starAlpha = 1;
-        else if (h >= 5 && h < 6.3) starAlpha = 1 - (h - 5) / 1.3;
+        if (h >= 18.0 && h < 19.6) starAlpha = (h - 18.0) / 1.6;
+        else if (h >= 19.6 || h < 5.2) starAlpha = 1;
+        else if (h >= 5.2 && h < 6.5) starAlpha = 1 - (h - 5.2) / 1.3;
 
         let lampAlpha = 0;
-        if (h >= 17.5 && h < 19) lampAlpha = (h - 17.5) / 1.5;
-        else if (h >= 19 || h < 5.5) lampAlpha = 1;
-        else if (h >= 5.5 && h < 6.8) lampAlpha = 1 - (h - 5.5) / 1.3;
+        if (h >= 17.2 && h < 18.8) lampAlpha = (h - 17.2) / 1.6;
+        else if (h >= 18.8 || h < 5.6) lampAlpha = 1;
+        else if (h >= 5.6 && h < 6.9) lampAlpha = 1 - (h - 5.6) / 1.3;
 
-        return { h, pal, phase, isDay, starAlpha, lampAlpha, ist };
+        return { h, pal, phase, isDay, starAlpha, lampAlpha, transitionT, sunX, sunY, mode, ist };
       }
 
       let seed = 9187;
@@ -2024,10 +2345,10 @@
       }
 
       const stars = [];
-      for (let i = 0; i < 58; i++) {
+      for (let i = 0; i < 62; i++) {
         stars.push({
           x: Math.floor(rand() * W),
-          y: Math.floor(2 + rand() * 36),
+          y: Math.floor(2 + rand() * 28),
           phase: rand() * Math.PI * 2,
           speed: 0.02 + rand() * 0.035,
           big: rand() > 0.85,
@@ -2035,45 +2356,52 @@
       }
 
       const clouds = [
-        { x: 26, y: 12, w: 34, speed: 0.04 },
-        { x: 148, y: 8, w: 40, speed: 0.028 },
-        { x: 274, y: 14, w: 32, speed: 0.036 },
+        { x: 24, y: 7, w: 38, speed: 0.038 },
+        { x: 146, y: 5, w: 46, speed: 0.026 },
+        { x: 278, y: 9, w: 34, speed: 0.034 },
       ];
 
-      const birds = [];
-      for (let i = 0; i < 7; i++) {
-        birds.push({
-          x: rand() * W,
-          y: 8 + rand() * 22,
-          speed: 0.22 + rand() * 0.16,
-          flapPhase: rand() * Math.PI * 2,
-          dir: rand() > 0.25 ? 1 : -1,
-        });
-      }
+      const birds = [
+        { x: 42, y: 10, speed: 0.36, flapPhase: 0.0, dir: 1, scale: 1 },
+        { x: 64, y: 8, speed: 0.34, flapPhase: 0.8, dir: 1, scale: 1 },
+        { x: 86, y: 12, speed: 0.38, flapPhase: 1.6, dir: 1, scale: 1 },
+        { x: 235, y: 10, speed: 0.32, flapPhase: 2.2, dir: -1, scale: 1 },
+        { x: 258, y: 13, speed: 0.35, flapPhase: 3.1, dir: -1, scale: 1 },
+        { x: 148, y: 21, speed: 0.28, flapPhase: 0.5, dir: 1, scale: 0.8 },
+        { x: 212, y: 23, speed: 0.30, flapPhase: 1.9, dir: -1, scale: 0.8 },
+      ];
 
       const shootingStars = [];
       function spawnShootingStar(sx, sy) {
         shootingStars.push({
           x: sx ?? (50 + Math.random() * 220),
-          y: sy ?? (4 + Math.random() * 14),
+          y: sy ?? (3 + Math.random() * 11),
           vx: 2.1,
-          vy: 0.55,
+          vy: 0.45,
           life: 1,
         });
       }
 
-      function getRiverSpan(y) {
-        const t = Math.max(0, (y - HORIZON) / (H - HORIZON));
-        const cx = 185 + Math.sin(t * Math.PI * 2.55 + 0.35) * (12 + t * 36) - t * 10;
-        const halfW = 3 + Math.pow(t, 1.32) * 40;
-        return { left: Math.round(cx - halfW), right: Math.round(cx + halfW), cx };
+      function getHorizonY(x) {
+        const nx = (x - 185) / 185;
+        const valleyDip = Math.exp(-Math.pow((x - 185) / 54, 2)) * 3.5;
+        const flankRise = nx * nx * 2.0;
+        return Math.round(44 + valleyDip - flankRise);
+      }
+
+      function getRiverSpan(y, x) {
+        const hBase = x !== undefined ? getHorizonY(x) : 45;
+        const t = Math.max(0, (y - hBase) / (H - hBase));
+        const cx = 185 + Math.sin(t * Math.PI * 2.55 + 0.35) * (11 + t * 38) - t * 9;
+        const halfW = 2.5 + Math.pow(t, 1.32) * 38;
+        return { left: Math.round(cx - halfW), right: Math.round(cx + halfW), cx, t };
       }
 
       const sparkles = [];
       for (let i = 0; i < 52; i++) {
         sparkles.push({
           t: rand(),
-          offset: (rand() - 0.5) * 1.55,
+          offset: (rand() - 0.5) * 1.5,
           speed: 0.002 + rand() * 0.0026,
           phase: rand() * Math.PI * 2,
           len: rand() > 0.55 ? 3 : 2,
@@ -2082,25 +2410,25 @@
 
       const bankDetails = [];
       for (let i = 0; i < 42; i++) {
-        const y = HORIZON + 4 + Math.floor(rand() * (H - HORIZON - 7));
+        const y = 48 + Math.floor(rand() * (H - 51));
         const span = getRiverSpan(y);
         const leftSide = rand() > 0.5;
         const x = leftSide
-          ? 6 + Math.floor(rand() * Math.max(8, span.left - 14))
-          : span.right + 8 + Math.floor(rand() * Math.max(8, W - span.right - 14));
-        if (x > 4 && x < W - 4) {
-          bankDetails.push({ x, y, flower: rand() > 0.68 });
+          ? 8 + Math.floor(rand() * Math.max(8, span.left - 16))
+          : span.right + 10 + Math.floor(rand() * Math.max(8, W - span.right - 16));
+        if (x > 6 && x < W - 6) {
+          bankDetails.push({ x, y, flower: rand() > 0.66 });
         }
       }
 
       const walkers = [
-        { x: 84, minX: 68, maxX: 112, y: 74, speed: 0.055, dir: 1, shirt: "#e3c5a8", pants: "#3d4f6b", legPhase: 0 },
-        { x: 278, minX: 258, maxX: 306, y: 84, speed: 0.06, dir: -1, shirt: "#b8d0e8", pants: "#384554", legPhase: 1.6 },
+        { x: 84, minX: 68, maxX: 112, y: 62, speed: 0.055, dir: 1, shirt: "#e3c5a8", pants: "#3d4f6b", legPhase: 0 },
+        { x: 278, minX: 258, maxX: 306, y: 70, speed: 0.06, dir: -1, shirt: "#b8d0e8", pants: "#384554", legPhase: 1.6 },
       ];
       const seatedPeople = [
-        { x: 96, y: 92, shirt: "#d9b48f", pants: "#3b4859" },
-        { x: 102, y: 92, shirt: "#a8bfd6", pants: "#333d4a" },
-        { x: 272, y: 69, shirt: "#d4c3b0", pants: "#403c4a" },
+        { x: 96, y: 76, shirt: "#d9b48f", pants: "#3b4859" },
+        { x: 102, y: 76, shirt: "#a8bfd6", pants: "#333d4a" },
+        { x: 272, y: 58, shirt: "#d4c3b0", pants: "#403c4a" },
       ];
 
       const fireflies = [];
@@ -2108,7 +2436,7 @@
         const leftSide = rand() > 0.5;
         fireflies.push({
           x: leftSide ? 14 + rand() * 105 : 252 + rand() * 104,
-          y: 62 + rand() * 40,
+          y: 52 + rand() * 32,
           phase: rand() * Math.PI * 2,
           drift: 0.015 + rand() * 0.02,
         });
@@ -2119,44 +2447,55 @@
         ctx.fillRect(Math.round(x), Math.round(y), w, h);
       }
 
-      function mountainY(x, peakX, peakY, halfSpan) {
+      function mountainY(x, peakX, peakY, halfSpan, baseY) {
         const dist = Math.abs(x - peakX);
-        if (dist >= halfSpan) return HORIZON + 2;
+        if (dist >= halfSpan) return baseY + 2;
         const norm = dist / halfSpan;
-        const apexCurveRadius = Math.max(6, halfSpan * 0.14);
-        const triY = peakY + (HORIZON - peakY) * norm;
+        const spur =
+          Math.sin(x * 0.085 + peakX * 0.03) * 1.5 * norm +
+          Math.cos(x * 0.21 - peakX * 0.07) * 0.8 * Math.pow(norm, 0.7);
+        const triY = peakY + (baseY - peakY) * Math.pow(norm, 0.92) + spur;
+        const apexCurveRadius = Math.max(7, halfSpan * 0.12);
         const roundFactor = Math.exp(-Math.pow(dist / apexCurveRadius, 2));
-        const curvedApexY = peakY + Math.pow(dist / apexCurveRadius, 2) * 2.2;
-        return Math.round(triY * (1 - roundFactor * 0.65) + curvedApexY * (roundFactor * 0.65));
+        const curvedApexY = peakY + Math.pow(dist / apexCurveRadius, 2) * 1.8;
+        return Math.round(triY * (1 - roundFactor * 0.6) + curvedApexY * (roundFactor * 0.6));
+      }
+
+      function farRidgeY(x) {
+        return Math.round(
+          28 +
+          Math.sin(x * 0.024 + 0.8) * 4.5 +
+          Math.cos(x * 0.062 - 1.2) * 2.2
+        );
       }
 
       function drawCloud(x, y, w, cMain, cHi) {
         const cx = Math.round(x);
         const cy = Math.round(y);
-        px(cx + 6, cy, w - 12, 1, cHi);
-        px(cx + 3, cy + 1, w - 6, 2, cHi);
-        px(cx + 1, cy + 3, w - 2, 2, cMain);
-        px(cx, cy + 5, w, 2, cMain);
-        px(cx + 4, cy + 7, w - 8, 1, cMain);
+        px(cx + 8, cy, Math.max(4, w - 16), 1, cHi);
+        px(cx + 5, cy + 1, Math.max(6, w - 10), 2, cHi);
+        px(cx + 2, cy + 3, w - 4, 2, cMain);
+        px(cx + 1, cy + 5, w - 2, 1, cMain);
+        px(cx + 4, cy + 6, Math.max(4, w - 8), 1, cMain);
       }
 
       function drawSunWithRays(cx, cy, tick) {
-        ctx.fillStyle = "rgba(255, 224, 145, 0.14)";
+        ctx.fillStyle = "rgba(255, 224, 145, 0.15)";
         ctx.beginPath();
-        ctx.arc(cx, cy, 32, 0, Math.PI * 2);
+        ctx.arc(cx, cy, 30, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = "rgba(255, 232, 165, 0.22)";
+        ctx.fillStyle = "rgba(255, 232, 165, 0.24)";
         ctx.beginPath();
-        ctx.arc(cx, cy, 20, 0, Math.PI * 2);
+        ctx.arc(cx, cy, 18, 0, Math.PI * 2);
         ctx.fill();
 
         const rayAngles = [-2.6, -2.35, -2.08, -1.82, -1.57, -1.32, -1.06, -0.79, -0.54];
-        const pulse = Math.sin(tick * 0.04) * 1.1;
+        const pulse = Math.sin(tick * 0.04) * 1.0;
         for (let i = 0; i < rayAngles.length; i++) {
           const ang = rayAngles[i];
-          const inner = 16;
-          const outer = (i % 2 === 0 ? 24 : 28) + pulse;
+          const inner = 14;
+          const outer = (i % 2 === 0 ? 21 : 25) + pulse;
           for (let r = inner; r <= outer; r += 1) {
             const rx = Math.round(cx + Math.cos(ang) * r);
             const ry = Math.round(cy + Math.sin(ang) * r);
@@ -2164,12 +2503,12 @@
           }
         }
 
-        const radius = 12;
+        const radius = 11;
         for (let dy = -radius; dy <= radius; dy++) {
           for (let dx = -radius; dx <= radius; dx++) {
             const d2 = dx * dx + dy * dy;
             if (d2 <= radius * radius) {
-              const col = d2 <= 49 ? "#fff8cc" : d2 <= 100 ? "#ffd966" : "#f5ab3d";
+              const col = d2 <= 42 ? "#fff8cc" : d2 <= 86 ? "#ffd966" : "#f5ab3d";
               px(cx + dx, cy + dy, 1, 1, col);
             }
           }
@@ -2177,14 +2516,14 @@
       }
 
       function drawMoon(cx, cy) {
-        ctx.fillStyle = "rgba(205, 225, 255, 0.08)";
+        ctx.fillStyle = "rgba(205, 225, 255, 0.09)";
         ctx.beginPath();
-        ctx.arc(cx, cy, 18, 0, Math.PI * 2);
+        ctx.arc(cx, cy, 16, 0, Math.PI * 2);
         ctx.fill();
 
-        ctx.fillStyle = "rgba(220, 235, 255, 0.15)";
+        ctx.fillStyle = "rgba(220, 235, 255, 0.16)";
         ctx.beginPath();
-        ctx.arc(cx, cy, 11, 0, Math.PI * 2);
+        ctx.arc(cx, cy, 10, 0, Math.PI * 2);
         ctx.fill();
 
         const r = 6;
@@ -2200,17 +2539,40 @@
         }
       }
 
+      function drawBird(bx, by, flapCycle, color, scale) {
+        const x = Math.round(bx);
+        const y = Math.round(by);
+        const s = Math.max(1, Math.round(scale));
+        px(x, y, 2 * s, 1 * s, color);
+        const phase = ((Math.floor(flapCycle) % 4) + 4) % 4;
+        if (phase === 0) {
+          px(x - 2 * s, y - 2 * s, 2 * s, 1 * s, color);
+          px(x - 1 * s, y - 1 * s, 1 * s, 1 * s, color);
+          px(x + 2 * s, y - 2 * s, 2 * s, 1 * s, color);
+          px(x + 2 * s, y - 1 * s, 1 * s, 1 * s, color);
+        } else if (phase === 1 || phase === 3) {
+          px(x - 2 * s, y - 1 * s, 2 * s, 1 * s, color);
+          px(x + 2 * s, y - 1 * s, 2 * s, 1 * s, color);
+        } else {
+          px(x - 2 * s, y + 1 * s, 2 * s, 1 * s, color);
+          px(x - 1 * s, y, 1 * s, 1 * s, color);
+          px(x + 2 * s, y + 1 * s, 2 * s, 1 * s, color);
+          px(x + 2 * s, y, 1 * s, 1 * s, color);
+        }
+      }
+
       function drawTree(x, y, pal, scale) {
         const s = scale || 1;
+        px(x - 2 * s, y + 1, 6 * s, 1, pal.grassBot);
         px(x, y - 2, 2, 3, pal.wood);
-        px(x - 3 * s, y - 4 * s, 8 * s, 3 * s, pal.treeDark);
-        px(x - 2 * s, y - 6 * s, 6 * s, 3 * s, pal.treeMid);
+        px(x - 3 * s, y - 4 * s, 8 * s, 2 * s, pal.treeDark);
+        px(x - 2 * s, y - 6 * s, 6 * s, 2 * s, pal.treeMid);
         px(x - 1 * s, y - 8 * s, 4 * s, 2 * s, pal.treeHi);
         px(x, y - 9 * s, 2 * s, 1 * s, pal.treeHi);
       }
 
       function drawLeftCottage(x, y, w, h, pal, lampAlpha, hasSmoke, tick) {
-        px(x - 1, y + h, w + 2, 1, pal.grassBot);
+        px(x - 2, y + h, w + 4, 2, pal.grassBot);
         px(x, y, w, h, pal.houseLWall);
         px(x + w - 3, y, 3, h, pal.houseLShade);
         px(x, y, w, 1, pal.houseLShade);
@@ -2280,9 +2642,10 @@
         }
       }
 
-      function drawPerson(x, y, shirt, pants, walking, step) {
+      function drawPerson(x, y, shirt, pants, walking, step, pal) {
         const ix = Math.round(x);
         const iy = Math.round(y);
+        px(ix - 1, iy + 1, 4, 1, pal.grassBot);
         px(ix, iy - 5, 2, 2, "#f0d4b8");
         px(ix, iy - 3, 2, 2, shirt);
         if (walking) {
@@ -2296,9 +2659,8 @@
 
       function updateModePill(info) {
         if (!modeLabel || !modeBtn) return;
-        const mode = MODES[modeIdx];
-        if (mode.label) {
-          modeLabel.textContent = mode.label;
+        if (info.mode.label) {
+          modeLabel.textContent = info.mode.label;
         } else {
           let hr = info.ist.getHours();
           const min = String(info.ist.getMinutes()).padStart(2, "0");
@@ -2313,10 +2675,11 @@
       let tick = 0;
 
       function render() {
-        const info = getHourAndPhase();
-        const { pal, isDay, starAlpha, lampAlpha } = info;
+        const info = getSceneState();
+        const { pal, isDay, starAlpha, lampAlpha, transitionT, sunX, sunY } = info;
 
-        const bandH = Math.ceil(HORIZON / pal.sky.length);
+        const skySpan = 50;
+        const bandH = Math.ceil(skySpan / pal.sky.length);
         for (let i = 0; i < pal.sky.length; i++) {
           const y0 = i * bandH;
           px(0, y0, W, bandH + 1, pal.sky[i]);
@@ -2327,6 +2690,16 @@
               ctx.fillRect(x, seamY, 1, 1);
             }
           }
+        }
+
+        if (transitionT > 0 && transitionT < 1) {
+          const sweepX = Math.round(transitionT * W);
+          const grad = ctx.createLinearGradient(sweepX - 36, 0, sweepX + 36, 0);
+          grad.addColorStop(0, "rgba(255, 198, 120, 0)");
+          grad.addColorStop(0.5, isDay ? "rgba(255, 224, 155, 0.18)" : "rgba(75, 110, 195, 0.20)");
+          grad.addColorStop(1, "rgba(255, 198, 120, 0)");
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, 0, W, skySpan);
         }
 
         if (starAlpha > 0.02) {
@@ -2361,64 +2734,102 @@
         }
 
         if (isDay) {
-          drawSunWithRays(185, 38, tick);
+          drawSunWithRays(sunX, sunY, tick);
         } else {
-          drawMoon(185, 14);
+          drawMoon(185, 11);
         }
 
         for (let i = 0; i < clouds.length; i++) {
           const cl = clouds[i];
           if (!reducedMotion) {
             cl.x += cl.speed;
-            if (cl.x > W + 14) cl.x = -cl.w - 10;
+            if (cl.x > W + 16) cl.x = -cl.w - 12;
           }
           drawCloud(cl.x, cl.y, cl.w, pal.cloud, pal.cloudHi);
         }
 
-        for (let x = 165; x < W; x++) {
-          const my = mountainY(x, 268, 17, 114);
-          if (my < HORIZON) {
-            const hSpan = HORIZON - my;
-            const col = x < 252 ? pal.mRightHi : x < 276 ? pal.mRightMid : pal.mRightDark;
-            px(x, my, 1, hSpan, col);
-          }
+        for (let x = 0; x < W; x++) {
+          const fy = farRidgeY(x);
+          const base = getHorizonY(x) + 2;
+          if (fy < base) px(x, fy, 1, base - fy, pal.ridgeFar);
         }
-        for (let x = 0; x <= 194; x++) {
-          const my = mountainY(x, 106, 19, 100);
-          if (my < HORIZON) {
-            const hSpan = HORIZON - my;
-            const col = x > 120 ? pal.mLeftHi : x > 92 ? pal.mLeftMid : pal.mLeftDark;
-            px(x, my, 1, hSpan, col);
+
+        for (let x = 156; x < W; x++) {
+          const base = getHorizonY(x) + 2;
+          const my = mountainY(x, 272, 12, 126, base);
+          if (my < base) {
+            const hSpan = base - my;
+            for (let y = my; y < base; y++) {
+              const depthRatio = (y - my) / Math.max(1, hSpan);
+              let col;
+              if (y - my <= 2 && x < 284) {
+                col = pal.mRightSnow;
+              } else if (x < 258) {
+                col = depthRatio > 0.78 ? pal.mRightMid : pal.mRightHi;
+              } else {
+                col = depthRatio > 0.45 ? pal.mRightDark : pal.mRightMid;
+              }
+              px(x, y, 1, 1, col);
+            }
           }
         }
 
-        if (starAlpha < 0.7) {
-          const birdAlpha = Math.max(0, 1 - starAlpha * 1.4);
-          ctx.fillStyle = `rgba(18, 24, 34, ${(birdAlpha * 0.8).toFixed(2)})`;
+        for (let x = 0; x <= 204; x++) {
+          const base = getHorizonY(x) + 2;
+          const my = mountainY(x, 98, 14, 110, base);
+          if (my < base) {
+            const hSpan = base - my;
+            for (let y = my; y < base; y++) {
+              const depthRatio = (y - my) / Math.max(1, hSpan);
+              let col;
+              if (y - my <= 2 && x > 86) {
+                col = pal.mLeftSnow;
+              } else if (x > 114) {
+                col = depthRatio > 0.78 ? pal.mLeftMid : pal.mLeftHi;
+              } else {
+                col = depthRatio > 0.45 ? pal.mLeftDark : pal.mLeftMid;
+              }
+              px(x, y, 1, 1, col);
+            }
+          }
+        }
+
+        for (let x = 0; x < W; x++) {
+          const base = getHorizonY(x) + 2;
+          const hillH = Math.round(3 + Math.sin(x * 0.055 + 1.1) * 1.8 + Math.cos(x * 0.13) * 0.9);
+          px(x, base - hillH, 1, hillH, pal.foothill);
+        }
+
+        ctx.fillStyle = pal.mist;
+        ctx.fillRect(0, 39, W, 7);
+
+        if (starAlpha < 0.75) {
+          const birdAlpha = Math.max(0.25, 1 - starAlpha * 1.2);
+          ctx.save();
+          ctx.globalAlpha = birdAlpha;
           for (let i = 0; i < birds.length; i++) {
             const b = birds[i];
             if (!reducedMotion) {
               b.x += b.speed * b.dir;
-              if (b.x > W + 10) b.x = -10;
-              if (b.x < -10) b.x = W + 10;
+              if (b.x > W + 12) b.x = -12;
+              if (b.x < -12) b.x = W + 12;
             }
             const bx = Math.round(b.x);
-            const by = Math.round(b.y + Math.sin(tick * 0.04 + b.flapPhase) * 1);
-            const wingUp = Math.sin(tick * 0.16 + b.flapPhase) > 0;
-            ctx.fillRect(bx, by, 2, 1);
-            ctx.fillRect(bx - 2, wingUp ? by - 1 : by + 1, 2, 1);
-            ctx.fillRect(bx + 2, wingUp ? by - 1 : by + 1, 2, 1);
+            const by = Math.round(b.y + Math.sin(tick * 0.05 + b.flapPhase) * 1.2);
+            drawBird(bx, by, tick * 0.22 + b.flapPhase, pal.bird, b.scale);
           }
+          ctx.restore();
         }
 
-        px(0, HORIZON, W, 17, pal.grassTop);
-        px(0, HORIZON + 17, W, 19, pal.grassMid);
-        px(0, HORIZON + 36, W, H - (HORIZON + 36), pal.grassBot);
-
-        ctx.fillStyle = pal.grassMid;
-        for (let x = 0; x < W; x += 2) ctx.fillRect(x, HORIZON + 16, 1, 1);
-        ctx.fillStyle = pal.grassBot;
-        for (let x = 1; x < W; x += 2) ctx.fillRect(x, HORIZON + 35, 1, 1);
+        for (let x = 0; x < W; x++) {
+          const hStart = getHorizonY(x);
+          for (let y = hStart; y < H; y++) {
+            const dY = y - hStart;
+            const wave = Math.sin(x * 0.045 + y * 0.06) * 2.0;
+            const col = dY + wave < 13 ? pal.grassTop : (dY + wave < 28 ? pal.grassMid : pal.grassBot);
+            px(x, y, 1, 1, col);
+          }
+        }
 
         for (let i = 0; i < bankDetails.length; i++) {
           const d = bankDetails[i];
@@ -2426,8 +2837,9 @@
           if (d.flower) px(d.x, d.y - 1, 1, 1, pal.flower);
         }
 
-        for (let y = HORIZON; y < H; y++) {
+        for (let y = 44; y < H; y++) {
           const span = getRiverSpan(y);
+          if (y < getHorizonY(span.cx)) continue;
           const w = Math.max(3, span.right - span.left);
 
           px(span.left - 3, y, 2, 1, pal.bankLight);
@@ -2449,7 +2861,7 @@
             sp.t += sp.speed;
             if (sp.t >= 1) sp.t = 0.02;
           }
-          const y = Math.round(HORIZON + sp.t * (H - HORIZON - 1));
+          const y = Math.round(46 + sp.t * (H - 47));
           const span = getRiverSpan(y);
           const halfW = Math.max(1, (span.right - span.left) * 0.42);
           const sx = Math.round(span.cx + sp.offset * halfW);
@@ -2461,24 +2873,24 @@
         }
         ctx.globalAlpha = 1;
 
-        const dockY = 82;
+        const dockY = 68;
         const dockEdge = getRiverSpan(dockY).right;
         px(dockEdge - 5, dockY, 8, 2, pal.wood);
         px(dockEdge - 5, dockY + 2, 1, 2, pal.bankDark);
         px(dockEdge - 1, dockY + 2, 1, 2, pal.bankDark);
 
-        drawTree(10, 58, pal, 1);
-        drawTree(78, 57, pal, 1);
-        drawTree(292, 57, pal, 1);
-        drawTree(354, 60, pal, 1);
+        drawTree(10, getHorizonY(10) + 4, pal, 1);
+        drawTree(78, getHorizonY(78) + 3, pal, 1);
+        drawTree(292, getHorizonY(292) + 3, pal, 1);
+        drawTree(354, getHorizonY(354) + 5, pal, 1);
 
-        drawLeftCottage(46, 54, 15, 8, pal, lampAlpha, false, tick);
-        drawLeftCottage(18, 53, 22, 10, pal, lampAlpha, true, tick);
-        drawRightCottage(312, 52, pal, lampAlpha, tick);
+        drawLeftCottage(46, getHorizonY(46) + 2, 15, 8, pal, lampAlpha, false, tick);
+        drawLeftCottage(18, getHorizonY(18) + 1, 22, 10, pal, lampAlpha, true, tick);
+        drawRightCottage(312, getHorizonY(312) + 1, pal, lampAlpha, tick);
 
         for (let i = 0; i < seatedPeople.length; i++) {
           const p = seatedPeople[i];
-          drawPerson(p.x, p.y, p.shirt, p.pants, false, 0);
+          drawPerson(p.x, p.y, p.shirt, p.pants, false, 0, pal);
         }
         for (let i = 0; i < walkers.length; i++) {
           const w = walkers[i];
@@ -2487,14 +2899,14 @@
             if (w.x > w.maxX) w.dir = -1;
             if (w.x < w.minX) w.dir = 1;
           }
-          drawPerson(w.x, w.y, w.shirt, w.pants, true, tick * 0.14 + w.legPhase);
+          drawPerson(w.x, w.y, w.shirt, w.pants, true, tick * 0.14 + w.legPhase, pal);
         }
 
         if (lampAlpha > 0.2) {
           ctx.fillStyle = `rgba(255, 200, 100, ${(lampAlpha * 0.28).toFixed(2)})`;
-          ctx.fillRect(89, 89, 5, 5);
+          ctx.fillRect(89, 73, 5, 5);
           ctx.fillStyle = `rgba(255, 228, 156, ${lampAlpha.toFixed(2)})`;
-          ctx.fillRect(91, 91, 1, 1);
+          ctx.fillRect(91, 75, 1, 1);
 
           for (let i = 0; i < fireflies.length; i++) {
             const ff = fireflies[i];
@@ -2516,16 +2928,17 @@
         const rect = canvas.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width) * W;
         const y = ((e.clientY - rect.top) / rect.height) * H;
-        const info = getHourAndPhase();
+        const info = getSceneState();
         if (info.starAlpha > 0.25) {
-          spawnShootingStar(Math.min(x, W - 24), Math.min(y, 28));
+          spawnShootingStar(Math.min(x, W - 24), Math.min(y, 22));
         } else {
           birds.push({
             x,
-            y: Math.max(6, Math.min(y, 32)),
-            speed: 0.24 + Math.random() * 0.14,
+            y: Math.max(5, Math.min(y, 26)),
+            speed: 0.32 + Math.random() * 0.14,
             flapPhase: Math.random() * Math.PI * 2,
             dir: Math.random() > 0.5 ? 1 : -1,
+            scale: 1,
           });
           if (birds.length > 14) birds.shift();
         }
@@ -2534,9 +2947,9 @@
       if (modeBtn) {
         modeBtn.addEventListener("click", (e) => {
           e.stopPropagation();
-          modeIdx = (modeIdx + 1) % MODES.length;
-          updateModePill(getHourAndPhase());
-          if (reducedMotion) render();
+          skyClock.cycleMode();
+          updateModePill(getSceneState());
+          render();
         });
       }
 
@@ -2548,7 +2961,7 @@
         requestAnimationFrame(loop);
       }
 
-      updateModePill(getHourAndPhase());
+      updateModePill(getSceneState());
       render();
       if (!reducedMotion) {
         requestAnimationFrame(loop);
