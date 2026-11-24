@@ -353,11 +353,25 @@
     .profile-meta {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       font-family: var(--font-mono);
       font-size: 12px;
-      color: #66666E;
+      color: #777780;
       letter-spacing: 0.02em;
+    }
+
+    .location-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .globe-3d {
+      display: block;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      flex-shrink: 0;
     }
 
     .band-footer {
@@ -530,7 +544,7 @@
       width: 84px;
       height: 84px;
       border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      /* border: 1px solid rgba(255, 255, 255, 0.14); */
       overflow: hidden;
       background-color: var(--card-bg);
       background-image: url("images/idle.png");
@@ -1340,14 +1354,17 @@
                 <span class="glitch-word" data-text="Manav">Manav</span>
                 <span class="glitch-word" data-text="Chaudhari">Chaudhari</span>
               </h1>
-              <div class="profile-role">cs grad &amp; builder</div>
+              <!-- <div class="profile-role">cs grad &amp; builder</div> -->
               <div class="profile-meta">
-                <span>India</span>
-                <span>·</span>
+                <span class="location-tag">
+                  <canvas class="globe-3d" id="globe3d" width="64" height="64" aria-hidden="true"></canvas>
+                  <span>Bengalaru, India</span>
+                </span>
+                <!-- <span>·</span>
                 <span class="status">
                   <span class="status-dot"></span>
                   <span>in progress</span>
-                </span>
+                </span> -->
               </div>
             </div>
           </div>
@@ -1478,7 +1495,7 @@
             <span class="arrow">↗</span>
           </a>
 
-          <a class="social-pill" href="./web-archive/">
+          <!-- <a class="social-pill" href="./web-archive/">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M21 8v13H3V8"></path>
@@ -1499,7 +1516,7 @@
             </svg>
             <span>Journey</span>
             <span class="arrow">↗</span>
-          </a>
+          </a> -->
         </div>
       </section>
     </div>
@@ -1511,7 +1528,254 @@
   </div>
 
   <script>
-    /* Live IST 16-Bit Pixel Sky — Enhanced Twin-Mountain & Winding River Scene */
+    /* WebGL 3D Earth Globe Before "India" */
+    (function () {
+      const canvas = document.getElementById("globe3d");
+      if (!canvas) return;
+
+      const gl = canvas.getContext("webgl", { alpha: true, antialias: true });
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      function createEarthTexture() {
+        const texCanvas = document.createElement("canvas");
+        texCanvas.width = 256;
+        texCanvas.height = 128;
+        const tctx = texCanvas.getContext("2d");
+        const w = texCanvas.width;
+        const h = texCanvas.height;
+        const img = tctx.createImageData(w, h);
+        const d = img.data;
+
+        function hash(x, y) {
+          const n = Math.sin(x * 127.1 + y * 311.7) * 43758.5453123;
+          return n - Math.floor(n);
+        }
+
+        function smoothNoise(x, y) {
+          const ix = Math.floor(x);
+          const iy = Math.floor(y);
+          const fx = x - ix;
+          const fy = y - iy;
+          const ux = fx * fx * (3 - 2 * fx);
+          const uy = fy * fy * (3 - 2 * fy);
+          const a = hash(ix, iy);
+          const b = hash(ix + 1, iy);
+          const c = hash(ix, iy + 1);
+          const d1 = hash(ix + 1, iy + 1);
+          return a + (b - a) * ux + (c - a) * uy + (a - b - c + d1) * ux * uy;
+        }
+
+        function fbm(x, y) {
+          let val = 0;
+          let amp = 0.5;
+          let freq = 1;
+          for (let i = 0; i < 4; i++) {
+            val += amp * smoothNoise(x * freq, y * freq);
+            freq *= 2.02;
+            amp *= 0.5;
+          }
+          return val;
+        }
+
+        const blobs = [
+          { u: 0.22, v: 0.34, ru: 0.11, rv: 0.14 },
+          { u: 0.29, v: 0.62, ru: 0.065, rv: 0.18 },
+          { u: 0.50, v: 0.26, ru: 0.065, rv: 0.09 },
+          { u: 0.52, v: 0.54, ru: 0.08, rv: 0.18 },
+          { u: 0.66, v: 0.32, ru: 0.16, rv: 0.14 },
+          { u: 0.68, v: 0.45, ru: 0.045, rv: 0.08 },
+          { u: 0.79, v: 0.70, ru: 0.07, rv: 0.08 },
+        ];
+
+        for (let y = 0; y < h; y++) {
+          const v = y / (h - 1);
+          const latAbs = Math.abs(v - 0.5) * 2;
+          for (let x = 0; x < w; x++) {
+            const u = x / (w - 1);
+            const idx = (y * w + x) * 4;
+
+            let landMask = 0;
+            for (let b = 0; b < blobs.length; b++) {
+              const bl = blobs[b];
+              let du = Math.abs(u - bl.u);
+              if (du > 0.5) du = 1 - du;
+              const dv = (v - bl.v) / bl.rv;
+              const dist = Math.sqrt((du / bl.ru) ** 2 + dv * dv);
+              if (dist < 1.25) {
+                landMask = Math.max(landMask, 1 - dist / 1.25);
+              }
+            }
+
+            const n = fbm(u * 14, v * 7);
+            const elevation = landMask * 0.85 + (n - 0.42) * 0.65;
+
+            let rCol, gCol, bCol;
+            if (latAbs > 0.86 + (n - 0.5) * 0.08) {
+              rCol = 226;
+              gCol = 236;
+              bCol = 245;
+            } else if (elevation > 0.36) {
+              const t = Math.min(1, (elevation - 0.36) / 0.45);
+              const arid = Math.max(0, 1 - Math.abs(latAbs - 0.28) * 5);
+              rCol = Math.round(58 + t * 85 + arid * 55);
+              gCol = Math.round(126 + t * 35 - arid * 22);
+              bCol = Math.round(68 + t * 20 + arid * 12);
+            } else {
+              const depth = Math.max(0, Math.min(1, (0.36 - elevation) / 0.36));
+              rCol = Math.round(28 - depth * 16);
+              gCol = Math.round(118 - depth * 68);
+              bCol = Math.round(196 - depth * 92);
+            }
+
+            d[idx] = rCol;
+            d[idx + 1] = gCol;
+            d[idx + 2] = bCol;
+            d[idx + 3] = 255;
+          }
+        }
+
+        tctx.putImageData(img, 0, 0);
+        return texCanvas;
+      }
+
+      if (!gl) return;
+
+      const vsSource = `
+        attribute vec3 aPos;
+        attribute vec2 aTex;
+        uniform float uRot;
+        varying vec2 vTex;
+        varying vec3 vNormal;
+        void main() {
+          float c = cos(uRot);
+          float s = sin(uRot);
+          vec3 rotPos = vec3(
+            aPos.x * c + aPos.z * s,
+            aPos.y,
+            -aPos.x * s + aPos.z * c
+          );
+          vTex = aTex;
+          vNormal = normalize(rotPos);
+          gl_Position = vec4(rotPos.xy, -rotPos.z * 0.5, 1.0);
+        }
+      `;
+
+      const fsSource = `
+        precision mediump float;
+        uniform sampler2D uTex;
+        varying vec2 vTex;
+        varying vec3 vNormal;
+        void main() {
+          vec3 texCol = texture2D(uTex, vTex).rgb;
+          vec3 lightDir = normalize(vec3(-0.55, 0.5, 0.75));
+          float diff = max(0.24, dot(normalize(vNormal), lightDir));
+          vec3 viewDir = vec3(0.0, 0.0, 1.0);
+          vec3 halfVec = normalize(lightDir + viewDir);
+          float spec = pow(max(0.0, dot(normalize(vNormal), halfVec)), 24.0) * 0.32;
+          vec3 col = texCol * diff + vec3(spec);
+          gl_FragColor = vec4(col, 1.0);
+        }
+      `;
+
+      function compileShader(type, src) {
+        const sh = gl.createShader(type);
+        gl.shaderSource(sh, src);
+        gl.compileShader(sh);
+        return sh;
+      }
+
+      const prog = gl.createProgram();
+      gl.attachShader(prog, compileShader(gl.VERTEX_SHADER, vsSource));
+      gl.attachShader(prog, compileShader(gl.FRAGMENT_SHADER, fsSource));
+      gl.linkProgram(prog);
+      gl.useProgram(prog);
+
+      const latSegs = 24;
+      const lonSegs = 36;
+      const positions = [];
+      const texCoords = [];
+      const indices = [];
+
+      for (let y = 0; y <= latSegs; y++) {
+        const v = y / latSegs;
+        const phi = v * Math.PI;
+        const sinPhi = Math.sin(phi);
+        const cosPhi = Math.cos(phi);
+
+        for (let x = 0; x <= lonSegs; x++) {
+          const u = x / lonSegs;
+          const theta = u * Math.PI * 2;
+          const px = sinPhi * Math.cos(theta);
+          const py = cosPhi;
+          const pz = sinPhi * Math.sin(theta);
+
+          positions.push(px * 0.96, py * 0.96, pz * 0.96);
+          texCoords.push(1.0 - u, 1.0 - v);
+        }
+      }
+
+      for (let y = 0; y < latSegs; y++) {
+        for (let x = 0; x < lonSegs; x++) {
+          const a = y * (lonSegs + 1) + x;
+          const b = a + lonSegs + 1;
+          indices.push(a, b, a + 1, b, b + 1, a + 1);
+        }
+      }
+
+      const posBuf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+      const aPos = gl.getAttribLocation(prog, "aPos");
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);
+
+      const texBuf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, texBuf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoords), gl.STATIC_DRAW);
+      const aTex = gl.getAttribLocation(prog, "aTex");
+      gl.enableVertexAttribArray(aTex);
+      gl.vertexAttribPointer(aTex, 2, gl.FLOAT, false, 0, 0);
+
+      const idxBuf = gl.createBuffer();
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, idxBuf);
+      gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+
+      const texture = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, createEarthTexture());
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+      const uRot = gl.getUniformLocation(prog, "uRot");
+      gl.enable(gl.DEPTH_TEST);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+
+      let rot = 0.6;
+
+      function draw() {
+        gl.clearColor(0, 0, 0, 0);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.uniform1f(uRot, rot);
+        gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+      }
+
+      function loop() {
+        if (!document.hidden && !reducedMotion) {
+          rot = (rot + 0.025) % (Math.PI * 2);
+          draw();
+        }
+        requestAnimationFrame(loop);
+      }
+
+      draw();
+      if (!reducedMotion) {
+        requestAnimationFrame(loop);
+      }
+    })();
+
+    /* Live IST 16-Bit Pixel Sky — Triangular Peaks with Softly Curved Summits & Winding River */
     (function () {
       const canvas = document.getElementById("pixelSky");
       const modeBtn = document.getElementById("skyModeBtn");
@@ -1538,7 +1802,6 @@
       ];
       let modeIdx = 0;
 
-      /* Curated 16-bit palettes with rich shadow/highlight steps */
       const PALETTES = {
         night: {
           sky: ["#050812", "#090f21", "#0f1933", "#162445", "#1f3057"],
@@ -1755,14 +2018,12 @@
         return { h, pal, phase, isDay, starAlpha, lampAlpha, ist };
       }
 
-      /* Deterministic RNG */
       let seed = 9187;
       function rand() {
         seed = (seed * 16807) % 2147483647;
         return (seed - 1) / 2147483646;
       }
 
-      /* Stars */
       const stars = [];
       for (let i = 0; i < 58; i++) {
         stars.push({
@@ -1774,14 +2035,12 @@
         });
       }
 
-      /* Fluffy 16-bit clouds */
       const clouds = [
         { x: 26, y: 12, w: 34, speed: 0.04 },
         { x: 148, y: 8, w: 40, speed: 0.028 },
         { x: 274, y: 14, w: 32, speed: 0.036 },
       ];
 
-      /* Flying birds */
       const birds = [];
       for (let i = 0; i < 7; i++) {
         birds.push({
@@ -1793,7 +2052,6 @@
         });
       }
 
-      /* Shooting stars */
       const shootingStars = [];
       function spawnShootingStar(sx, sy) {
         shootingStars.push({
@@ -1805,7 +2063,6 @@
         });
       }
 
-      /* Winding S-curve river geometry */
       function getRiverSpan(y) {
         const t = Math.max(0, (y - HORIZON) / (H - HORIZON));
         const cx = 185 + Math.sin(t * Math.PI * 2.55 + 0.35) * (12 + t * 36) - t * 10;
@@ -1813,7 +2070,6 @@
         return { left: Math.round(cx - halfW), right: Math.round(cx + halfW), cx };
       }
 
-      /* River sparkles */
       const sparkles = [];
       for (let i = 0; i < 52; i++) {
         sparkles.push({
@@ -1825,7 +2081,6 @@
         });
       }
 
-      /* Grass tufts & tiny wildflowers on the banks */
       const bankDetails = [];
       for (let i = 0; i < 42; i++) {
         const y = HORIZON + 4 + Math.floor(rand() * (H - HORIZON - 7));
@@ -1839,7 +2094,6 @@
         }
       }
 
-      /* People on the banks */
       const walkers = [
         { x: 84, minX: 68, maxX: 112, y: 74, speed: 0.055, dir: 1, shirt: "#e3c5a8", pants: "#3d4f6b", legPhase: 0 },
         { x: 278, minX: 258, maxX: 306, y: 84, speed: 0.06, dir: -1, shirt: "#b8d0e8", pants: "#384554", legPhase: 1.6 },
@@ -1850,7 +2104,6 @@
         { x: 272, y: 69, shirt: "#d4c3b0", pants: "#403c4a" },
       ];
 
-      /* Night fireflies */
       const fireflies = [];
       for (let i = 0; i < 16; i++) {
         const leftSide = rand() > 0.5;
@@ -1868,10 +2121,14 @@
       }
 
       function mountainY(x, peakX, peakY, halfSpan) {
-        const d = Math.abs(x - peakX) / halfSpan;
-        if (d >= 1) return HORIZON + 2;
-        const shape = Math.pow(1 - d * d, 1.12);
-        return Math.round(HORIZON - (HORIZON - peakY) * shape);
+        const dist = Math.abs(x - peakX);
+        if (dist >= halfSpan) return HORIZON + 2;
+        const norm = dist / halfSpan;
+        const apexCurveRadius = Math.max(6, halfSpan * 0.14);
+        const triY = peakY + (HORIZON - peakY) * norm;
+        const roundFactor = Math.exp(-Math.pow(dist / apexCurveRadius, 2));
+        const curvedApexY = peakY + Math.pow(dist / apexCurveRadius, 2) * 2.2;
+        return Math.round(triY * (1 - roundFactor * 0.65) + curvedApexY * (roundFactor * 0.65));
       }
 
       function drawCloud(x, y, w, cMain, cHi) {
@@ -1885,7 +2142,6 @@
       }
 
       function drawSunWithRays(cx, cy, tick) {
-        /* Warm horizon bloom */
         ctx.fillStyle = "rgba(255, 224, 145, 0.14)";
         ctx.beginPath();
         ctx.arc(cx, cy, 32, 0, Math.PI * 2);
@@ -1896,7 +2152,6 @@
         ctx.arc(cx, cy, 20, 0, Math.PI * 2);
         ctx.fill();
 
-        /* Crisp pixel sunbeams */
         const rayAngles = [-2.6, -2.35, -2.08, -1.82, -1.57, -1.32, -1.06, -0.79, -0.54];
         const pulse = Math.sin(tick * 0.04) * 1.1;
         for (let i = 0; i < rayAngles.length; i++) {
@@ -1910,7 +2165,6 @@
           }
         }
 
-        /* Layered pixel sun disc */
         const radius = 12;
         for (let dy = -radius; dy <= radius; dy++) {
           for (let dx = -radius; dx <= radius; dx++) {
@@ -1949,9 +2203,7 @@
 
       function drawTree(x, y, pal, scale) {
         const s = scale || 1;
-        /* Trunk */
         px(x, y - 2, 2, 3, pal.wood);
-        /* Layered pine/foliage tiers */
         px(x - 3 * s, y - 4 * s, 8 * s, 3 * s, pal.treeDark);
         px(x - 2 * s, y - 6 * s, 6 * s, 3 * s, pal.treeMid);
         px(x - 1 * s, y - 8 * s, 4 * s, 2 * s, pal.treeHi);
@@ -1959,22 +2211,17 @@
       }
 
       function drawLeftCottage(x, y, w, h, pal, lampAlpha, hasSmoke, tick) {
-        /* Ground shadow */
         px(x - 1, y + h, w + 2, 1, pal.grassBot);
-        /* Main wall + side shadow */
         px(x, y, w, h, pal.houseLWall);
         px(x + w - 3, y, 3, h, pal.houseLShade);
-        /* Roof shadow eave */
         px(x, y, w, 1, pal.houseLShade);
 
-        /* Pitched shingled roof */
         for (let r = 0; r < 6; r++) {
           const rw = w + 4 - r * 2;
           if (rw < 4) break;
           px(x - 2 + r, y - 1 - r, rw, 1, r % 2 === 0 ? pal.houseLRoof : pal.houseLRoofHi);
         }
 
-        /* Chimney + gentle rising smoke */
         if (hasSmoke) {
           px(x + w - 5, y - 8, 2, 3, pal.houseLShade);
           const sOff = Math.floor(tick * 0.05 + x) % 8;
@@ -1983,7 +2230,6 @@
           ctx.fillRect(x + w - 4 + (sOff > 4 ? 1 : 0), y - 13 - ((sOff + 1) % 4), 2, 1);
         }
 
-        /* Framed windows */
         const winCol = lampAlpha > 0.15
           ? `rgba(255, 212, 118, ${0.45 + lampAlpha * 0.55})`
           : "#2a3b4f";
@@ -2001,41 +2247,34 @@
       function drawRightCottage(x, y, pal, lampAlpha, tick) {
         const w = 26;
         const h = 13;
-        /* Stone plinth & ground shadow */
         px(x - 2, y + h, w + 4, 2, pal.bankDark);
         px(x - 1, y + h, w + 2, 1, pal.bankLight);
-        /* Main warm wall + shaded side */
         px(x, y, w, h, pal.houseRWall);
         px(x + w - 4, y, 4, h, pal.houseRShade);
         px(x, y, w, 1, pal.houseRShade);
 
-        /* Pitched tiled roof */
         for (let r = 0; r < 8; r++) {
           const rw = w + 6 - r * 2;
           if (rw < 6) break;
           px(x - 3 + r, y - 1 - r, rw, 1, r % 2 === 0 ? pal.houseRRoof : pal.houseRRoofHi);
         }
 
-        /* Chimney + smoke */
         px(x + 5, y - 10, 2, 4, pal.houseRRoof);
         const sOff = Math.floor(tick * 0.05) % 8;
         ctx.fillStyle = "rgba(225, 232, 242, 0.28)";
         ctx.fillRect(x + 5 + (sOff > 3 ? 1 : 0), y - 12 - (sOff % 4), 2, 1);
         ctx.fillRect(x + 6 + (sOff > 4 ? 1 : 0), y - 15 - ((sOff + 1) % 4), 2, 1);
 
-        /* Arched wooden doorway */
         px(x + 10, y + 6, 6, 7, pal.door);
         px(x + 11, y + 5, 4, 1, pal.door);
         px(x + 12, y + 4, 2, 1, pal.door);
 
-        /* Side windows */
         const winCol = lampAlpha > 0.15
           ? `rgba(255, 212, 118, ${0.45 + lampAlpha * 0.55})`
           : "#2a3b4f";
         px(x + 3, y + 5, 4, 4, winCol);
         px(x + 19, y + 5, 4, 4, winCol);
 
-        /* Warm spill onto plinth & grass at night */
         if (lampAlpha > 0.25) {
           ctx.fillStyle = `rgba(255, 200, 100, ${(lampAlpha * 0.2).toFixed(2)})`;
           ctx.fillRect(x + 2, y + h + 2, w - 4, 2);
@@ -2045,11 +2284,8 @@
       function drawPerson(x, y, shirt, pants, walking, step) {
         const ix = Math.round(x);
         const iy = Math.round(y);
-        /* Head */
         px(ix, iy - 5, 2, 2, "#f0d4b8");
-        /* Torso */
         px(ix, iy - 3, 2, 2, shirt);
-        /* Legs */
         if (walking) {
           const stride = Math.sin(step) > 0.25 ? 1 : 0;
           px(ix - stride, iy - 1, 1, 2, pants);
@@ -2081,7 +2317,6 @@
         const info = getHourAndPhase();
         const { pal, isDay, starAlpha, lampAlpha } = info;
 
-        /* 1. Multi-band pixel sky with 2-row dither seams */
         const bandH = Math.ceil(HORIZON / pal.sky.length);
         for (let i = 0; i < pal.sky.length; i++) {
           const y0 = i * bandH;
@@ -2095,7 +2330,6 @@
           }
         }
 
-        /* 2. Twinkling stars & shooting stars (night) */
         if (starAlpha > 0.02) {
           for (let i = 0; i < stars.length; i++) {
             const s = stars[i];
@@ -2127,14 +2361,12 @@
           }
         }
 
-        /* 3. Sun behind twin mountains (day) OR Moon on top of sky (night) */
         if (isDay) {
           drawSunWithRays(185, 38, tick);
         } else {
           drawMoon(185, 14);
         }
 
-        /* 4. Calm drifting pixel clouds */
         for (let i = 0; i < clouds.length; i++) {
           const cl = clouds[i];
           if (!reducedMotion) {
@@ -2144,19 +2376,16 @@
           drawCloud(cl.x, cl.y, cl.w, pal.cloud, pal.cloudHi);
         }
 
-        /* 5. Shaded Twin Mountains (drawn OVER the sun so sun peeks from behind) */
-        /* Right mountain (indigo-blue tones, sunlit on left-facing valley slope) */
         for (let x = 165; x < W; x++) {
-          const my = mountainY(x, 268, 18, 114);
+          const my = mountainY(x, 268, 17, 114);
           if (my < HORIZON) {
             const hSpan = HORIZON - my;
             const col = x < 252 ? pal.mRightHi : x < 276 ? pal.mRightMid : pal.mRightDark;
             px(x, my, 1, hSpan, col);
           }
         }
-        /* Left mountain (emerald-green tones, sunlit on right-facing valley slope) */
         for (let x = 0; x <= 194; x++) {
-          const my = mountainY(x, 106, 20, 100);
+          const my = mountainY(x, 106, 19, 100);
           if (my < HORIZON) {
             const hSpan = HORIZON - my;
             const col = x > 120 ? pal.mLeftHi : x > 92 ? pal.mLeftMid : pal.mLeftDark;
@@ -2164,7 +2393,6 @@
           }
         }
 
-        /* 6. Flying pixel birds (day, dawn, dusk) */
         if (starAlpha < 0.7) {
           const birdAlpha = Math.max(0, 1 - starAlpha * 1.4);
           ctx.fillStyle = `rgba(18, 24, 34, ${(birdAlpha * 0.8).toFixed(2)})`;
@@ -2184,46 +2412,38 @@
           }
         }
 
-        /* 7. Layered Grassy Banks */
         px(0, HORIZON, W, 17, pal.grassTop);
         px(0, HORIZON + 17, W, 19, pal.grassMid);
         px(0, HORIZON + 36, W, H - (HORIZON + 36), pal.grassBot);
 
-        /* Dither seams on grass */
         ctx.fillStyle = pal.grassMid;
         for (let x = 0; x < W; x += 2) ctx.fillRect(x, HORIZON + 16, 1, 1);
         ctx.fillStyle = pal.grassBot;
         for (let x = 1; x < W; x += 2) ctx.fillRect(x, HORIZON + 35, 1, 1);
 
-        /* Tiny grass tufts & wildflowers */
         for (let i = 0; i < bankDetails.length; i++) {
           const d = bankDetails[i];
           px(d.x, d.y, 2, 1, pal.grassTuft);
           if (d.flower) px(d.x, d.y - 1, 1, 1, pal.flower);
         }
 
-        /* 8. Winding S-Curve River with two-tone shoreline lip */
         for (let y = HORIZON; y < H; y++) {
           const span = getRiverSpan(y);
           const w = Math.max(3, span.right - span.left);
 
-          /* Two-tone shaded bank edge */
           px(span.left - 3, y, 2, 1, pal.bankLight);
           px(span.left - 1, y, 1, 1, pal.bankDark);
           px(span.right, y, 1, 1, pal.bankDark);
           px(span.right + 1, y, 2, 1, pal.bankLight);
 
-          /* Water depth layers */
           px(span.left, y, w, 1, pal.riverDark);
           if (w > 4) px(span.left + 2, y, w - 4, 1, pal.riverMid);
 
-          /* Shimmering center current */
           const hiW = Math.max(1, Math.round(w * 0.42));
           const sway = Math.round(Math.sin(tick * 0.055 + y * 0.2) * 1.5);
           px(Math.round(span.cx - hiW / 2) + sway, y, hiW, 1, pal.riverHi);
         }
 
-        /* Animated flowing river sparkles */
         for (let i = 0; i < sparkles.length; i++) {
           const sp = sparkles[i];
           if (!reducedMotion) {
@@ -2242,27 +2462,21 @@
         }
         ctx.globalAlpha = 1;
 
-        /* Tiny wooden dock on the right foreground bank */
         const dockY = 82;
         const dockEdge = getRiverSpan(dockY).right;
         px(dockEdge - 5, dockY, 8, 2, pal.wood);
         px(dockEdge - 5, dockY + 2, 1, 2, pal.bankDark);
         px(dockEdge - 1, dockY + 2, 1, 2, pal.bankDark);
 
-        /* 9. Trees & Cozy Cottages on the Banks */
         drawTree(10, 58, pal, 1);
         drawTree(78, 57, pal, 1);
         drawTree(292, 57, pal, 1);
         drawTree(354, 60, pal, 1);
 
-        /* Left bank: two cottages side-by-side */
         drawLeftCottage(46, 54, 15, 8, pal, lampAlpha, false, tick);
         drawLeftCottage(18, 53, 22, 10, pal, lampAlpha, true, tick);
-
-        /* Right bank: larger cottage with arched door */
         drawRightCottage(312, 52, pal, lampAlpha, tick);
 
-        /* 10. People on the grassy banks */
         for (let i = 0; i < seatedPeople.length; i++) {
           const p = seatedPeople[i];
           drawPerson(p.x, p.y, p.shirt, p.pants, false, 0);
@@ -2277,7 +2491,6 @@
           drawPerson(w.x, w.y, w.shirt, w.pants, true, tick * 0.14 + w.legPhase);
         }
 
-        /* Warm bank lantern + fireflies at dusk/night */
         if (lampAlpha > 0.2) {
           ctx.fillStyle = `rgba(255, 200, 100, ${(lampAlpha * 0.28).toFixed(2)})`;
           ctx.fillRect(89, 89, 5, 5);
@@ -2299,7 +2512,6 @@
         if (tick % 30 === 0) updateModePill(info);
       }
 
-      /* Clicking the sky spawns a shooting star (night) or a bird (day) */
       canvas.addEventListener("pointerdown", (e) => {
         if (reducedMotion) return;
         const rect = canvas.getBoundingClientRect();
@@ -2320,7 +2532,6 @@
         }
       });
 
-      /* Clicking the pill cycles Live IST -> Dawn -> Day -> Dusk -> Night */
       if (modeBtn) {
         modeBtn.addEventListener("click", (e) => {
           e.stopPropagation();
