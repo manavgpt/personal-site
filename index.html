@@ -1,157 +1,299 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" class="scroll-smooth">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Manav Chaudhari</title>
-  <meta name="description" content="Manav Chaudhari — Currently building my new portfolio.">
-  <meta name="theme-color" content="#000000">
 
-  <!-- Favicons -->
-  <link id="favicon" rel="icon" type="image/png" sizes="192x192" href="images/active.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="images/active.png?v=14">
-  <link rel="preload" as="image" href="images/inactive.png?v=14">
-  <link rel="preload" as="image" href="images/avatar-sheet.png">
+  <!-- Favicons & Avatar Preloads -->
+  <link id="favicon" rel="icon" type="image/png" sizes="192x192" href="images/active.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="images/active.png" />
+  <link rel="preload" as="image" href="images/inactive.png" />
+  <link rel="preload" as="image" href="images/idle.png" />
+  <link rel="preload" as="image" href="images/avatar-sheet.png" />
+  <link rel="preload" as="image" href="images/dizzy.png" />
+  <link rel="preload" as="image" href="images/poked.png" />
 
-  <link rel="preload" as="image" href="images/dizzy.png">
-  <link rel="preload" as="image" href="images/poked.png">
-
-
-  <!-- Typography -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Google Fonts: Inter (Swiss Technical UI/Body) & JetBrains Mono (Metadata/Indices/Tags) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap"
-    rel="stylesheet">
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
 
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Immediate Theme Detection Script (Prevents Flash of Unstyled Theme) -->
+  <script>
+    (function () {
+      try {
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {
+        // Fallback to light mode silently
+      }
+    })();
+  </script>
+
+  <!-- Tailwind Custom Typography Config -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Design Tokens, Hatched Dividers, Subtle Animations & Micro-Interactions -->
   <style>
     :root {
-      --bg: #000000;
-      --card-bg: #0A0A0C;
-      --surface-elevated: #141417;
-      --hover-fill: rgba(255, 255, 255, 0.065);
-      --border: rgba(255, 255, 255, 0.08);
-      --border-hover: rgba(255, 255, 255, 0.16);
-
-      --fg: #EDEDED;
-      --fg-muted: #888888;
-      --fg-faint: #444444;
-
-      --accent: #E5A93C;
-
-      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --font-mono: "JetBrains Mono", monospace;
-
-      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --bg: #ffffff;
+      --surface: #fafafa;
+      --surface-hover: #f4f4f5;
+      --border: #e4e4e7;
+      --border-strong: #d4d4d8;
+      --text: #18181b;
+      --text-secondary: #3f3f46;
+      --muted: #71717a;
+      --accent: #059669;
+      --accent-soft: rgba(5, 150, 105, 0.1);
+      --hatch: rgba(24, 24, 27, 0.065);
+      --glass: rgba(255, 255, 255, 0.84);
+      --dot-base: rgba(24, 24, 27, 0.16);
+      --dot-active: rgba(5, 150, 105, 0.82);
     }
 
-    :root[data-theme="light"] {
-      --bg: #F8F7F4;
-      --card-bg: #FFFFFF;
-      --surface-elevated: #FFFFFF;
-      --hover-fill: rgba(17, 17, 20, 0.055);
-      --border: rgba(17, 17, 20, 0.09);
-      --border-hover: rgba(17, 17, 20, 0.18);
-
-      --fg: #141417;
-      --fg-muted: #5F5F68;
-      --fg-faint: #92929C;
+    html.dark {
+      --bg: #09090b;
+      --surface: #111113;
+      --surface-hover: #18181b;
+      --border: #27272a;
+      --border-strong: #3f3f46;
+      --text: #fafafa;
+      --text-secondary: #d4d4d8;
+      --muted: #a1a1aa;
+      --accent: #10b981;
+      --accent-soft: rgba(16, 185, 129, 0.12);
+      --hatch: rgba(250, 250, 250, 0.06);
+      --glass: rgba(9, 9, 11, 0.84);
+      --dot-base: rgba(250, 250, 250, 0.15);
+      --dot-active: rgba(16, 185, 129, 0.85);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html,
+    /* Smooth engineered theme transitions */
     body {
-      width: 100%;
-      height: 100%;
       background-color: var(--bg);
-      color: var(--fg);
-      font-family: var(--font-sans);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
+      color: var(--text);
+      transition: background-color 220ms ease, color 220ms ease;
     }
 
-    /* Clean Blur-Fade Theme Transition */
-    ::view-transition-old(root),
-    ::view-transition-new(root) {
-      mix-blend-mode: normal;
+    .theme-border {
+      border-color: var(--border);
+      transition: border-color 220ms ease, background-color 220ms ease, color 220ms ease;
     }
 
-    ::view-transition-old(root) {
-      animation: theme-blur-out 420ms ease-in-out both;
+    .theme-surface {
+      background-color: var(--surface);
+      transition: background-color 220ms ease, border-color 220ms ease;
     }
 
-    ::view-transition-new(root) {
-      animation: theme-blur-in 420ms ease-in-out both;
-    }
-
-    @keyframes theme-blur-out {
-      from {
-        opacity: 1;
-        filter: blur(0px);
-      }
-
-      to {
-        opacity: 0;
-        filter: blur(10px);
-      }
-    }
-
-    @keyframes theme-blur-in {
-      from {
-        opacity: 0;
-        filter: blur(10px);
-      }
-
-      to {
-        opacity: 1;
-        filter: blur(0px);
-      }
-    }
-
-    .view-hidden {
-      display: none !important;
-    }
-
-    /* Centered Minimalist Unit */
-    .container {
+    /* Full-column Diagonal Hatched Section Divider (28px height) */
+    .hatch-divider {
+      height: 28px;
       width: 100%;
-      max-width: 520px;
-      display: flex;
-      flex-direction: column;
-      gap: 36px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background-image: repeating-linear-gradient(-45deg,
+          var(--hatch) 0px,
+          var(--hatch) 1px,
+          transparent 1px,
+          transparent 8px);
+      transition: border-color 220ms ease;
     }
 
-    /* Meta Bar */
-    .meta-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-family: var(--font-mono);
-      font-size: 13.5px;
-      letter-spacing: 0.04em;
-      color: var(--fg-muted);
+    /* Rotating Vertical Text-Swap Subtitle (Zero Layout Shift) */
+    .role-rotator {
+      position: relative;
+      height: 24px;
+      overflow: hidden;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: var(--fg);
-      font-weight: 500;
-      cursor: default;
+    .role-item {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 24px;
+      line-height: 24px;
+      opacity: 0;
+      transform: translateY(100%);
+      transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), opacity 320ms ease;
+      pointer-events: none;
     }
 
-    /* 8-Way Sprite Avatar + Easter Egg Pill */
+    .role-item.is-active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .role-item.is-exiting {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+
+    /* Subtle Scroll-Reveal Animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 420ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Experience Accordion Smooth Grid Animation */
+    .accordion-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      opacity: 0;
+      transition: grid-template-rows 260ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease;
+    }
+
+    .accordion-item[data-open="true"] .accordion-body {
+      grid-template-rows: 1fr;
+      opacity: 1;
+    }
+
+    .accordion-inner {
+      overflow: hidden;
+    }
+
+    .accordion-chevron {
+      transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .accordion-item[data-open="true"] .accordion-chevron {
+      transform: rotate(180deg);
+    }
+
+    /* Editorial Sibling Dimming for Technical Notes */
+    @media (hover: hover) and (pointer: fine) {
+      .notes-index:hover .note-row {
+        opacity: 0.42;
+      }
+
+      .notes-index .note-row:hover {
+        opacity: 1;
+      }
+    }
+
+    /* Card Subtle Hover Elevation & Border Crispness */
+    .project-card {
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      transition: border-color 180ms ease, transform 200ms cubic-bezier(0.22, 1, 0.36, 1), background-color 200ms ease, box-shadow 200ms ease;
+    }
+
+    .project-card:hover {
+      border-color: var(--border-strong);
+      background-color: var(--surface);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px -14px rgba(0, 0, 0, 0.16);
+    }
+
+    html.dark .project-card:hover {
+      box-shadow: 0 10px 28px -12px rgba(0, 0, 0, 0.65);
+    }
+
+    /* Filter Chip Transitions */
+    .pill-btn {
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background-color: transparent;
+      transition: all 160ms ease;
+    }
+
+    .pill-btn:hover {
+      color: var(--text);
+      border-color: var(--border-strong);
+      background-color: var(--surface);
+    }
+
+    .pill-btn[aria-pressed="true"] {
+      background-color: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
+
+    /* Tech Chip Hover */
+    .tech-chip {
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
+    }
+
+    .tech-chip:hover {
+      border-color: var(--border-strong);
+      background-color: var(--surface);
+      transform: translateY(-1px);
+    }
+
+    /* Modal Animation */
+    .modal-backdrop {
+      transition: opacity 200ms ease;
+    }
+
+    .modal-panel {
+      transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), opacity 200ms ease;
+    }
+
+    /* Subtle Filter Fade-In */
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-filter-in {
+      animation: fadeSlideIn 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    /* Custom Scrollbar for Modals */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-strong);
+      border-radius: 9999px;
+    }
+
+    /* 8-Way Sprite Avatar + Dizzy / Annoyed Easter Egg Pill */
     .avatar-wrap {
       position: relative;
       display: flex;
@@ -161,8 +303,8 @@
     }
 
     .brand-avatar {
-      width: 50px;
-      height: 50px;
+      width: 54px;
+      height: 54px;
       border-radius: 50%;
       overflow: hidden;
       background-color: transparent;
@@ -173,10 +315,11 @@
       cursor: pointer;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
-      transition: border-color 0.2s var(--ease), filter 0.2s var(--ease);
+      transition: border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    :root[data-theme="light"] .brand-avatar {
+    html:not(.dark) .brand-avatar {
       filter: drop-shadow(0 3px 8px rgba(17, 17, 20, 0.14));
     }
 
@@ -186,7 +329,6 @@
       background-position: 50% 50%;
     }
 
-    /* Reaction overrides */
     .brand-avatar.is-reacting {
       background-size: 88% !important;
       background-position: center !important;
@@ -261,16 +403,17 @@
       opacity: 0;
       pointer-events: none;
       white-space: nowrap;
-      background: var(--surface-elevated);
-      border: 1px solid var(--border-hover);
-      color: var(--fg);
-      font-family: var(--font-mono);
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      color: var(--text);
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
       font-size: 11px;
       letter-spacing: 0.02em;
       padding: 4px 10px;
-      border-radius: 99px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-      transition: opacity 0.2s var(--ease), transform 0.22s var(--ease);
+      border-radius: 9999px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 20;
     }
 
@@ -279,1289 +422,1592 @@
       transform: translateX(-50%) translateY(0) scale(1);
     }
 
-    /* Spider-Verse Name Glitch Effect */
-    .brand-name {
-      font-family: Inter;
-      font-size: 13px;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45em;
-      position: relative;
-    }
-
-    .glitch-word {
-      position: relative;
-      display: inline-block;
-      will-change: transform, filter;
-    }
-
-    .glitch-word::before,
-    .glitch-word::after {
-      content: attr(data-text);
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0;
-    }
-
-    /* Mode 1: Horizontal Slice Shear + CMY Ghost */
-    .glitch-word.glitch-slice {
-      color: transparent;
-      animation: g-slice-base 360ms steps(1, end) forwards;
-    }
-
-    .glitch-word.glitch-slice::before {
-      color: var(--fg);
-      opacity: 1;
-      clip-path: inset(0 0 48% 0);
-      animation: g-slice-top 360ms steps(1, end) forwards;
-    }
-
-    .glitch-word.glitch-slice::after {
-      color: var(--fg);
-      opacity: 1;
-      clip-path: inset(52% 0 0 0);
-      animation: g-slice-bot 360ms steps(1, end) forwards;
-    }
-
-    @keyframes g-slice-base {
-
-      0%,
-      45% {
-        color: transparent;
-      }
-
-      55% {
-        color: var(--fg);
-        text-shadow: -2.5px 1px 0 #00f0ff, 2.5px -1px 0 #ff0080, 0 2px 0 #ffe600;
-      }
-
-      80% {
-        color: var(--fg);
-        text-shadow: 1.5px -1px 0 #00f0ff, -1.5px 1px 0 #ff0080;
-      }
-
-      100% {
-        color: var(--fg);
-        text-shadow: none;
-      }
-    }
-
-    @keyframes g-slice-top {
-      0% {
-        transform: translate(-3px, -1.5px);
-        color: var(--fg);
-        opacity: 1;
-      }
-
-      30% {
-        transform: translate(2.5px, -1px) skewX(-6deg);
-        color: #00f0ff;
-        opacity: 1;
-      }
-
-      55% {
-        transform: translate(-2px, 1px);
-        color: #ff0080;
-        opacity: 0.85;
-        clip-path: inset(0 0 0 0);
-        mix-blend-mode: screen;
-      }
-
-      85%,
-      100% {
-        opacity: 0;
-        transform: none;
-      }
-    }
-
-    @keyframes g-slice-bot {
-      0% {
-        transform: translate(3.5px, 1.5px);
-        color: var(--fg);
-        opacity: 1;
-      }
-
-      30% {
-        transform: translate(-2.5px, 1px) skewX(6deg);
-        color: #ffe600;
-        opacity: 1;
-      }
-
-      55% {
-        transform: translate(2px, -1px);
-        color: #00f0ff;
-        opacity: 0.85;
-        clip-path: inset(0 0 0 0);
-        mix-blend-mode: screen;
-      }
-
-      85%,
-      100% {
-        opacity: 0;
-        transform: none;
-      }
-    }
-
-    /* Mode 2: CMY Chromatic Split */
-    .glitch-word.glitch-cmy {
-      animation: g-cmy-base 420ms steps(1, end) forwards;
-    }
-
-    .glitch-word.glitch-cmy::before {
-      color: #00f0ff;
-      mix-blend-mode: screen;
-      animation: g-cmy-cyan 420ms steps(1, end) forwards;
-    }
-
-    .glitch-word.glitch-cmy::after {
-      color: #ff0080;
-      mix-blend-mode: screen;
-      animation: g-cmy-mag 420ms steps(1, end) forwards;
-    }
-
-    @keyframes g-cmy-base {
-      0% {
-        transform: translate(0, 0);
-        text-shadow: 2px 2px 0 #ffe600;
-      }
-
-      25% {
-        transform: translate(-1.5px, 0.5px) skewX(-4deg);
-        text-shadow: -2px 2px 0 #ffe600;
-      }
-
-      50% {
-        transform: translate(1.5px, -0.5px);
-        text-shadow: 2px -1.5px 0 #ffe600;
-      }
-
-      75% {
-        transform: translate(-0.5px, 0);
-        text-shadow: -1.5px 1px 0 #00f0ff, 1.5px -1px 0 #ff0080;
-      }
-
-      100% {
-        transform: none;
-        text-shadow: none;
-      }
-    }
-
-    @keyframes g-cmy-cyan {
-      0% {
-        opacity: 0.9;
-        transform: translate(-3px, -1.5px);
-      }
-
-      25% {
-        opacity: 0.95;
-        transform: translate(3px, 1px);
-      }
-
-      50% {
-        opacity: 0.85;
-        transform: translate(-2px, 1.5px);
-      }
-
-      75% {
-        opacity: 0.7;
-        transform: translate(-1.5px, 0);
-      }
-
-      100% {
-        opacity: 0;
-        transform: none;
-      }
-    }
-
-    @keyframes g-cmy-mag {
-      0% {
-        opacity: 0.9;
-        transform: translate(3px, 1.5px);
-      }
-
-      25% {
-        opacity: 0.95;
-        transform: translate(-3px, -1px);
-      }
-
-      50% {
-        opacity: 0.85;
-        transform: translate(2.5px, -1.5px);
-      }
-
-      75% {
-        opacity: 0.7;
-        transform: translate(1.5px, 0);
-      }
-
-      100% {
-        opacity: 0;
-        transform: none;
-      }
-    }
-
-    /* Mode 3: Comic Halftone + Color Block Burst */
-    .glitch-word.glitch-comic {
-      animation: g-comic-base 480ms steps(1, end) forwards;
-    }
-
-    .glitch-word.glitch-comic::before {
-      content: "";
-      inset: -4px -6px;
-      background-image:
-        radial-gradient(#ff0080 1.2px, transparent 1.2px),
-        radial-gradient(#00f0ff 1.2px, transparent 1.2px),
-        radial-gradient(#ffe600 1px, transparent 1px);
-      background-size: 6px 6px, 7px 7px, 5px 5px;
-      background-position: 0 0, 3px 2px, 1px 4px;
-      mix-blend-mode: screen;
-      animation: g-comic-dots 480ms steps(1, end) forwards;
-    }
-
-    .glitch-word.glitch-comic::after {
-      content: attr(data-text);
-      mix-blend-mode: screen;
-      animation: g-comic-block 480ms steps(1, end) forwards;
-    }
-
-    @keyframes g-comic-base {
-      0% {
-        transform: skewX(-8deg);
-        text-shadow: -3px -2px 0 #ff0080, 3px 2px 0 #00f0ff;
-      }
-
-      22% {
-        transform: translate(2px, -1px) skewX(6deg);
-        text-shadow: 2px 2px 0 #ffe600, -2px -1px 0 #00f0ff;
-      }
-
-      48% {
-        background: linear-gradient(115deg, #22c55e 0 36%, #3b82f6 36% 68%, #f97316 68% 100%);
-        color: #000000;
-        padding: 0 3px;
-        margin: 0 -3px;
-        transform: skewX(-10deg) scale(1.03);
-        text-shadow: none;
-      }
-
-      72% {
-        background: transparent;
-        color: var(--fg);
-        padding: 0;
-        margin: 0;
-        transform: translate(-1px, 0);
-        text-shadow: -2px 0 0 #00f0ff, 2px 0 0 #ff0080, 0 1.5px 0 #ffe600;
-      }
-
-      100% {
-        background: transparent;
-        color: var(--fg);
-        padding: 0;
-        margin: 0;
-        transform: none;
-        text-shadow: none;
-      }
-    }
-
-    @keyframes g-comic-dots {
-      0% {
-        opacity: 0.9;
-        transform: translate(-2px, 1px);
-        clip-path: inset(0 15% 20% 0);
-      }
-
-      22% {
-        opacity: 1;
-        transform: translate(3px, -2px);
-        clip-path: inset(10% 0 0 10%);
-      }
-
-      48% {
-        opacity: 0.45;
-        transform: translate(-1px, 2px);
-        clip-path: inset(0 0 0 0);
-      }
-
-      72%,
-      100% {
-        opacity: 0;
-        transform: none;
-      }
-    }
-
-    @keyframes g-comic-block {
-      0% {
-        opacity: 0.9;
-        color: #00f0ff;
-        transform: translate(2.5px, -2px);
-        clip-path: inset(0 0 50% 0);
-      }
-
-      22% {
-        opacity: 0.9;
-        color: #ff0080;
-        transform: translate(-3px, 2px);
-        clip-path: inset(45% 0 0 0);
-      }
-
-      48% {
-        opacity: 0;
-      }
-
-      72% {
-        opacity: 0.8;
-        color: #ffe600;
-        transform: translate(1.5px, 1px);
-        clip-path: inset(0 0 0 0);
-      }
-
-      100% {
-        opacity: 0;
-        transform: none;
-      }
-    }
-
     @media (prefers-reduced-motion: reduce) {
 
       .brand-avatar.is-dizzy,
-      .brand-avatar.is-annoyed,
-      .glitch-word,
-      .glitch-word::before,
-      .glitch-word::after,
-      ::view-transition-old(root),
-      ::view-transition-new(root) {
+      .brand-avatar.is-annoyed {
         animation: none !important;
       }
-    }
-
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 8px rgba(229, 169, 60, 0.6);
-      animation: pulse 2.2s infinite ease-in-out;
-    }
-
-    @keyframes pulse {
-
-      0%,
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-
-      50% {
-        opacity: 0.4;
-        transform: scale(0.85);
-      }
-    }
-
-    .theme-toggle-btn {
-      width: 28px;
-      height: 28px;
-      border-radius: 999px;
-      border: none;
-      background: transparent;
-      color: var(--fg-muted);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      flex-shrink: 0;
-      transition: color 0.2s var(--ease), background 0.2s var(--ease), transform 0.2s var(--ease);
-    }
-
-    .theme-toggle-btn:hover {
-      color: var(--fg);
-      background: var(--hover-fill);
-    }
-
-    .theme-toggle-btn:active {
-      transform: scale(0.90);
-    }
-
-    /* Core Content Block */
-    .content-block {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    h1 {
-      font-family: "Newsreader", Georgia, serif;
-      font-size: clamp(34px, 5.5vw, 46px);
-      font-weight: 500;
-      line-height: 1.08;
-      letter-spacing: -0.04em;
-      font-optical-sizing: auto;
-      background: linear-gradient(180deg, #FFFFFF 0%, #A1A1AA 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      padding-bottom: 2px;
-    }
-
-    :root[data-theme="light"] h1 {
-      background: linear-gradient(180deg, #0B0B0D 0%, #5F5F68 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    h1 em {
-      font-style: italic;
-    }
-
-    p {
-      font-size: 15px;
-      line-height: 1.6;
-      color: var(--fg-muted);
-      letter-spacing: -0.01em;
-      text-align: justify;
-    }
-
-    /* Footer / Links Row */
-    .links-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding-top: 12px;
-      border-top: 1px solid var(--border);
-      font-size: 13.5px;
-      flex-wrap: wrap;
-    }
-
-    .footer-location {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      color: var(--fg-muted);
-      font-family: var(--font-mono);
-      font-size: 12.5px;
-      margin-left: auto;
-    }
-
-    .globe-3d {
-      display: block;
-      width: 15px;
-      height: 15px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .link-item .arrow {
-      display: inline-block;
-      transition: transform 0.2s var(--ease);
-    }
-
-    .link-item:hover .arrow {
-      transform: translate(2px, -2px);
-    }
-
-    .link-item {
-      color: var(--fg-muted);
-      text-decoration: none;
-      transition: color 0.2s var(--ease);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      background: transparent;
-      border: none;
-      font-family: inherit;
-      font-size: inherit;
-      padding: 0;
-    }
-
-    .link-item svg {
-      color: var(--fg-muted);
-      flex-shrink: 0;
-      transition: color 0.2s var(--ease);
-    }
-
-    .link-item:hover svg {
-      color: var(--fg);
-    }
-
-    .link-item:hover {
-      color: var(--fg);
-    }
-
-    .copy-btn {
-      color: var(--fg);
-      font-weight: 500;
-    }
-
-    /* Clean Minimal Toast */
-    .toast {
-      position: fixed;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%) translateY(16px);
-      opacity: 0;
-      pointer-events: none;
-      background: var(--surface-elevated);
-      border: 1px solid var(--border-hover);
-      color: var(--fg);
-      font-size: 12.5px;
-      font-family: var(--font-mono);
-      padding: 8px 16px;
-      border-radius: 99px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-      transition: transform 0.25s var(--ease), opacity 0.25s;
-      z-index: 100;
-    }
-
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
     }
   </style>
 </head>
 
-<body>
-  <main class="container">
-    <!-- Meta -->
-    <div class="meta-bar">
-      <div class="brand" id="brandTrigger">
-        <div class="avatar-wrap">
-          <div class="brand-avatar" id="brandAvatar" role="img" aria-label="Manav"></div>
-          <span class="avatar-pill" id="avatarPill" aria-live="polite"></span>
+<body class="font-sans antialiased overflow-x-hidden selection:bg-emerald-500/20 selection:text-[var(--text)]">
+
+  <!-- ======================================================================= -->
+  <!-- DESKTOP SCROLL-SPY RAIL (OUTSIDE RIGHT 1px VERTICAL GUIDE LINE)         -->
+  <!-- ======================================================================= -->
+  <aside aria-label="Section scroll progress"
+    class="hidden lg:flex fixed top-1/2 -translate-y-1/2 z-30 flex-col gap-1.5" style="left: calc(50% + 408px);">
+    <nav id="scrollSpyRail" class="flex flex-col gap-1">
+      <a href="#hero" data-spy="hero"
+        class="spy-link group flex items-center gap-2.5 py-1 text-[11px] font-mono text-[var(--muted)] hover:text-[var(--text)] transition-colors">
+        <span class="spy-bar w-[2px] h-3.5 rounded-full bg-[var(--border)] transition-all duration-200"></span>
+        <span>00</span>
+        <span
+          class="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[10px] text-[var(--muted)]">Intro</span>
+      </a>
+      <a href="#projects" data-spy="projects"
+        class="spy-link group flex items-center gap-2.5 py-1 text-[11px] font-mono text-[var(--muted)] hover:text-[var(--text)] transition-colors">
+        <span class="spy-bar w-[2px] h-3.5 rounded-full bg-[var(--border)] transition-all duration-200"></span>
+        <span>01</span>
+        <span
+          class="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[10px] text-[var(--muted)]">Projects</span>
+      </a>
+      <a href="#experience" data-spy="experience"
+        class="spy-link group flex items-center gap-2.5 py-1 text-[11px] font-mono text-[var(--muted)] hover:text-[var(--text)] transition-colors">
+        <span class="spy-bar w-[2px] h-3.5 rounded-full bg-[var(--border)] transition-all duration-200"></span>
+        <span>02</span>
+        <span
+          class="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[10px] text-[var(--muted)]">Experience</span>
+      </a>
+      <a href="#stack" data-spy="stack"
+        class="spy-link group flex items-center gap-2.5 py-1 text-[11px] font-mono text-[var(--muted)] hover:text-[var(--text)] transition-colors">
+        <span class="spy-bar w-[2px] h-3.5 rounded-full bg-[var(--border)] transition-all duration-200"></span>
+        <span>03</span>
+        <span
+          class="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[10px] text-[var(--muted)]">Stack</span>
+      </a>
+      <a href="#notes" data-spy="notes"
+        class="spy-link group flex items-center gap-2.5 py-1 text-[11px] font-mono text-[var(--muted)] hover:text-[var(--text)] transition-colors">
+        <span class="spy-bar w-[2px] h-3.5 rounded-full bg-[var(--border)] transition-all duration-200"></span>
+        <span>04</span>
+        <span
+          class="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[10px] text-[var(--muted)]">Notes</span>
+      </a>
+      <a href="#footer" data-spy="footer"
+        class="spy-link group flex items-center gap-2.5 py-1 text-[11px] font-mono text-[var(--muted)] hover:text-[var(--text)] transition-colors">
+        <span class="spy-bar w-[2px] h-3.5 rounded-full bg-[var(--border)] transition-all duration-200"></span>
+        <span>05</span>
+        <span
+          class="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[10px] text-[var(--muted)]">Colophon</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ======================================================================= -->
+  <!-- FRAMED SINGLE-COLUMN ARCHITECTURAL CONTAINER (MAX-WIDTH 780px)          -->
+  <!-- Continuous 1px left & right vertical guide lines extending full height  -->
+  <!-- ======================================================================= -->
+  <div class="max-w-[780px] mx-auto min-h-screen border-x theme-border relative">
+
+    <!-- ===================================================================== -->
+    <!-- STICKY TOP NAVIGATION BAR (FROSTED GLASS INSIDE FRAME)                -->
+    <!-- ===================================================================== -->
+    <header class="sticky top-0 z-40 border-b theme-border backdrop-blur-md" style="background-color: var(--glass);">
+      <div class="px-5 sm:px-7 h-14 flex items-center justify-between gap-3">
+        <!-- Left: Minimal Monogram / Brand Mark -->
+        <a href="#hero"
+          class="inline-flex items-center gap-2 font-mono text-xs font-medium tracking-tight text-[var(--text)] hover:opacity-75 transition-opacity shrink-0"
+          aria-label="Manav Chaudhari Home">
+          <span class="hidden sm:inline">Manav</span>
+        </a>
+
+        <!-- Center: Clean Section Links -->
+        <nav aria-label="Primary Navigation"
+          class="flex items-center gap-3 sm:gap-5 text-[12.5px] sm:text-[13px] text-[var(--muted)] overflow-x-auto no-scrollbar">
+          <a href="#hero" class="hover:text-[var(--text)] transition-colors py-1 shrink-0">about</a>
+          <a href="#projects" class="hover:text-[var(--text)] transition-colors py-1 shrink-0">projects</a>
+          <a href="#experience" class="hover:text-[var(--text)] transition-colors py-1 shrink-0">experience</a>
+          <a href="#stack" class="hover:text-[var(--text)] transition-colors py-1 shrink-0">stack</a>
+          <a href="#notes" class="hover:text-[var(--text)] transition-colors py-1 shrink-0">notes</a>
+        </nav>
+
+        <!-- Right: Crisp Light/Dark Toggle Button + Tooltip -->
+        <div class="relative group shrink-0">
+          <button id="themeToggleBtn" type="button" aria-label="Toggle color theme"
+            class="w-8 h-8 rounded-lg border theme-border hover:border-[var(--border-strong)] hover:bg-[var(--surface)] flex items-center justify-center text-[var(--text)] transition-all cursor-pointer">
+            <!-- Sun Icon (shown in Dark Mode) -->
+            <svg id="sunIcon" class="w-4 h-4 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path
+                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41">
+              </path>
+            </svg>
+            <!-- Moon Icon (shown in Light Mode) -->
+            <svg id="moonIcon" class="w-4 h-4 block dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+            </svg>
+          </button>
+
+          <!-- Hover Tooltip: Press T -->
+          <span
+            class="pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity absolute right-0 top-10 whitespace-nowrap px-2 py-1 rounded-md border theme-border bg-[var(--bg)] text-[10px] font-mono text-[var(--muted)] shadow-sm">
+            Press <kbd class="text-[var(--text)] font-medium">T</kbd>
+          </span>
         </div>
-        <span class="brand-name" aria-label="Manav Chaudhari">
-          <span class="glitch-word" data-text="Manav">Manav</span>
-          <span class="glitch-word" data-text="Chaudhari">Chaudhari</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- =================================================================== -->
+      <!-- SECTION 00: HERO / INTERACTIVE DOT-MATRIX BANNER + ABOUT + CONTACT  -->
+      <!-- =================================================================== -->
+      <section id="hero" class="scroll-mt-14">
+
+        <!-- Subtle Interactive Dot-Matrix Header Banner (height: 110px) -->
+        <div id="dotBannerContainer" class="relative w-full h-[110px] border-b theme-border overflow-hidden select-none"
+          style="background-color: var(--surface);">
+          <canvas id="dotMatrixCanvas" class="block w-full h-full"></canvas>
+          <!-- Subtle Corner Coordinate Stamp -->
+          <div
+            class="pointer-events-none absolute bottom-2.5 right-4 font-mono text-[10px] tracking-wider text-[var(--muted)] opacity-75">
+            00 / SYS.READY · 37.7749° N
+          </div>
+        </div>
+
+        <!-- Hero Content Area -->
+        <div class="px-5 sm:px-7 py-8 sm:py-9">
+          <!-- Profile Row: 8-Way Interactive Avatar + Name -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <!-- 8-Way Sprite Avatar + Easter Egg Pill -->
+              <div class="avatar-wrap">
+                <div class="brand-avatar" id="brandAvatar" role="img" aria-label="Manav"></div>
+                <span class="avatar-pill" id="avatarPill" aria-live="polite"></span>
+              </div>
+
+              <div>
+                <div class="flex items-center gap-2.5 flex-wrap">
+                  <h1 class="text-xl sm:text-2xl font-semibold tracking-tight text-[var(--text)]">
+                    Manav Chaudhari
+                  </h1>
+                </div>
+
+                <!-- Rotating Vertical Text-Swap Subtitle (Zero Layout Shift) -->
+                <div class="role-rotator mt-1 font-mono text-[13px] text-[var(--muted)]" aria-live="polite">
+                  <span class="role-item is-active">Full-Stack Systems Engineer</span>
+                  <span class="role-item">AI &amp; Backend Builder</span>
+                  <span class="role-item">Product-Minded Developer</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- High-Density About: Strictly 3 Scannable Engineering Bullets -->
+          <div class="mt-7 pt-6 border-t theme-border">
+            <p class="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--muted)] mb-3.5">
+              00 / About
+            </p>
+            <ul class="space-y-2.5 text-[14.5px] leading-relaxed text-[var(--text-secondary)]">
+              <li class="flex items-start gap-2.5">
+                <span class="font-mono text-xs mt-1 select-none" style="color: var(--accent);">—</span>
+                <span>
+                  I architect low-latency distributed backends, developer tooling, and clean web interfaces built for
+                  reliability at scale.
+                </span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="font-mono text-xs mt-1 select-none" style="color: var(--accent);">—</span>
+                <span>
+                  Focused on <span class="text-[var(--text)] font-medium">TypeScript, Go, Rust, and
+                    Python</span>—bridging systems engineering fundamentals with modern AI retrieval pipelines.
+                </span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <span class="font-mono text-xs mt-1 select-none" style="color: var(--accent);">—</span>
+                <span>
+                  Currently building open-source edge observability tools and exploring SWE / Systems roles on
+                  high-craft engineering teams.
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Quick Contact Strip: Direct Links + Resume Preview -->
+          <div class="mt-7 flex items-center flex-wrap gap-2">
+            <!-- Direct Email Link -->
+            <a href="mailto:hello@manav.here"
+              class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border theme-border text-xs font-mono text-[var(--text)] hover:border-[var(--border-strong)] hover:bg-[var(--surface)] transition-all">
+              <svg class="w-3.5 h-3.5 text-[var(--muted)]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+              </svg>
+              Email
+              <span class="text-[var(--muted)]">↗</span>
+            </a>
+
+            <!-- GitHub External Link -->
+            <a href="https://github.com/manavgpt" target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border theme-border text-xs font-mono text-[var(--text)] hover:border-[var(--border-strong)] hover:bg-[var(--surface)] transition-all">
+              <svg class="w-3.5 h-3.5 text-[var(--muted)]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4">
+                </path>
+                <path d="M9 18c-4.51 2-5-2-7-2"></path>
+              </svg>
+              GitHub
+              <span class="text-[var(--muted)]">↗</span>
+            </a>
+
+            <!-- Twitter External Link -->
+            <a href="https://x.com/manavgpt" target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border theme-border text-xs font-mono text-[var(--text)] hover:border-[var(--border-strong)] hover:bg-[var(--surface)] transition-all">
+              <svg class="w-3.5 h-3.5 text-[var(--muted)]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
+                <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+              </svg>
+              Twitter
+              <span class="text-[var(--muted)]">↗</span>
+            </a>
+
+            <!-- Resume PDF Preview Button -->
+            <button id="resumeBtn" type="button"
+              class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border theme-border text-xs font-mono text-[var(--text)] hover:border-[var(--border-strong)] hover:bg-[var(--surface)] transition-all cursor-pointer">
+              <svg class="w-3.5 h-3.5 text-[var(--muted)]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" x2="8" y1="13" y2="13"></line>
+                <line x1="16" x2="8" y1="17" y2="17"></line>
+              </svg>
+              Resume PDF
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- HATCHED DIVIDER -->
+      <div class="hatch-divider" aria-hidden="true"></div>
+
+      <!-- =================================================================== -->
+      <!-- SECTION 01: SELECTED WORK / PROJECTS (2-COL GRID + CASE STUDY MODAL)-->
+      <!-- =================================================================== -->
+      <section id="projects" class="px-5 sm:px-7 py-9 scroll-mt-14 reveal">
+        <!-- Section Header + Filter Pills -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 mb-6">
+          <div>
+            <p class="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--muted)]">
+              01 / Projects
+            </p>
+            <h2 class="text-lg font-semibold tracking-tight text-[var(--text)] mt-0.5">
+              Selected Engineering Work
+            </h2>
+          </div>
+
+          <!-- Interactive Filter Pills -->
+          <div id="projectFilterBar" class="flex items-center flex-wrap gap-1.5" role="group"
+            aria-label="Filter projects">
+            <button type="button" data-project-filter="All" aria-pressed="true"
+              class="pill-btn px-2.5 py-1 rounded-md text-[11.5px] font-mono cursor-pointer">
+              All
+            </button>
+            <button type="button" data-project-filter="Fullstack" aria-pressed="false"
+              class="pill-btn px-2.5 py-1 rounded-md text-[11.5px] font-mono cursor-pointer">
+              Fullstack
+            </button>
+            <button type="button" data-project-filter="Backend" aria-pressed="false"
+              class="pill-btn px-2.5 py-1 rounded-md text-[11.5px] font-mono cursor-pointer">
+              Backend
+            </button>
+            <button type="button" data-project-filter="AI / Systems" aria-pressed="false"
+              class="pill-btn px-2.5 py-1 rounded-md text-[11.5px] font-mono cursor-pointer">
+              AI / Systems
+            </button>
+          </div>
+        </div>
+
+        <!-- 2-Column Project Card Grid -->
+        <div id="projectsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Rendered dynamically via JS -->
+        </div>
+      </section>
+
+      <!-- HATCHED DIVIDER -->
+      <div class="hatch-divider" aria-hidden="true"></div>
+
+      <!-- =================================================================== -->
+      <!-- SECTION 02: EXPERIENCE (ACCORDION LEDGER)                           -->
+      <!-- =================================================================== -->
+      <section id="experience" class="px-5 sm:px-7 py-9 scroll-mt-14 reveal">
+        <div class="mb-6">
+          <p class="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--muted)]">
+            02 / Experience
+          </p>
+          <h2 class="text-lg font-semibold tracking-tight text-[var(--text)] mt-0.5">
+            Career &amp; Engineering Impact
+          </h2>
+        </div>
+
+        <div id="experienceList" class="border theme-border rounded-xl divide-y divide-[var(--border)] overflow-hidden">
+          <!-- Rendered dynamically via JS -->
+        </div>
+      </section>
+
+      <!-- HATCHED DIVIDER -->
+      <div class="hatch-divider" aria-hidden="true"></div>
+
+      <!-- =================================================================== -->
+      <!-- SECTION 03: TECH STACK (FILTERABLE TABS + ICON CHIPS)               -->
+      <!-- =================================================================== -->
+      <section id="stack" class="px-5 sm:px-7 py-9 scroll-mt-14 reveal">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 mb-6">
+          <div>
+            <p class="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--muted)]">
+              03 / Tech Stack
+            </p>
+            <h2 class="text-lg font-semibold tracking-tight text-[var(--text)] mt-0.5">
+              Tools &amp; Technologies
+            </h2>
+          </div>
+
+          <!-- Filterable Category Tabs -->
+          <div id="stackFilterBar" class="flex items-center flex-wrap gap-1.5" role="group"
+            aria-label="Filter tech stack">
+            <button type="button" data-stack-filter="All" aria-pressed="true"
+              class="pill-btn px-2.5 py-1 rounded-md text-[11.5px] font-mono cursor-pointer">
+              All
+            </button>
+            <button type="button" data-stack-filter="Languages" aria-pressed="false"
+              class="pill-btn px-2.5 py-1 rounded-md text-[11.5px] font-mono cursor-pointer">
+              Languages
+            </button>
+            <button type="button" data-stack-filter="Frontend" aria-pressed="false"
+              class="pill-btn px-2.5 py-1 rounded-md text-[11.5px] font-mono cursor-pointer">
+              Frontend
+            </button>
+            <button type="button" data-stack-filter="Backend" aria-pressed="false"
+              class="pill-btn px-2.5 py-1 rounded-md text-[11.5px] font-mono cursor-pointer">
+              Backend
+            </button>
+            <button type="button" data-stack-filter="AI & Infra" aria-pressed="false"
+              class="pill-btn px-2.5 py-1 rounded-md text-[11.5px] font-mono cursor-pointer">
+              AI &amp; Infra
+            </button>
+          </div>
+        </div>
+
+        <!-- Compact Grid of Icon + Monospace Label Chips -->
+        <div id="stackGrid" class="flex flex-wrap gap-2">
+          <!-- Rendered dynamically via JS -->
+        </div>
+      </section>
+
+      <!-- HATCHED DIVIDER -->
+      <div class="hatch-divider" aria-hidden="true"></div>
+
+      <!-- =================================================================== -->
+      <!-- SECTION 04: TECHNICAL NOTES (EDITORIAL INDEX + READER MODAL)        -->
+      <!-- =================================================================== -->
+      <section id="notes" class="px-5 sm:px-7 py-9 scroll-mt-14 reveal">
+        <div class="flex items-end justify-between gap-4 mb-5">
+          <div>
+            <p class="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--muted)]">
+              04 / Notes
+            </p>
+            <h2 class="text-lg font-semibold tracking-tight text-[var(--text)] mt-0.5">
+              Technical Writing &amp; Field Notes
+            </h2>
+          </div>
+          <span class="font-mono text-[11px] text-[var(--muted)] hidden sm:inline">
+            Click any entry to read
+          </span>
+        </div>
+
+        <!-- Minimalist Editorial Index Table -->
+        <div id="notesIndex" class="notes-index border-t border-b theme-border divide-y divide-[var(--border)]">
+          <!-- Rendered dynamically via JS -->
+        </div>
+      </section>
+
+      <!-- HATCHED DIVIDER -->
+      <div class="hatch-divider" aria-hidden="true"></div>
+
+      <!-- =================================================================== -->
+      <!-- SECTION 05: ARCHITECTURAL FOOTER / COLOPHON                         -->
+      <!-- =================================================================== -->
+      <footer id="footer" class="px-5 sm:px-7 py-8 scroll-mt-14">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
+          <div class="space-y-1.5">
+            <p class="font-medium text-[var(--text)]">
+              © 2026 Manav Chaudhari
+            </p>
+            <p class="font-mono text-[11px] text-[var(--muted)] flex items-center gap-2 flex-wrap">
+              <span>Local time: <span id="liveClock" class="text-[var(--text)]">--:--:--</span></span>
+            </p>
+          </div>
+
+          <button id="backToTopBtn" type="button"
+            class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border theme-border font-mono text-[11.5px] text-[var(--muted)] hover:text-[var(--text)] hover:border-[var(--border-strong)] hover:bg-[var(--surface)] transition-all cursor-pointer">
+            <span>Back to top</span>
+            <span aria-hidden="true">↑</span>
+          </button>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- REUSABLE EDITORIAL MODAL (CASE STUDIES, TECHNICAL NOTES, RESUME)        -->
+  <!-- ======================================================================= -->
+  <div id="modalOverlay"
+    class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-[2px] modal-backdrop opacity-0"
+    role="dialog" aria-modal="true" aria-labelledby="modalHeading">
+    <div id="modalPanel"
+      class="w-full max-w-[640px] max-h-[85vh] overflow-y-auto rounded-xl border theme-border bg-[var(--bg)] shadow-2xl p-6 sm:p-7 modal-panel scale-95 opacity-0">
+      <!-- Modal Top Meta + Close -->
+      <div class="flex items-center justify-between gap-4 pb-4 border-b theme-border">
+        <span id="modalKicker" class="font-mono text-[11px] uppercase tracking-wider text-[var(--muted)]">
+          KICKER
         </span>
+        <button id="modalCloseBtn" type="button" aria-label="Close modal"
+          class="px-2 py-1 rounded-md border theme-border font-mono text-[11px] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface)] transition-colors cursor-pointer">
+          ESC ✕
+        </button>
       </div>
 
-      <div class="status">
-        <!-- <span class="status-dot"></span>
-        <span>in progress</span> -->
-        <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Toggle light or dark theme"
-          title="Toggle light/dark theme">
-          <svg id="iconSun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="4"></circle>
-            <path d="M12 2v2"></path>
-            <path d="M12 20v2"></path>
-            <path d="m4.93 4.93 1.41 1.41"></path>
-            <path d="m17.66 17.66 1.41 1.41"></path>
-            <path d="M2 12h2"></path>
-            <path d="M20 12h2"></path>
-            <path d="m6.34 17.66-1.41 1.41"></path>
-            <path d="m19.07 4.93-1.41 1.41"></path>
-          </svg>
-          <svg id="iconMoon" class="view-hidden" width="14" height="14" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-          </svg>
+      <!-- Modal Dynamic Body -->
+      <div class="mt-5">
+        <h3 id="modalHeading" class="text-xl font-semibold tracking-tight text-[var(--text)]">
+          Modal Title
+        </h3>
+        <div id="modalContent" class="mt-4 space-y-4 text-[14px] leading-relaxed text-[var(--text-secondary)]">
+          <!-- Injected via JavaScript -->
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div
+        class="mt-7 pt-4 border-t theme-border flex items-center justify-between text-xs font-mono text-[var(--muted)]">
+        <span id="modalFooterNote">manav.here / reader</span>
+        <button id="modalDoneBtn" type="button"
+          class="text-[var(--text)] hover:underline underline-offset-4 cursor-pointer">
+          Close ✕
         </button>
       </div>
     </div>
-
-    <!-- Core Message -->
-    <div class="content-block">
-      <h1>this site is being built</h1>
-      <p>
-        i'm currently putting together my new personal website.
-        curating projects, writing, and refining the details.
-        coming soon.
-      </p>
-    </div>
-
-    <!-- Footer / Links -->
-    <footer class="links-row">
-      <a class="link-item" href="mailto:hello@manav.here">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-        </svg>
-        <span>mail</span><span class="arrow">↗</span>
-      </a>
-
-      <a class="link-item" href="https://github.com/manavgpt" target="_blank" rel="noopener">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path
-            d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-        </svg>
-        <span>github</span><span class="arrow">↗</span>
-      </a>
-
-      <a class="link-item" href="https://x.com/manavgpt" target="_blank" rel="noopener">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path
-            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-        </svg>
-        <span>twitter</span><span class="arrow">↗</span>
-      </a>
-
-      <span class="footer-location">
-        <canvas class="globe-3d" id="globe3d" width="64" height="64" aria-hidden="true"></canvas>
-        <span>bengaluru, india</span>
-      </span>
-    </footer>
-
-
-  </main>
-
-  <!-- Toast -->
-  <div class="toast" id="toast">
-    <span id="toastMsg">Email copied</span>
   </div>
 
+  <!-- ======================================================================= -->
+  <!-- SLEEK BOTTOM-RIGHT TOAST NOTIFICATION                                   -->
+  <!-- ======================================================================= -->
+  <div id="toast" role="status" aria-live="polite"
+    class="fixed bottom-5 right-5 z-50 pointer-events-none opacity-0 translate-y-2 transition-all duration-200 px-3.5 py-2.5 rounded-lg border theme-border shadow-lg font-mono text-xs flex items-center gap-2"
+    style="background-color: var(--text); color: var(--bg);">
+    <span class="w-1.5 h-1.5 rounded-full" style="background-color: var(--accent);"></span>
+    <span id="toastText">Notification</span>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- VANILLA JAVASCRIPT: THEME, CANVAS, FILTERS, MODALS, SCROLL-SPY          -->
+  <!-- ======================================================================= -->
   <script>
-    /* Clean Blur-Fade Theme Switcher */
     (function () {
-      const btn = document.getElementById("themeToggleBtn");
-      const iconSun = document.getElementById("iconSun");
-      const iconMoon = document.getElementById("iconMoon");
-      const metaTheme = document.querySelector('meta[name="theme-color"]');
-      const root = document.documentElement;
-      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      'use strict';
 
-      function syncThemeUI(theme) {
-        root.setAttribute("data-theme", theme);
-        if (iconSun) iconSun.classList.toggle("view-hidden", theme === "light");
-        if (iconMoon) iconMoon.classList.toggle("view-hidden", theme !== "light");
-        if (metaTheme) metaTheme.setAttribute("content", theme === "light" ? "#F8F7F4" : "#000000");
+      /* ---------------------------------------------------------------------
+       * 1. STRUCTURED PORTFOLIO DATA
+       * ------------------------------------------------------------------- */
+      const PROJECTS = [
+        {
+          id: 'pulsedb',
+          title: 'PulseDB',
+          tagline: 'Distributed Event Streamer',
+          category: 'Backend',
+          status: 'LIVE',
+          year: '2026',
+          description:
+            'High-throughput append-only event log with Raft-based partition replication and sub-2ms consumer fan-out.',
+          tags: ['Go', 'gRPC', 'Raft'],
+          problem:
+            'Standard message brokers introduce heavy JVM memory overhead and complex operational tuning for small-to-mid-scale telemetry pipelines.',
+          architecture:
+            'Built a zero-dependency segmented log storage engine in Go using memory-mapped I/O, binary framing over gRPC streams, and deterministic Raft leader election across 3-node clusters.',
+          metrics: [
+            'Sustains 64,000 events/sec per node with 1.6ms p99 tail latency',
+            '42MB idle memory footprint vs. 1.2GB+ on comparable JVM brokers',
+            'Automated crash recovery verified across 500+ fault-injection runs',
+          ],
+        },
+        {
+          id: 'vektor',
+          title: 'Vektor',
+          tagline: 'Local Semantic Code Search',
+          category: 'AI / Systems',
+          status: 'OSS',
+          year: '2026',
+          description:
+            'AST-aware hybrid code search CLI combining tree-sitter chunking, local ONNX embeddings, and HNSW indexing.',
+          tags: ['Rust', 'ONNX', 'Tree-sitter'],
+          problem:
+            'Grep fails when searching by architectural intent, while cloud code-search tools require uploading proprietary repositories to third-party servers.',
+          architecture:
+            'Parses multi-language repositories into semantic function/class AST nodes via Tree-sitter, embeds locally using quantized ONNX models, and queries a single-file HNSW vector index.',
+          metrics: [
+            'Indexes 120k LOC monorepos in under 14 seconds on Apple Silicon',
+            'Sub-18ms hybrid lexical + vector query response completely offline',
+            '1.4k+ GitHub stars and adopted by 12 open-source maintainer teams',
+          ],
+        },
+        {
+          id: 'cadence',
+          title: 'Cadence',
+          tagline: 'Real-time Collaborative API Tester',
+          category: 'Fullstack',
+          status: 'LIVE',
+          year: '2025',
+          description:
+            'Browser-native API workbench with CRDT-synced request collections, live latency histograms, and edge replay.',
+          tags: ['TypeScript', 'Next.js', 'WebSockets'],
+          problem:
+            'Bloated desktop API clients slow down team onboarding and make sharing live debugging sessions across backend and frontend engineers painful.',
+          architecture:
+            'Uses Yjs CRDT state sync over lightweight WebSocket rooms, backed by PostgreSQL snapshots and an isolated edge proxy for CORS-free HTTP/GraphQL inspection.',
+          metrics: [
+            'Real-time multiplayer editing with <35ms state convergence',
+            '98/100 Lighthouse performance score with zero heavy client bundles',
+            'Processes 180k+ proxied developer test requests monthly',
+          ],
+        },
+        {
+          id: 'relay',
+          title: 'Relay',
+          tagline: 'Edge Webhook Router',
+          category: 'Backend',
+          status: 'LIVE',
+          year: '2025',
+          description:
+            'Fault-tolerant webhook ingestion gateway with HMAC signature verification, exponential backoff, and dead-letter replay.',
+          tags: ['TypeScript', 'Redis', 'PostgreSQL'],
+          problem:
+            'Downstream webhook spikes frequently overwhelm application APIs, causing silent drops and billing/sync inconsistencies.',
+          architecture:
+            'Ingests webhooks at the edge, validates cryptographic signatures immediately, buffers payloads in Redis Streams, and dispatches with per-tenant rate limits and circuit breakers.',
+          metrics: [
+            '99.99% delivery reliability across 2.4M simulated burst webhooks',
+            'Zero dropped events during downstream 15-minute outage drills',
+            'One-click dead-letter queue inspection and selective replay UI',
+          ],
+        },
+      ];
+
+      const EXPERIENCE = [
+        {
+          id: 'exp-1',
+          company: 'Linearity Cloud',
+          role: 'Software Engineer, Core Systems',
+          period: '2025 — Present',
+          location: 'San Francisco, CA',
+          bullets: [
+            'Architected a Go & Redis distributed rate-limiter handling 45k req/sec across 14 edge regions, cutting p99 API latency by 36%.',
+            'Built an internal semantic log-triage assistant using Python and pgvector, reducing average incident root-cause time by 28%.',
+            'Led migration of core billing webhooks to an idempotent outbox pattern, eliminating duplicate invoice retries.',
+          ],
+        },
+        {
+          id: 'exp-2',
+          company: 'Verve Analytics',
+          role: 'Full-Stack Engineering Intern',
+          period: 'May 2024 — Aug 2024',
+          location: 'Remote',
+          bullets: [
+            'Engineered a virtualized real-time query inspector in React & TypeScript capable of rendering 50,000+ rows at 60 FPS.',
+            'Optimized slow PostgreSQL analytical queries via partial composite indexes, improving dashboard load times from 2.4s to 310ms.',
+          ],
+        },
+        {
+          id: 'exp-3',
+          company: 'Open-Source Collective',
+          role: 'Core Maintainer & Contributor',
+          period: '2023 — 2024',
+          location: 'Distributed',
+          bullets: [
+            'Maintained TypeScript SDKs and CLI tooling used by 8,000+ weekly developers, authoring automated CI benchmark suites.',
+            'Shipped zero-allocation JSON stream parsers and memory-leak patches across community Rust and Node.js packages.',
+          ],
+        },
+      ];
+
+      const STACK = [
+        { name: 'TypeScript', category: 'Languages', symbol: 'TS' },
+        { name: 'Go', category: 'Languages', symbol: 'GO' },
+        { name: 'Python', category: 'Languages', symbol: 'PY' },
+        { name: 'Rust', category: 'Languages', symbol: 'RS' },
+        { name: 'SQL', category: 'Languages', symbol: 'SQ' },
+        { name: 'React', category: 'Frontend', symbol: '⚛' },
+        { name: 'Next.js', category: 'Frontend', symbol: '▲' },
+        { name: 'Tailwind CSS', category: 'Frontend', symbol: '≈' },
+        { name: 'HTML5 Canvas', category: 'Frontend', symbol: '▦' },
+        { name: 'Node.js', category: 'Backend', symbol: '⬢' },
+        { name: 'PostgreSQL', category: 'Backend', symbol: '⛁' },
+        { name: 'Redis', category: 'Backend', symbol: '◈' },
+        { name: 'gRPC', category: 'Backend', symbol: '⇄' },
+        { name: 'Docker', category: 'AI & Infra', symbol: '❏' },
+        { name: 'PyTorch', category: 'AI & Infra', symbol: '◉' },
+        { name: 'Gemini / OpenAI', category: 'AI & Infra', symbol: '✦' },
+        { name: 'Linux / eBPF', category: 'AI & Infra', symbol: '⌘' },
+      ];
+
+      const NOTES = [
+        {
+          id: 'raft-lessons',
+          date: 'Nov 2026',
+          title: 'Designing Deterministic Fault Injection for Raft Logs',
+          readTime: '6 min',
+          paragraphs: [
+            'Testing distributed consensus with real wall-clock timers and live TCP sockets makes bugs nearly impossible to reproduce. A race condition that surfaces once in 10,000 runs will disappear the moment you attach a debugger.',
+            'By abstracting the network transport and monotonic clock behind a seeded deterministic simulator, we can compress hours of cluster partitions, packet reordering, and node restarts into a 400ms unit test.',
+            'Whenever an invariant fails—such as two leaders committing conflicting entries at the same log index—the simulator prints a single 64-bit seed that replays the exact failure sequence deterministically.',
+          ],
+          code: `// Deterministic simulation step loop\nfor tick := 0; tick < maxTicks; tick++ {\n  sim.deliverReadyPackets(tick)\n  for _, node := range sim.nodes {\n    node.Step(tick)\n  }\n  sim.assertElectionSafety()\n}`,
+        },
+        {
+          id: 'hybrid-search',
+          date: 'Aug 2026',
+          title: 'Why Pure Vector Search Fails on Codebases (and How Hybrid Fixes It)',
+          readTime: '5 min',
+          paragraphs: [
+            'Dense embeddings excel at conceptual queries like "where do we verify JWT expiry?", but they struggle badly with exact identifiers, error codes, and camelCase symbol names.',
+            'Combining BM25 lexical scoring with HNSW cosine similarity via Reciprocal Rank Fusion (RRF) consistently outperforms either method alone—without requiring brittle weight tuning across repositories.',
+            'In Vektor, chunking strictly on Tree-sitter AST boundaries (functions, structs, traits) rather than arbitrary 500-token sliding windows lifted top-5 retrieval precision by 24%.',
+          ],
+          code: `// Reciprocal Rank Fusion (k = 60)\nfn rrf_score(bm25_rank: usize, vec_rank: usize) -> f32 {\n    (1.0 / (60.0 + bm25_rank as f32)) +\n    (1.0 / (60.0 + vec_rank as f32))\n}`,
+        },
+        {
+          id: 'tail-latency',
+          date: 'May 2026',
+          title: 'Eliminating p99 Tail Latency Spikes in Webhook Workers',
+          readTime: '4 min',
+          paragraphs: [
+            'Averages hide pain. When a webhook worker pool shares a single unpartitioned queue, one slow downstream tenant timing out at 30 seconds can exhaust worker concurrency and stall healthy tenants.',
+            'Switching to fair per-tenant virtual queues in Redis with strict 4-second connect/read timeouts and jittered exponential backoff isolated slow consumers completely.',
+            'Before adding more servers, always instrument your queue wait time separately from handler execution time—90% of mysterious p99 spikes are queueing theory problems, not CPU bottlenecks.',
+          ],
+          code: `// Full-jitter exponential backoff\nconst maxDelay = Math.min(CAP_MS, BASE_MS * 2 ** attempt);\nconst sleepMs = Math.floor(Math.random() * maxDelay);`,
+        },
+      ];
+
+      /* ---------------------------------------------------------------------
+       * 2. STATE & DOM REFERENCES
+       * ------------------------------------------------------------------- */
+      let activeProjectFilter = 'All';
+      let activeStackFilter = 'All';
+      let openExperienceId = 'exp-1'; // First item expanded by default
+      let userOverrodeTheme = false;
+      let toastTimeout = null;
+
+      const htmlEl = document.documentElement;
+      const themeToggleBtn = document.getElementById('themeToggleBtn');
+      const projectsGrid = document.getElementById('projectsGrid');
+      const experienceList = document.getElementById('experienceList');
+      const stackGrid = document.getElementById('stackGrid');
+      const notesIndex = document.getElementById('notesIndex');
+      const resumeBtn = document.getElementById('resumeBtn');
+      const backToTopBtn = document.getElementById('backToTopBtn');
+      const liveClockEl = document.getElementById('liveClock');
+
+      // Modal elements
+      const modalOverlay = document.getElementById('modalOverlay');
+      const modalPanel = document.getElementById('modalPanel');
+      const modalKicker = document.getElementById('modalKicker');
+      const modalHeading = document.getElementById('modalHeading');
+      const modalContent = document.getElementById('modalContent');
+      const modalFooterNote = document.getElementById('modalFooterNote');
+      const modalCloseBtn = document.getElementById('modalCloseBtn');
+      const modalDoneBtn = document.getElementById('modalDoneBtn');
+
+      // Toast elements
+      const toastEl = document.getElementById('toast');
+      const toastText = document.getElementById('toastText');
+
+      /* ---------------------------------------------------------------------
+       * 3. TOAST NOTIFICATION HELPER
+       * ------------------------------------------------------------------- */
+      function showToast(message) {
+        clearTimeout(toastTimeout);
+        toastText.textContent = message;
+        toastEl.classList.remove('opacity-0', 'translate-y-2');
+        toastEl.classList.add('opacity-100', 'translate-y-0');
+
+        toastTimeout = setTimeout(() => {
+          toastEl.classList.remove('opacity-100', 'translate-y-0');
+          toastEl.classList.add('opacity-0', 'translate-y-2');
+        }, 2400);
       }
 
-      let initialTheme = "dark";
-      try {
-        const saved = localStorage.getItem("theme");
-        if (saved === "light" || saved === "dark") {
-          initialTheme = saved;
-        } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
-          initialTheme = "light";
-        }
-      } catch (_) { }
-      syncThemeUI(initialTheme);
-
-      if (btn) {
-        btn.addEventListener("click", () => {
-          const current = root.getAttribute("data-theme") === "light" ? "light" : "dark";
-          const next = current === "dark" ? "light" : "dark";
-
-          try {
-            localStorage.setItem("theme", next);
-          } catch (_) { }
-
-          if (reducedMotion || typeof document.startViewTransition !== "function") {
-            syncThemeUI(next);
-            return;
-          }
-
-          document.startViewTransition(() => {
-            syncThemeUI(next);
-          });
-        });
-      }
-    })();
-
-    /* Shared IST Clock for 3D Globe */
-    const skyClock = (function () {
-      function getISTDate() {
-        const now = new Date();
-        const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
-        return new Date(utcMs + 5.5 * 3600000);
+      /* ---------------------------------------------------------------------
+       * 4. DUAL-MODE THEME ENGINE (AUTO + MANUAL TOGGLE + 'T' SHORTCUT)
+       * ------------------------------------------------------------------- */
+      function toggleTheme(source) {
+        userOverrodeTheme = true;
+        const isDark = htmlEl.classList.toggle('dark');
+        //showToast(isDark ? 'Switched to Dark mode' : 'Switched to Light mode');
+        // Redraw dot matrix immediately with updated theme colors
+        if (typeof drawDotMatrix === 'function') drawDotMatrix();
       }
 
-      function getHour() {
-        const ist = getISTDate();
-        return ist.getHours() + ist.getMinutes() / 60 + ist.getSeconds() / 3600;
-      }
+      themeToggleBtn.addEventListener('click', () => toggleTheme('button'));
 
-      function getLightingState(h) {
-        let dayAmount = 0;
-        let goldenAmount = 0;
-
-        if (h >= 5 && h < 7.5) {
-          const t = (h - 5) / 2.5;
-          dayAmount = t;
-          goldenAmount = Math.sin(t * Math.PI);
-        } else if (h >= 7.5 && h < 16.5) {
-          dayAmount = 1;
-          goldenAmount = 0;
-        } else if (h >= 16.5 && h < 19.5) {
-          const t = (h - 16.5) / 3;
-          dayAmount = 1 - t;
-          goldenAmount = Math.sin(t * Math.PI);
-        }
-
-        const sunAngle = ((h - 6) / 12) * Math.PI;
-        return { dayAmount, goldenAmount, sunAngle };
-      }
-
-      return { getHour, getLightingState };
-    })();
-
-    /* WebGL 3D Earth Globe */
-    (function () {
-      const canvas = document.getElementById("globe3d");
-      if (!canvas) return;
-
-      const gl = canvas.getContext("webgl", { alpha: true, antialias: true });
-      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      function createEarthTexture() {
-        const texCanvas = document.createElement("canvas");
-        texCanvas.width = 256;
-        texCanvas.height = 128;
-        const tctx = texCanvas.getContext("2d");
-        const w = texCanvas.width;
-        const h = texCanvas.height;
-        const img = tctx.createImageData(w, h);
-        const d = img.data;
-
-        function hash(x, y) {
-          const n = Math.sin(x * 127.1 + y * 311.7) * 43758.5453123;
-          return n - Math.floor(n);
-        }
-
-        function smoothNoise(x, y) {
-          const ix = Math.floor(x);
-          const iy = Math.floor(y);
-          const fx = x - ix;
-          const fy = y - iy;
-          const ux = fx * fx * (3 - 2 * fx);
-          const uy = fy * fy * (3 - 2 * fy);
-          const a = hash(ix, iy);
-          const b = hash(ix + 1, iy);
-          const c = hash(ix, iy + 1);
-          const d1 = hash(ix + 1, iy + 1);
-          return a + (b - a) * ux + (c - a) * uy + (a - b - c + d1) * ux * uy;
-        }
-
-        function fbm(x, y) {
-          let val = 0;
-          let amp = 0.5;
-          let freq = 1;
-          for (let i = 0; i < 4; i++) {
-            val += amp * smoothNoise(x * freq, y * freq);
-            freq *= 2.02;
-            amp *= 0.5;
-          }
-          return val;
-        }
-
-        const blobs = [
-          { u: 0.22, v: 0.34, ru: 0.11, rv: 0.14 },
-          { u: 0.29, v: 0.62, ru: 0.065, rv: 0.18 },
-          { u: 0.50, v: 0.26, ru: 0.065, rv: 0.09 },
-          { u: 0.52, v: 0.54, ru: 0.08, rv: 0.18 },
-          { u: 0.66, v: 0.32, ru: 0.16, rv: 0.14 },
-          { u: 0.68, v: 0.45, ru: 0.045, rv: 0.08 },
-          { u: 0.79, v: 0.70, ru: 0.07, rv: 0.08 },
-        ];
-
-        for (let y = 0; y < h; y++) {
-          const v = y / (h - 1);
-          const latAbs = Math.abs(v - 0.5) * 2;
-          for (let x = 0; x < w; x++) {
-            const u = x / (w - 1);
-            const idx = (y * w + x) * 4;
-
-            let landMask = 0;
-            for (let b = 0; b < blobs.length; b++) {
-              const bl = blobs[b];
-              let du = Math.abs(u - bl.u);
-              if (du > 0.5) du = 1 - du;
-              const dv = (v - bl.v) / bl.rv;
-              const dist = Math.sqrt((du / bl.ru) ** 2 + dv * dv);
-              if (dist < 1.25) {
-                landMask = Math.max(landMask, 1 - dist / 1.25);
-              }
-            }
-
-            const n = fbm(u * 14, v * 7);
-            const elevation = landMask * 0.85 + (n - 0.42) * 0.65;
-
-            let rCol, gCol, bCol;
-            if (latAbs > 0.86 + (n - 0.5) * 0.08) {
-              rCol = 226;
-              gCol = 236;
-              bCol = 245;
-            } else if (elevation > 0.36) {
-              const t = Math.min(1, (elevation - 0.36) / 0.45);
-              const arid = Math.max(0, 1 - Math.abs(latAbs - 0.28) * 5);
-              rCol = Math.round(58 + t * 85 + arid * 55);
-              gCol = Math.round(126 + t * 35 - arid * 22);
-              bCol = Math.round(68 + t * 20 + arid * 12);
-            } else {
-              const depth = Math.max(0, Math.min(1, (0.36 - elevation) / 0.36));
-              rCol = Math.round(28 - depth * 16);
-              gCol = Math.round(118 - depth * 68);
-              bCol = Math.round(196 - depth * 92);
-            }
-
-            d[idx] = rCol;
-            d[idx + 1] = gCol;
-            d[idx + 2] = bCol;
-            d[idx + 3] = 255;
-          }
-        }
-
-        tctx.putImageData(img, 0, 0);
-        return texCanvas;
-      }
-
-      if (!gl) return;
-
-      const vsSource = `
-        attribute vec3 aPos;
-        attribute vec2 aTex;
-        uniform float uRot;
-        varying vec2 vTex;
-        varying vec3 vNormal;
-        void main() {
-          float c = cos(uRot);
-          float s = sin(uRot);
-          vec3 rotPos = vec3(
-            aPos.x * c + aPos.z * s,
-            aPos.y,
-            -aPos.x * s + aPos.z * c
-          );
-          vTex = aTex;
-          vNormal = normalize(rotPos);
-          gl_Position = vec4(rotPos.xy, -rotPos.z * 0.5, 1.0);
-        }
-      `;
-
-      const fsSource = `
-        precision mediump float;
-        uniform sampler2D uTex;
-        uniform vec3 uLightDir;
-        uniform float uAmbient;
-        uniform float uSpecStrength;
-        uniform vec3 uLightTint;
-        varying vec2 vTex;
-        varying vec3 vNormal;
-        void main() {
-          vec3 texCol = texture2D(uTex, vTex).rgb;
-          vec3 n = normalize(vNormal);
-          float diff = max(0.0, dot(n, normalize(uLightDir)));
-          vec3 viewDir = vec3(0.0, 0.0, 1.0);
-          vec3 halfVec = normalize(normalize(uLightDir) + viewDir);
-          float spec = pow(max(0.0, dot(n, halfVec)), 22.0) * uSpecStrength;
-          vec3 lit = texCol * (uAmbient + diff * 0.85) * uLightTint + vec3(spec) * uLightTint;
-          gl_FragColor = vec4(lit, 1.0);
-        }
-      `;
-
-      function compileShader(type, src) {
-        const sh = gl.createShader(type);
-        gl.shaderSource(sh, src);
-        gl.compileShader(sh);
-        return sh;
-      }
-
-      const prog = gl.createProgram();
-      gl.attachShader(prog, compileShader(gl.VERTEX_SHADER, vsSource));
-      gl.attachShader(prog, compileShader(gl.FRAGMENT_SHADER, fsSource));
-      gl.linkProgram(prog);
-      gl.useProgram(prog);
-
-      const latSegs = 24;
-      const lonSegs = 36;
-      const positions = [];
-      const texCoords = [];
-      const indices = [];
-
-      for (let y = 0; y <= latSegs; y++) {
-        const v = y / latSegs;
-        const phi = v * Math.PI;
-        const sinPhi = Math.sin(phi);
-        const cosPhi = Math.cos(phi);
-
-        for (let x = 0; x <= lonSegs; x++) {
-          const u = x / lonSegs;
-          const theta = u * Math.PI * 2;
-          const px = sinPhi * Math.cos(theta);
-          const py = cosPhi;
-          const pz = sinPhi * Math.sin(theta);
-
-          positions.push(px * 0.96, py * 0.96, pz * 0.96);
-          texCoords.push(1.0 - u, 1.0 - v);
+      // Listen for OS theme changes if user hasn't manually toggled
+      if (window.matchMedia) {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const handleSystemThemeChange = (e) => {
+          if (userOverrodeTheme) return;
+          htmlEl.classList.toggle('dark', e.matches);
+          if (typeof drawDotMatrix === 'function') drawDotMatrix();
+        };
+        if (mediaQuery.addEventListener) {
+          mediaQuery.addEventListener('change', handleSystemThemeChange);
         }
       }
 
-      for (let y = 0; y < latSegs; y++) {
-        for (let x = 0; x < lonSegs; x++) {
-          const a = y * (lonSegs + 1) + x;
-          const b = a + lonSegs + 1;
-          indices.push(a, b, a + 1, b, b + 1, a + 1);
+      // Keyboard shortcuts: 'T' to toggle theme, 'Escape' to close modal
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modalOverlay.classList.contains('hidden')) {
+          closeModal();
+          return;
         }
-      }
-
-      const posBuf = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-      const aPos = gl.getAttribLocation(prog, "aPos");
-      gl.enableVertexAttribArray(aPos);
-      gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);
-
-      const texBuf = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, texBuf);
-      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoords), gl.STATIC_DRAW);
-      const aTex = gl.getAttribLocation(prog, "aTex");
-      gl.enableVertexAttribArray(aTex);
-      gl.vertexAttribPointer(aTex, 2, gl.FLOAT, false, 0, 0);
-
-      const idxBuf = gl.createBuffer();
-      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, idxBuf);
-      gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
-
-      const texture = gl.createTexture();
-      gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, createEarthTexture());
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-
-      const uRot = gl.getUniformLocation(prog, "uRot");
-      const uLightDir = gl.getUniformLocation(prog, "uLightDir");
-      const uAmbient = gl.getUniformLocation(prog, "uAmbient");
-      const uSpecStrength = gl.getUniformLocation(prog, "uSpecStrength");
-      const uLightTint = gl.getUniformLocation(prog, "uLightTint");
-
-      gl.enable(gl.DEPTH_TEST);
-      gl.viewport(0, 0, canvas.width, canvas.height);
-
-      let rot = 0.6;
-
-      function draw() {
-        const h = skyClock.getHour();
-        const { dayAmount, goldenAmount, sunAngle } = skyClock.getLightingState(h);
-
-        const lx = -Math.cos(sunAngle) * 0.72;
-        const ly = 0.25 + Math.max(0, Math.sin(sunAngle)) * 0.45;
-        const lz = 0.55 + dayAmount * 0.25;
-
-        const ambient = 0.14 + dayAmount * 0.22;
-        const spec = 0.12 + dayAmount * 0.28;
-
-        const nightTint = [0.68, 0.78, 1.05];
-        const dayTint = [1.05, 1.04, 1.0];
-        const goldenTint = [1.22, 0.92, 0.74];
-
-        const baseR = nightTint[0] + (dayTint[0] - nightTint[0]) * dayAmount;
-        const baseG = nightTint[1] + (dayTint[1] - nightTint[1]) * dayAmount;
-        const baseB = nightTint[2] + (dayTint[2] - nightTint[2]) * dayAmount;
-
-        const tintR = baseR + (goldenTint[0] - baseR) * goldenAmount * 0.75;
-        const tintG = baseG + (goldenTint[1] - baseG) * goldenAmount * 0.75;
-        const tintB = baseB + (goldenTint[2] - baseB) * goldenAmount * 0.75;
-
-        gl.clearColor(0, 0, 0, 0);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        gl.uniform1f(uRot, rot);
-        gl.uniform3f(uLightDir, lx, ly, lz);
-        gl.uniform1f(uAmbient, ambient);
-        gl.uniform1f(uSpecStrength, spec);
-        gl.uniform3f(uLightTint, tintR, tintG, tintB);
-        gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
-      }
-
-      function loop() {
-        if (!document.hidden) {
-          if (!reducedMotion) {
-            rot = (rot + 0.025) % (Math.PI * 2);
-          }
-          draw();
+        const tag = e.target && e.target.tagName ? e.target.tagName.toLowerCase() : '';
+        if (tag === 'input' || tag === 'textarea' || e.metaKey || e.ctrlKey || e.altKey) {
+          return;
         }
-        requestAnimationFrame(loop);
-      }
-
-      draw();
-      requestAnimationFrame(loop);
-    })();
-
-    /* 8-Way Sprite Swap + Dizzy / Annoyed Easter Egg */
-    (function () {
-      const avatar = document.getElementById("brandAvatar");
-      const pill = document.getElementById("avatarPill");
-      if (!avatar) return;
-
-      const DIZZY_LINES = ["dizzy", "whoa", "chill", "easy there", "i can hear sounds", "who am i??"];
-      const ANNOYED_LINES = ["i'm down", "stop poking", "really?", "bruh!", "my eyes", "bro, i'm literally dead", "turned into a ghost"];
-
-      let isReacting = false;
-      let reactTimer = null;
-      let lastAngle = null;
-      let spinAccum = 0;
-      let spinDecayTimer = null;
-      let clickCount = 0;
-      let clickResetTimer = null;
-
-      function triggerReaction(type) {
-        if (isReacting) return;
-        isReacting = true;
-        spinAccum = 0;
-        lastAngle = null;
-        clickCount = 0;
-
-        const lines = type === "dizzy" ? DIZZY_LINES : ANNOYED_LINES;
-        const msg = lines[Math.floor(Math.random() * lines.length)];
-
-        avatar.classList.remove("is-dizzy", "is-annoyed");
-        void avatar.offsetWidth;
-        avatar.classList.add("is-reacting", type === "dizzy" ? "is-dizzy" : "is-annoyed");
-
-        if (pill) {
-          pill.textContent = msg;
-          pill.classList.add("show");
-        }
-
-        clearTimeout(reactTimer);
-        reactTimer = setTimeout(() => {
-          avatar.classList.remove("is-reacting", "is-dizzy", "is-annoyed");
-          if (pill) pill.classList.remove("show");
-          isReacting = false;
-        }, 2200);
-      }
-
-      avatar.addEventListener("click", (e) => {
-        e.stopPropagation();
-        if (isReacting) return;
-
-        clickCount += 1;
-        clearTimeout(clickResetTimer);
-
-        if (clickCount >= 2) {
-          triggerReaction("annoyed");
-        } else {
-          clickResetTimer = setTimeout(() => {
-            clickCount = 0;
-          }, 1100);
+        if (e.key === 't' || e.key === 'T') {
+          toggleTheme('keyboard');
         }
       });
 
-      const sheet = new Image();
-      sheet.onload = () => {
-        avatar.classList.add("sprite-ready");
-        initTracking();
-      };
-      sheet.src = "images/avatar-sheet.png";
+      /* ---------------------------------------------------------------------
+       * 5. INTERACTIVE DOT-MATRIX HEADER BANNER (HTML5 CANVAS)
+       * ------------------------------------------------------------------- */
+      const dotBannerContainer = document.getElementById('dotBannerContainer');
+      const canvas = document.getElementById('dotMatrixCanvas');
+      const ctx = canvas.getContext('2d');
+      let pointer = { x: -999, y: -999, active: false };
+      let canvasWidth = 0;
+      let canvasHeight = 0;
 
-      function initTracking() {
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      function resizeCanvas() {
+        if (!dotBannerContainer || !canvas) return;
+        const rect = dotBannerContainer.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvasWidth = rect.width;
+        canvasHeight = rect.height;
+        canvas.width = Math.floor(canvasWidth * dpr);
+        canvas.height = Math.floor(canvasHeight * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        drawDotMatrix();
+      }
 
-        const POSITIONS = {
-          "0": "100% 50%",
-          "1": "100% 100%",
-          "2": "50% 100%",
-          "3": "0% 100%",
-          "4": "0% 50%",
-          "-4": "0% 50%",
-          "-3": "0% 0%",
-          "-2": "50% 0%",
-          "-1": "100% 0%",
-        };
+      function drawDotMatrix() {
+        if (!ctx || !canvasWidth || !canvasHeight) return;
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-        const DEADZONE = 28;
-        let lastPos = "50% 50%";
-        let rafId = null;
-        let mx = 0;
-        let my = 0;
+        const isDark = htmlEl.classList.contains('dark');
+        const spacing = 18;
+        const radiusInfluence = 95;
+        const offsetX = (canvasWidth % spacing) / 2;
+        const offsetY = (canvasHeight % spacing) / 2;
 
-        function setPos(pos) {
-          if (pos === lastPos) return;
-          avatar.style.backgroundPosition = pos;
-          lastPos = pos;
-        }
-
-        function update() {
-          rafId = null;
-          if (isReacting) return;
-
-          const rect = avatar.getBoundingClientRect();
-          const cx = rect.left + rect.width / 2;
-          const cy = rect.top + rect.height / 2;
-          const dx = mx - cx;
-          const dy = my - cy;
-
-          if (Math.hypot(dx, dy) < DEADZONE) {
-            setPos("50% 50%");
-            lastAngle = null;
-            return;
-          }
-
-          const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-          const sector = Math.round(angle / 45);
-          setPos(POSITIONS[String(sector)] || "50% 50%");
-
-          if (lastAngle !== null) {
-            let delta = angle - lastAngle;
-            if (delta > 180) delta -= 360;
-            if (delta < -180) delta += 360;
-
-            spinAccum += Math.abs(delta);
-            clearTimeout(spinDecayTimer);
-            spinDecayTimer = setTimeout(() => {
-              spinAccum = 0;
-              lastAngle = null;
-            }, 650);
-
-            if (spinAccum >= 900) {
-              triggerReaction("dizzy");
-              return;
+        for (let x = offsetX + spacing / 2; x < canvasWidth; x += spacing) {
+          for (let y = offsetY + spacing / 2; y < canvasHeight; y += spacing) {
+            let intensity = 0;
+            if (pointer.active) {
+              const dx = x - pointer.x;
+              const dy = y - pointer.y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < radiusInfluence) {
+                intensity = Math.pow(1 - dist / radiusInfluence, 1.8);
+              }
             }
+
+            const dotRadius = 1.05 + intensity * 1.15;
+            ctx.beginPath();
+            ctx.arc(x, y, dotRadius, 0, Math.PI * 2);
+
+            if (intensity > 0.05) {
+              // Subtle emerald illumination near cursor
+              const r = isDark ? 16 : 5;
+              const g = isDark ? 185 : 150;
+              const b = isDark ? 129 : 105;
+              const alpha = 0.22 + intensity * 0.65;
+              ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
+            } else {
+              ctx.fillStyle = isDark ? 'rgba(250, 250, 250, 0.14)' : 'rgba(24, 24, 27, 0.15)';
+            }
+            ctx.fill();
           }
-          lastAngle = angle;
         }
+      }
 
-        window.addEventListener("pointermove", (e) => {
-          if (e.pointerType !== "mouse") return;
-          mx = e.clientX;
-          my = e.clientY;
-          if (!rafId) rafId = requestAnimationFrame(update);
-        }, { passive: true });
+      dotBannerContainer.addEventListener('mousemove', (e) => {
+        const rect = dotBannerContainer.getBoundingClientRect();
+        pointer.x = e.clientX - rect.left;
+        pointer.y = e.clientY - rect.top;
+        pointer.active = true;
+        requestAnimationFrame(drawDotMatrix);
+      });
 
-        document.addEventListener("pointerleave", () => {
-          lastAngle = null;
-          spinAccum = 0;
-          if (!isReacting) setPos("50% 50%");
+      dotBannerContainer.addEventListener('mouseleave', () => {
+        pointer.active = false;
+        requestAnimationFrame(drawDotMatrix);
+      });
+
+      dotBannerContainer.addEventListener(
+        'touchmove',
+        (e) => {
+          if (!e.touches.length) return;
+          const rect = dotBannerContainer.getBoundingClientRect();
+          pointer.x = e.touches[0].clientX - rect.left;
+          pointer.y = e.touches[0].clientY - rect.top;
+          pointer.active = true;
+          requestAnimationFrame(drawDotMatrix);
+        },
+        { passive: true }
+      );
+
+      dotBannerContainer.addEventListener('touchend', () => {
+        pointer.active = false;
+        requestAnimationFrame(drawDotMatrix);
+      });
+
+      window.addEventListener('resize', resizeCanvas);
+
+      /* ---------------------------------------------------------------------
+       * 6. ROTATING VERTICAL TEXT-SWAP SUBTITLE (EVERY 2.8s)
+       * ------------------------------------------------------------------- */
+      const roleItems = document.querySelectorAll('.role-item');
+      let currentRoleIdx = 0;
+
+      if (roleItems.length > 1) {
+        setInterval(() => {
+          const prevIdx = currentRoleIdx;
+          currentRoleIdx = (currentRoleIdx + 1) % roleItems.length;
+
+          const prevEl = roleItems[prevIdx];
+          const nextEl = roleItems[currentRoleIdx];
+
+          prevEl.classList.remove('is-active');
+          prevEl.classList.add('is-exiting');
+
+          // Reset exiting item below after transition completes
+          setTimeout(() => {
+            prevEl.classList.remove('is-exiting');
+          }, 440);
+
+          nextEl.classList.add('is-active');
+        }, 2800);
+      }
+
+      /* ---------------------------------------------------------------------
+       * 7. RENDER PROJECTS & FILTERING + CASE STUDY MODAL
+       * ------------------------------------------------------------------- */
+      function renderProjects() {
+        const list =
+          activeProjectFilter === 'All'
+            ? PROJECTS
+            : PROJECTS.filter((p) => p.category === activeProjectFilter);
+
+        projectsGrid.innerHTML = list
+          .map((project) => {
+            const isLive = project.status === 'LIVE';
+            const badgeHtml = isLive
+              ? `<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-[10px] font-mono tracking-wide" style="border-color: var(--border); background-color: var(--accent-soft); color: var(--accent);">
+                  <span class="relative flex h-1.5 w-1.5" aria-hidden="true">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background-color: var(--accent);"></span>
+                    <span class="relative inline-flex rounded-full h-1.5 w-1.5" style="background-color: var(--accent);"></span>
+                  </span>
+                  LIVE
+                </span>`
+              : `<span class="inline-flex items-center px-2 py-0.5 rounded-full border theme-border text-[10px] font-mono tracking-wide text-[var(--muted)]">
+                  OSS
+                </span>`;
+
+            return `
+              <article
+                data-project-card="${project.id}"
+                tabindex="0"
+                role="button"
+                aria-label="Open case study for ${project.title}"
+                class="project-card animate-filter-in rounded-xl p-4 sm:p-5 flex flex-col justify-between gap-4 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50"
+              >
+                <div>
+                  <div class="flex items-start justify-between gap-2">
+                    <div>
+                      <h3 class="text-[15px] font-semibold text-[var(--text)] tracking-tight">
+                        ${project.title}
+                      </h3>
+                      <p class="font-mono text-[11px] text-[var(--muted)] mt-0.5">
+                        ${project.tagline}
+                      </p>
+                    </div>
+                    ${badgeHtml}
+                  </div>
+
+                  <p class="mt-3 text-[13px] leading-relaxed text-[var(--text-secondary)] line-clamp-2">
+                    ${project.description}
+                  </p>
+                </div>
+
+                <div class="pt-3 border-t theme-border flex items-center justify-between gap-2 flex-wrap">
+                  <div class="flex items-center flex-wrap gap-1.5">
+                    ${project.tags
+                .map(
+                  (tag) =>
+                    `<span class="px-2 py-0.5 rounded border theme-border theme-surface font-mono text-[10.5px] text-[var(--muted)]">${tag}</span>`
+                )
+                .join('')}
+                  </div>
+
+                  <div class="flex items-center gap-3 font-mono text-[11px] text-[var(--muted)]">
+                    <a href="#preview-${project.id}" data-card-link="Previewing ${project.title}" class="hover:text-[var(--text)] transition-colors">Preview ↗</a>
+                    <a href="#code-${project.id}" data-card-link="Opening ${project.title} repository" class="hover:text-[var(--text)] transition-colors">Code ↗</a>
+                  </div>
+                </div>
+              </article>
+            `;
+          })
+          .join('');
+      }
+
+      document.querySelectorAll('[data-project-filter]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          activeProjectFilter = btn.dataset.projectFilter;
+          document.querySelectorAll('[data-project-filter]').forEach((b) => {
+            b.setAttribute('aria-pressed', String(b.dataset.projectFilter === activeProjectFilter));
+          });
+          renderProjects();
+        });
+      });
+
+      function openProjectModal(projectId) {
+        const p = PROJECTS.find((item) => item.id === projectId);
+        if (!p) return;
+
+        openModal({
+          kicker: `CASE STUDY · ${p.category.toUpperCase()} · ${p.year}`,
+          title: `${p.title} — ${p.tagline}`,
+          footerNote: `manav.here / projects / ${p.id}`,
+          html: `
+            <div class="space-y-5">
+              <div>
+                <h4 class="font-mono text-[11px] uppercase tracking-wider text-[var(--muted)] mb-1.5">Problem</h4>
+                <p>${p.problem}</p>
+              </div>
+              <div>
+                <h4 class="font-mono text-[11px] uppercase tracking-wider text-[var(--muted)] mb-1.5">Architecture</h4>
+                <p>${p.architecture}</p>
+              </div>
+              <div>
+                <h4 class="font-mono text-[11px] uppercase tracking-wider text-[var(--muted)] mb-2">Key Metrics</h4>
+                <ul class="space-y-1.5">
+                  ${p.metrics
+              .map(
+                (m) => `
+                    <li class="flex items-start gap-2 text-[13.5px] text-[var(--text)]">
+                      <span class="font-mono text-xs mt-0.5" style="color: var(--accent);">→</span>
+                      <span>${m}</span>
+                    </li>
+                  `
+              )
+              .join('')}
+                </ul>
+              </div>
+              <div class="pt-3 border-t theme-border flex items-center justify-between flex-wrap gap-3">
+                <div class="flex items-center flex-wrap gap-1.5">
+                  ${p.tags
+              .map(
+                (t) =>
+                  `<span class="px-2.5 py-1 rounded-md border theme-border theme-surface font-mono text-[11px] text-[var(--text)]">${t}</span>`
+              )
+              .join('')}
+                </div>
+                <div class="flex items-center gap-4 font-mono text-xs text-[var(--text)]">
+                  <a href="#live-${p.id}" data-mock-action="Launching ${p.title} live demo" class="hover:underline underline-offset-4">Live Preview ↗</a>
+                  <a href="#repo-${p.id}" data-mock-action="Opening ${p.title} source code" class="hover:underline underline-offset-4">Source Code ↗</a>
+                </div>
+              </div>
+            </div>
+          `,
         });
       }
-    })();
 
-    /* Spider-Verse Intermittent Name Glitch */
-    (function () {
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-      const words = Array.from(document.querySelectorAll(".glitch-word"));
-      const trigger = document.getElementById("brandTrigger");
-      if (!words.length) return;
-
-      const modes = [
-        { cls: "glitch-slice", dur: 380 },
-        { cls: "glitch-cmy", dur: 440 },
-        { cls: "glitch-comic", dur: 500 },
-      ];
-
-      let busy = false;
-      let timer = null;
-
-      function fireGlitch(forceBoth) {
-        if (busy || document.hidden) return;
-        busy = true;
-
-        const mode = modes[Math.floor(Math.random() * modes.length)];
-        let targets;
-
-        if (forceBoth) {
-          targets = words;
-        } else {
-          const roll = Math.random();
-          if (roll < 0.38) targets = [words[0]];
-          else if (roll < 0.76) targets = [words[1]];
-          else targets = words;
+      projectsGrid.addEventListener('click', (e) => {
+        const directLink = e.target.closest('[data-card-link]');
+        if (directLink) {
+          e.preventDefault();
+          e.stopPropagation();
+          showToast(directLink.dataset.cardLink);
+          return;
         }
+        const card = e.target.closest('[data-project-card]');
+        if (card) {
+          openProjectModal(card.dataset.projectCard);
+        }
+      });
 
-        targets.forEach((el) => {
-          el.classList.remove("glitch-slice", "glitch-cmy", "glitch-comic");
-          void el.offsetWidth;
-          el.classList.add(mode.cls);
+      projectsGrid.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          const card = e.target.closest('[data-project-card]');
+          if (card) {
+            e.preventDefault();
+            openProjectModal(card.dataset.projectCard);
+          }
+        }
+      });
+
+      /* ---------------------------------------------------------------------
+       * 8. RENDER EXPERIENCE ACCORDION (FIRST EXPANDED BY DEFAULT)
+       * ------------------------------------------------------------------- */
+      function renderExperience() {
+        experienceList.innerHTML = EXPERIENCE.map((item) => {
+          const isOpen = item.id === openExperienceId;
+          return `
+            <div class="accordion-item bg-[var(--bg)]" data-exp-id="${item.id}" data-open="${isOpen}">
+              <button
+                type="button"
+                aria-expanded="${isOpen}"
+                class="exp-trigger w-full text-left px-4 sm:px-5 py-4 hover:bg-[var(--surface)] transition-colors flex items-center justify-between gap-4 cursor-pointer"
+              >
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <h3 class="text-[14.5px] font-semibold text-[var(--text)]">${item.role}</h3>
+                    <span class="text-[var(--muted)] text-xs">@</span>
+                    <span class="text-[14px] font-medium text-[var(--text-secondary)]">${item.company}</span>
+                  </div>
+                  <p class="font-mono text-[11.5px] text-[var(--muted)] mt-1">
+                    ${item.period} · ${item.location}
+                  </p>
+                </div>
+
+                <svg
+                  class="accordion-chevron w-4 h-4 text-[var(--muted)] shrink-0"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              <div class="accordion-body">
+                <div class="accordion-inner">
+                  <ul class="px-4 sm:px-5 pb-5 pt-1 space-y-2 text-[13.5px] leading-relaxed text-[var(--text-secondary)]">
+                    ${item.bullets
+              .map(
+                (bullet) => `
+                      <li class="flex items-start gap-2.5">
+                        <span class="font-mono text-xs mt-0.5 select-none" style="color: var(--accent);">•</span>
+                        <span>${bullet}</span>
+                      </li>
+                    `
+              )
+              .join('')}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      experienceList.addEventListener('click', (e) => {
+        const trigger = e.target.closest('.exp-trigger');
+        if (!trigger) return;
+        const itemEl = trigger.closest('.accordion-item');
+        const id = itemEl.dataset.expId;
+
+        openExperienceId = openExperienceId === id ? null : id;
+        experienceList.querySelectorAll('.accordion-item').forEach((row) => {
+          const match = row.dataset.expId === openExperienceId;
+          row.setAttribute('data-open', String(match));
+          const btn = row.querySelector('.exp-trigger');
+          if (btn) btn.setAttribute('aria-expanded', String(match));
         });
+      });
+
+      /* ---------------------------------------------------------------------
+       * 9. RENDER TECH STACK & CATEGORY FILTERING
+       * ------------------------------------------------------------------- */
+      function renderStack() {
+        const list =
+          activeStackFilter === 'All'
+            ? STACK
+            : STACK.filter((item) => item.category === activeStackFilter);
+
+        stackGrid.innerHTML = list
+          .map(
+            (tech) => `
+            <div class="tech-chip animate-filter-in inline-flex items-center gap-2 px-3 py-1.5 rounded-lg">
+              <span class="w-5 h-5 rounded border theme-border theme-surface flex items-center justify-center font-mono text-[10px] text-[var(--muted)] shrink-0">
+                ${tech.symbol}
+              </span>
+              <span class="font-mono text-[12px] text-[var(--text)]">${tech.name}</span>
+            </div>
+          `
+          )
+          .join('');
+      }
+
+      document.querySelectorAll('[data-stack-filter]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          activeStackFilter = btn.dataset.stackFilter;
+          document.querySelectorAll('[data-stack-filter]').forEach((b) => {
+            b.setAttribute('aria-pressed', String(b.dataset.stackFilter === activeStackFilter));
+          });
+          renderStack();
+        });
+      });
+
+      /* ---------------------------------------------------------------------
+       * 10. RENDER TECHNICAL NOTES INDEX & READER MODAL
+       * ------------------------------------------------------------------- */
+      function renderNotes() {
+        notesIndex.innerHTML = NOTES.map(
+          (note) => `
+          <button
+            type="button"
+            data-note-id="${note.id}"
+            class="note-row w-full text-left py-3.5 px-2 -mx-2 rounded-lg hover:bg-[var(--surface)] transition-all duration-200 grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4 items-baseline cursor-pointer"
+          >
+            <span class="sm:col-span-2 font-mono text-[11.5px] text-[var(--muted)]">
+              ${note.date}
+            </span>
+            <span class="sm:col-span-8 text-[14.5px] font-medium text-[var(--text)]">
+              ${note.title}
+            </span>
+            <span class="sm:col-span-2 sm:text-right font-mono text-[11.5px] text-[var(--muted)]">
+              ${note.readTime} read
+            </span>
+          </button>
+        `
+        ).join('');
+      }
+
+      notesIndex.addEventListener('click', (e) => {
+        const row = e.target.closest('[data-note-id]');
+        if (!row) return;
+        const note = NOTES.find((n) => n.id === row.dataset.noteId);
+        if (!note) return;
+
+        openModal({
+          kicker: `TECHNICAL NOTE · ${note.date.toUpperCase()} · ${note.readTime.toUpperCase()} READ`,
+          title: note.title,
+          footerNote: `manav.here / notes / ${note.id}`,
+          html:
+            note.paragraphs.map((p) => `<p>${p}</p>`).join('') +
+            `<pre class="mt-4 p-4 rounded-lg border theme-border theme-surface font-mono text-xs text-[var(--text)] overflow-x-auto leading-relaxed"><code>${note.code}</code></pre>`,
+        });
+      });
+
+      /* ---------------------------------------------------------------------
+       * 11. REUSABLE MODAL CONTROLLER (CASE STUDY, NOTES, RESUME PREVIEW)
+       * ------------------------------------------------------------------- */
+      function openModal({ kicker, title, html, footerNote }) {
+        modalKicker.textContent = kicker;
+        modalHeading.textContent = title;
+        modalContent.innerHTML = html;
+        modalFooterNote.textContent = footerNote || 'manav.here';
+
+        modalOverlay.classList.remove('hidden');
+        modalOverlay.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+
+        requestAnimationFrame(() => {
+          modalOverlay.classList.remove('opacity-0');
+          modalPanel.classList.remove('scale-95', 'opacity-0');
+          modalPanel.classList.add('scale-100', 'opacity-100');
+        });
+      }
+
+      function closeModal() {
+        modalOverlay.classList.add('opacity-0');
+        modalPanel.classList.remove('scale-100', 'opacity-100');
+        modalPanel.classList.add('scale-95', 'opacity-0');
+        document.body.style.overflow = '';
 
         setTimeout(() => {
-          targets.forEach((el) => el.classList.remove(mode.cls));
-          busy = false;
-        }, mode.dur);
+          modalOverlay.classList.add('hidden');
+          modalOverlay.classList.remove('flex');
+        }, 200);
       }
 
-      function scheduleNext() {
-        clearTimeout(timer);
-        const delay = 3000 + Math.random() * 3500;
-        timer = setTimeout(() => {
-          fireGlitch(false);
-          scheduleNext();
-        }, delay);
+      modalCloseBtn.addEventListener('click', closeModal);
+      modalDoneBtn.addEventListener('click', closeModal);
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeModal();
+      });
+
+      /* Resume PDF Preview Modal */
+      resumeBtn.addEventListener('click', () => {
+        openModal({
+          kicker: 'DOCUMENT PREVIEW · UPDATED NOV 2026',
+          title: 'Manav Chaudhari',
+          footerNote: 'Manav_Chaudhari_Resume.pdf · 1 page',
+          html: `
+            <div class="p-4 rounded-lg border theme-border theme-surface space-y-3 text-[13px]">
+              <div class="flex items-center justify-between flex-wrap gap-2 pb-2 border-b theme-border">
+                <span class="font-semibold text-[var(--text)]">B.S. Computer Science (Systems Track)</span>
+                <span class="font-mono text-[11px] text-[var(--muted)]">GPA 3.92 / 4.00</span>
+              </div>
+              <p><strong class="text-[var(--text)]">Core Focus:</strong> Distributed Systems, Backend Architecture, AI Retrieval Pipelines, Web Performance.</p>
+              <p><strong class="text-[var(--text)]">Recent Roles:</strong> Core Systems SWE @ Linearity Cloud · Full-Stack Intern @ Verve Analytics.</p>
+              <p><strong class="text-[var(--text)]">Highlights:</strong> Built PulseDB (64k events/sec Go log engine) &amp; Vektor (1.4k+ star Rust semantic code search).</p>
+            </div>
+            <div class="flex items-center justify-end gap-3 pt-2">
+              <button type="button" data-mock-action="Downloading Manav_Chaudhari_Resume.pdf" class="px-3.5 py-2 rounded-lg font-mono text-xs cursor-pointer transition-opacity hover:opacity-90" style="background-color: var(--text); color: var(--bg);">
+                Download PDF ↓
+              </button>
+            </div>
+          `,
+        });
+      });
+
+      /* ---------------------------------------------------------------------
+       * 12. GLOBAL MOCK LINK FEEDBACK & BACK TO TOP
+       * ------------------------------------------------------------------- */
+      document.addEventListener('click', (e) => {
+        const mockEl = e.target.closest('[data-mock-action]');
+        if (!mockEl) return;
+        e.preventDefault();
+        showToast(mockEl.dataset.mockAction);
+      });
+
+      /* Back to Top */
+      backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      /* ---------------------------------------------------------------------
+       * 13. LIVE TICKING LOCAL CLOCK IN FOOTER
+       * ------------------------------------------------------------------- */
+      function updateClock() {
+        try {
+          const now = new Date();
+          liveClockEl.textContent = now.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+          });
+        } catch (e) {
+          liveClockEl.textContent = '--:--:--';
+        }
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      /* ---------------------------------------------------------------------
+       * 14. INTERSECTION OBSERVERS: SCROLL-REVEAL & DESKTOP SCROLL-SPY RAIL
+       * ------------------------------------------------------------------- */
+      function initObservers() {
+        // Subtle engineered scroll-reveal
+        const revealEls = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                revealObserver.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
+        );
+        revealEls.forEach((el) => revealObserver.observe(el));
+
+        // Desktop Scroll-Spy Rail tracking
+        const sections = ['hero', 'projects', 'experience', 'stack', 'notes', 'footer'];
+        const spyLinks = document.querySelectorAll('.spy-link');
+
+        function setActiveSpy(id) {
+          spyLinks.forEach((link) => {
+            const isMatch = link.dataset.spy === id;
+            const bar = link.querySelector('.spy-bar');
+            if (isMatch) {
+              link.style.color = 'var(--text)';
+              if (bar) {
+                bar.style.backgroundColor = 'var(--accent)';
+                bar.style.height = '18px';
+              }
+            } else {
+              link.style.color = 'var(--muted)';
+              if (bar) {
+                bar.style.backgroundColor = 'var(--border)';
+                bar.style.height = '14px';
+              }
+            }
+          });
+        }
+
+        const spyObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                setActiveSpy(entry.target.id);
+              }
+            });
+          },
+          { rootMargin: '-35% 0px -55% 0px', threshold: 0 }
+        );
+
+        sections.forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) spyObserver.observe(el);
+        });
+
+        setActiveSpy('hero');
       }
 
-      setTimeout(() => {
-        fireGlitch(true);
-        scheduleNext();
-      }, 1400);
+      /* ---------------------------------------------------------------------
+       * 15. DYNAMIC FAVICON CONTROLLER (ACTIVE VS. INACTIVE TAB/WINDOW)
+       * ------------------------------------------------------------------- */
+      function initDynamicFavicon() {
+        const faviconEl = document.getElementById('dynamic-favicon');
+        if (!faviconEl) return;
 
-      if (trigger) {
-        trigger.addEventListener("mouseenter", () => fireGlitch(false));
+        function updateFavicon() {
+          try {
+            const isActive = !document.hidden && document.hasFocus();
+            const targetHref = isActive ? 'active.png' : 'inactive.png';
+            if (faviconEl.getAttribute('href') !== targetHref) {
+              faviconEl.setAttribute('href', targetHref);
+            }
+          } catch (err) {
+            // Silently ignore favicon update errors in restricted environments
+          }
+        }
+
+        document.addEventListener('visibilitychange', updateFavicon);
+        window.addEventListener('focus', updateFavicon);
+        window.addEventListener('blur', updateFavicon);
+
+        // Set initial state on load
+        updateFavicon();
       }
+
+      /* ---------------------------------------------------------------------
+       * 15. DYNAMIC FAVICON CONTROLLER (ROBUST DOM-REPLACEMENT SWAP)
+       * ------------------------------------------------------------------- */
+      function initDynamicFavicon() {
+        let currentState = null;
+
+        function setFavicon(src) {
+          try {
+            // Remove existing icon links to force browser tab-bar repaint
+            document.querySelectorAll("link[rel*='icon']").forEach((el) => el.remove());
+
+            const link = document.createElement('link');
+            link.id = 'favicon';
+            link.rel = 'icon';
+            link.type = 'image/png';
+
+            // Append cache-buster only on http/https protocols
+            const isHttp = location.protocol === 'http:' || location.protocol === 'https:';
+            link.href = isHttp ? `${src}?v=${Date.now()}` : src;
+            document.head.appendChild(link);
+          } catch (err) {
+            // Silently ignore favicon update errors in restricted environments
+          }
+        }
+
+        function updateFavicon() {
+          const isInactive = document.hidden || !document.hasFocus();
+          const target = isInactive ? 'images/inactive.png' : 'images/active.png';
+          if (target === currentState) return;
+          currentState = target;
+          setFavicon(target);
+        }
+
+        document.addEventListener('visibilitychange', updateFavicon);
+        window.addEventListener('focus', updateFavicon);
+        window.addEventListener('blur', updateFavicon);
+
+        // Initialize on load
+        updateFavicon();
+      }
+
+      /* ---------------------------------------------------------------------
+       * 16. 8-WAY SPRITE AVATAR TRACKING + DIZZY / ANNOYED EASTER EGG
+       * ------------------------------------------------------------------- */
+      function initInteractiveAvatar() {
+        const avatar = document.getElementById('brandAvatar');
+        const pill = document.getElementById('avatarPill');
+        if (!avatar) return;
+
+        const DIZZY_LINES = [
+          'dizzy',
+          'whoa',
+          'chill',
+          'easy there',
+          'i can hear sounds',
+          'who am i??',
+        ];
+        const ANNOYED_LINES = [
+          "i'm down",
+          'stop poking',
+          'really?',
+          'bruh!',
+          'my eyes',
+          "bro, i'm literally dead",
+          'turned into a ghost',
+        ];
+
+        let isReacting = false;
+        let reactTimer = null;
+        let lastAngle = null;
+        let spinAccum = 0;
+        let spinDecayTimer = null;
+        let clickCount = 0;
+        let clickResetTimer = null;
+
+        function triggerReaction(type) {
+          if (isReacting) return;
+          isReacting = true;
+          spinAccum = 0;
+          lastAngle = null;
+          clickCount = 0;
+
+          const lines = type === 'dizzy' ? DIZZY_LINES : ANNOYED_LINES;
+          const msg = lines[Math.floor(Math.random() * lines.length)];
+
+          avatar.classList.remove('is-dizzy', 'is-annoyed');
+          void avatar.offsetWidth;
+          avatar.classList.add('is-reacting', type === 'dizzy' ? 'is-dizzy' : 'is-annoyed');
+
+          if (pill) {
+            pill.textContent = msg;
+            pill.classList.add('show');
+          }
+
+          clearTimeout(reactTimer);
+          reactTimer = setTimeout(() => {
+            avatar.classList.remove('is-reacting', 'is-dizzy', 'is-annoyed');
+            if (pill) pill.classList.remove('show');
+            isReacting = false;
+          }, 2200);
+        }
+
+        avatar.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (isReacting) return;
+
+          clickCount += 1;
+          clearTimeout(clickResetTimer);
+
+          if (clickCount >= 2) {
+            triggerReaction('annoyed');
+          } else {
+            clickResetTimer = setTimeout(() => {
+              clickCount = 0;
+            }, 1100);
+          }
+        });
+
+        // Preload 3x3 sprite sheet and enable 8-way tracking once loaded
+        const sheet = new Image();
+        sheet.onload = () => {
+          avatar.classList.add('sprite-ready');
+          initTracking();
+        };
+        sheet.src = 'images/avatar-sheet.png';
+
+        function initTracking() {
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+          const POSITIONS = {
+            '0': '100% 50%',
+            '1': '100% 100%',
+            '2': '50% 100%',
+            '3': '0% 100%',
+            '4': '0% 50%',
+            '-4': '0% 50%',
+            '-3': '0% 0%',
+            '-2': '50% 0%',
+            '-1': '100% 0%',
+          };
+
+          const DEADZONE = 28;
+          let lastPos = '50% 50%';
+          let rafId = null;
+          let mx = 0;
+          let my = 0;
+
+          function setPos(pos) {
+            if (pos === lastPos) return;
+            avatar.style.backgroundPosition = pos;
+            lastPos = pos;
+          }
+
+          function update() {
+            rafId = null;
+            if (isReacting) return;
+
+            const rect = avatar.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const dx = mx - cx;
+            const dy = my - cy;
+
+            if (Math.hypot(dx, dy) < DEADZONE) {
+              setPos('50% 50%');
+              lastAngle = null;
+              return;
+            }
+
+            const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+            const sector = Math.round(angle / 45);
+            setPos(POSITIONS[String(sector)] || '50% 50%');
+
+            if (lastAngle !== null) {
+              let delta = angle - lastAngle;
+              if (delta > 180) delta -= 360;
+              if (delta < -180) delta += 360;
+
+              spinAccum += Math.abs(delta);
+              clearTimeout(spinDecayTimer);
+              spinDecayTimer = setTimeout(() => {
+                spinAccum = 0;
+                lastAngle = null;
+              }, 650);
+
+              if (spinAccum >= 900) {
+                triggerReaction('dizzy');
+                return;
+              }
+            }
+            lastAngle = angle;
+          }
+
+          window.addEventListener(
+            'pointermove',
+            (e) => {
+              if (e.pointerType !== 'mouse') return;
+              mx = e.clientX;
+              my = e.clientY;
+              if (!rafId) rafId = requestAnimationFrame(update);
+            },
+            { passive: true }
+          );
+
+          document.addEventListener('pointerleave', () => {
+            lastAngle = null;
+            spinAccum = 0;
+            if (!isReacting) setPos('50% 50%');
+          });
+        }
+      }
+
+      /* ---------------------------------------------------------------------
+       * 17. INITIALIZE APPLICATION ON LOAD
+       * ------------------------------------------------------------------- */
+      renderProjects();
+      renderExperience();
+      renderStack();
+      renderNotes();
+      initObservers();
+      initDynamicFavicon();
+      initInteractiveAvatar();
+      resizeCanvas();
     })();
-
-    /* Inactivity Tab Flip */
-    const favicon = document.getElementById("favicon");
-    const inactiveMessages = [
-      "where'd you go?",
-      "still there?",
-      "multitasking, huh?",
-      "hello???",
-      "well, that was quick",
-      "off exploring?",
-    ];
-
-    let messageIndex = 0;
-    let inactiveInterval = null;
-
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        if (favicon) favicon.href = "images/inactive.png";
-        messageIndex = 0;
-        document.title = inactiveMessages[messageIndex];
-
-        clearInterval(inactiveInterval);
-        inactiveInterval = setInterval(() => {
-          messageIndex = (messageIndex + 1) % inactiveMessages.length;
-          document.title = inactiveMessages[messageIndex];
-        }, 2700);
-      } else {
-        if (favicon) favicon.href = "images/active.png";
-        clearInterval(inactiveInterval);
-        inactiveInterval = null;
-        document.title = "finally, you found me!";
-      }
-    });
-
-    /* Copy Email */
-    const copyBtn = document.getElementById("copyBtn");
-    const toast = document.getElementById("toast");
-    const toastMsg = document.getElementById("toastMsg");
-    let toastTimer = null;
-
-    function showToast(msg) {
-      if (!toast) return;
-      toastMsg.textContent = msg;
-      toast.classList.add("show");
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2000);
-    }
-
-    const email = "hello@manav.here";
-    copyBtn.addEventListener("click", () => {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(email).then(() => {
-          showToast(`Copied ${email}`);
-        }).catch(() => fallbackPrompt());
-      } else {
-        fallbackPrompt();
-      }
-    });
-
-    function fallbackPrompt() {
-      showToast(email);
-    }
   </script>
 </body>
 
