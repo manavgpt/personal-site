@@ -806,7 +806,7 @@
       box-shadow: 0 12px 32px -10px rgba(0, 0, 0, 0.65);
     }
 
-    /* Dissolving 780px Framed Column Guides (Fade seamlessly into open Starbase sky) */
+    /* Dissolving 780px Framed Column Guides (Fade seamlessly at the bottom) */
     .framed-column {
       position: relative;
       z-index: 10;
@@ -822,7 +822,7 @@
       pointer-events: none;
       background: linear-gradient(to bottom,
           var(--border) 0%,
-          var(--border) calc(100% - 140px),
+          var(--border) calc(100% - 100px),
           transparent 100%);
       transition: background 220ms ease;
     }
@@ -835,20 +835,10 @@
       right: 0;
     }
 
-    /* Subtle Notes Backdrop Fading Smoothly into the Horizon Bleed Zone */
-    .notes-bleed-bg {
-      background: linear-gradient(to bottom,
-          var(--bg) 0%,
-          var(--bg) calc(100% - 80px),
-          transparent 100%);
-      transition: background 220ms ease;
-    }
-
-    /* Starbase Sky Top Fade Overlay (160px Seamless Dissolve Out of var(--bg)) */
+    /* Starbase Sky Top Fade Overlay (110px Seamless Dissolve Out of var(--bg)) */
     .starbase-fade-overlay {
       background: linear-gradient(to bottom,
           var(--bg) 0%,
-          var(--bg) 12%,
           transparent 100%);
       transition: background 220ms ease;
     }
@@ -971,16 +961,16 @@
         <span class="spy-bar w-[2px] h-3.5 rounded-full bg-[var(--border)] transition-all duration-200"></span>
         <span>05</span>
         <span
-          class="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[10px] text-[var(--muted)]">Colophon</span>
+          class="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[10px] text-[var(--muted)]">Starbase</span>
       </a>
     </nav>
   </aside>
 
   <!-- ======================================================================= -->
   <!-- FRAMED SINGLE-COLUMN ARCHITECTURAL CONTAINER (MAX-WIDTH 780px)          -->
-  <!-- Vertical 1px guides dissolve smoothly into the open Starbase sky below  -->
+  <!-- Vertical 1px guides dissolve seamlessly before the open Starbase footer -->
   <!-- ======================================================================= -->
-  <div class="framed-column max-w-[780px] mx-auto mt-14">
+  <div class="framed-column max-w-[780px] mx-auto mt-14 relative">
     <main>
       <!-- =================================================================== -->
       <!-- SECTION 00: HERO / INTERACTIVE DOT-MATRIX BANNER + ABOUT + CONTACT  -->
@@ -1239,8 +1229,9 @@
 
       <!-- =================================================================== -->
       <!-- SECTION 04: TECHNICAL NOTES (EDITORIAL INDEX + READER MODAL)        -->
+      <!-- Generous bottom padding ensures clean separation above Starbase     -->
       <!-- =================================================================== -->
-      <section id="notes" class="notes-bleed-bg px-5 sm:px-7 pt-9 pb-14 scroll-mt-20 reveal">
+      <section id="notes" class="px-5 sm:px-7 pt-9 pb-16 sm:pb-20 scroll-mt-20 reveal">
         <div class="flex items-end justify-between gap-4 mb-5">
           <div>
             <p class="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--muted)]">
@@ -1264,53 +1255,18 @@
   </div>
 
   <!-- ======================================================================= -->
-  <!-- SECTION 05: OPEN FULL-WIDTH STARBASE HORIZON BLEED FOOTER               -->
-  <!-- Side silhouettes rise into left/right margins beside 04 / Notes         -->
+  <!-- SECTION 05: OPEN FULL-WIDTH STARBASE LAUNCH COMPLEX FOOTER              -->
+  <!-- Clean separation below 04 / Notes, zero text/controls, silent ignition  -->
   <!-- ======================================================================= -->
-  <footer id="footer"
-    class="-mt-32 sm:-mt-40 relative z-0 w-full overflow-hidden scroll-mt-20 h-[540px] sm:h-[580px] select-none"
+  <footer id="footer" class="relative w-full h-[400px] sm:h-[440px] mt-0 overflow-hidden select-none scroll-mt-20"
     style="background-color: var(--bg);">
 
+    <!-- Seamless Top 110px Fade Blending Sky Out of Page Background -->
+    <div class="starbase-fade-overlay pointer-events-none absolute inset-x-0 top-0 h-[110px] z-10" aria-hidden="true">
+    </div>
+
     <!-- Full-Bleed HiDPI Architectural Vector Canvas -->
-    <canvas id="starbaseFooterCanvas" class="block w-full h-full cursor-pointer"></canvas>
-
-    <!-- Seamless Top 160px Fade Blending Sky Out of Page Background -->
-    <div class="starbase-fade-overlay pointer-events-none absolute inset-x-0 top-0 h-40" aria-hidden="true"></div>
-
-    <!-- Sleek Static Fire HUD Pill (Appears Below Notes During 4s Raptor Ignition) -->
-    <div id="staticFireHud"
-      class="pointer-events-none absolute top-36 sm:top-44 left-1/2 -translate-x-1/2 z-10 opacity-0 -translate-y-1 transition-all duration-200 px-3 py-1 rounded-full border theme-border backdrop-blur-md font-mono text-[10.5px] tracking-wider text-[var(--text)] flex items-center gap-2 shadow-sm"
-      style="background-color: var(--glass);">
-      <span class="w-1.5 h-1.5 rounded-full animate-pulse bg-amber-500"></span>
-      <span>STATIC FIRE · 33 RAPTORS IGNITED</span>
-    </div>
-
-    <!-- Centered Frosted-Glass Foreground Footer Bar -->
-    <div class="bottom-4 left-0 right-0 px-4 pointer-events-none z-10 absolute">
-      <div
-        class="max-w-[780px] mx-auto pointer-events-auto rounded-xl border theme-border backdrop-blur-md px-5 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs shadow-sm"
-        style="background-color: var(--glass);">
-        <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <p class="font-medium text-[var(--text)]">
-            © 2026 Manav Chaudhari
-          </p>
-          <span class="text-[var(--border-strong)] hidden sm:inline" aria-hidden="true">·</span>
-          <p class="font-mono text-[11px] text-[var(--muted)]">
-            Local time: <span id="liveClock" class="text-[var(--text)]">--:--:--</span>
-          </p>
-          <span class="text-[var(--border-strong)] hidden md:inline" aria-hidden="true">·</span>
-          <span id="starbaseHint" class="font-mono text-[10.5px] text-[var(--muted)] hidden md:inline">
-            05 / STARBASE · click pad for static fire
-          </span>
-        </div>
-
-        <button id="backToTopBtn" type="button"
-          class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border theme-border font-mono text-[11.5px] text-[var(--muted)] hover:text-[var(--text)] hover:border-[var(--border-strong)] hover:bg-[var(--surface)] transition-all cursor-pointer">
-          <span>Back to top</span>
-          <span aria-hidden="true">↑</span>
-        </button>
-      </div>
-    </div>
+    <canvas id="starbaseFooterCanvas" class="block w-full h-full"></canvas>
   </footer>
 
   <!-- ======================================================================= -->
@@ -1561,6 +1517,7 @@
       let openExperienceId = 'exp-1';
       let userOverrodeTheme = false;
       let toastTimeout = null;
+      let redrawDotMatrix = null;
       let redrawStarbaseFooter = null;
 
       const htmlEl = document.documentElement;
@@ -1570,8 +1527,6 @@
       const stackGrid = document.getElementById('stackGrid');
       const notesIndex = document.getElementById('notesIndex');
       const resumeBtn = document.getElementById('resumeBtn');
-      const backToTopBtn = document.getElementById('backToTopBtn');
-      const liveClockEl = document.getElementById('liveClock');
 
       // Modal elements
       const modalOverlay = document.getElementById('modalOverlay');
@@ -1591,6 +1546,7 @@
        * 3. TOAST NOTIFICATION HELPER
        * ------------------------------------------------------------------- */
       function showToast(message) {
+        if (!toastEl || !toastText) return;
         clearTimeout(toastTimeout);
         toastText.textContent = message;
         toastEl.classList.remove('opacity-0', 'translate-y-2');
@@ -1605,34 +1561,32 @@
       /* ---------------------------------------------------------------------
        * 4. DUAL-MODE THEME ENGINE (AUTO + MANUAL TOGGLE + 'T' SHORTCUT)
        * ------------------------------------------------------------------- */
-      function syncCanvasesOnThemeChange() {
-        if (typeof drawDotMatrix === 'function') drawDotMatrix();
-        if (typeof redrawStarbaseFooter === 'function') redrawStarbaseFooter();
-      }
-
       function toggleTheme() {
         userOverrodeTheme = true;
         htmlEl.classList.toggle('dark');
-        syncCanvasesOnThemeChange();
+        if (typeof redrawDotMatrix === 'function') redrawDotMatrix();
+        if (typeof redrawStarbaseFooter === 'function') redrawStarbaseFooter();
       }
 
-      themeToggleBtn.addEventListener('click', toggleTheme);
+      if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', toggleTheme);
+      }
 
       if (window.matchMedia) {
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
         const handleSystemThemeChange = (e) => {
           if (userOverrodeTheme) return;
           htmlEl.classList.toggle('dark', e.matches);
-          syncCanvasesOnThemeChange();
+          if (typeof redrawDotMatrix === 'function') redrawDotMatrix();
+          if (typeof redrawStarbaseFooter === 'function') redrawStarbaseFooter();
         };
         if (mediaQuery.addEventListener) {
           mediaQuery.addEventListener('change', handleSystemThemeChange);
         }
       }
 
-      // Keyboard shortcuts: 'T' to toggle theme, 'Escape' to close modal
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !modalOverlay.classList.contains('hidden')) {
+        if (e.key === 'Escape' && modalOverlay && !modalOverlay.classList.contains('hidden')) {
           closeModal();
           return;
         }
@@ -1648,106 +1602,120 @@
       /* ---------------------------------------------------------------------
        * 5. INTERACTIVE DOT-MATRIX HEADER BANNER (HTML5 CANVAS)
        * ------------------------------------------------------------------- */
-      const dotBannerContainer = document.getElementById('dotBannerContainer');
-      const canvas = document.getElementById('dotMatrixCanvas');
-      const ctx = canvas.getContext('2d');
-      let pointer = { x: -999, y: -999, active: false };
-      let canvasWidth = 0;
-      let canvasHeight = 0;
-
-      function resizeCanvas() {
+      function initDotMatrix() {
+        const dotBannerContainer = document.getElementById('dotBannerContainer');
+        const canvas = document.getElementById('dotMatrixCanvas');
         if (!dotBannerContainer || !canvas) return;
-        const rect = dotBannerContainer.getBoundingClientRect();
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        canvasWidth = rect.width;
-        canvasHeight = rect.height;
-        canvas.width = Math.floor(canvasWidth * dpr);
-        canvas.height = Math.floor(canvasHeight * dpr);
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        drawDotMatrix();
-      }
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
-      function drawDotMatrix() {
-        if (!ctx || !canvasWidth || !canvasHeight) return;
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+        let pointer = { x: -999, y: -999, active: false };
+        let canvasWidth = 0;
+        let canvasHeight = 0;
 
-        const isDark = htmlEl.classList.contains('dark');
-        const spacing = 18;
-        const radiusInfluence = 95;
-        const offsetX = (canvasWidth % spacing) / 2;
-        const offsetY = (canvasHeight % spacing) / 2;
+        function drawDotMatrix() {
+          if (!canvasWidth || !canvasHeight) return;
+          ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-        for (let x = offsetX + spacing / 2; x < canvasWidth; x += spacing) {
-          for (let y = offsetY + spacing / 2; y < canvasHeight; y += spacing) {
-            let intensity = 0;
-            if (pointer.active) {
-              const dx = x - pointer.x;
-              const dy = y - pointer.y;
-              const dist = Math.sqrt(dx * dx + dy * dy);
-              if (dist < radiusInfluence) {
-                intensity = Math.pow(1 - dist / radiusInfluence, 1.8);
+          const isDark = htmlEl.classList.contains('dark');
+          const spacing = 18;
+          const radiusInfluence = 95;
+          const offsetX = (canvasWidth % spacing) / 2;
+          const offsetY = (canvasHeight % spacing) / 2;
+
+          for (let x = offsetX + spacing / 2; x < canvasWidth; x += spacing) {
+            for (let y = offsetY + spacing / 2; y < canvasHeight; y += spacing) {
+              let intensity = 0;
+              if (pointer.active) {
+                const dx = x - pointer.x;
+                const dy = y - pointer.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < radiusInfluence) {
+                  intensity = Math.pow(1 - dist / radiusInfluence, 1.8);
+                }
               }
-            }
 
-            const dotRadius = 1.05 + intensity * 1.15;
-            ctx.beginPath();
-            ctx.arc(x, y, dotRadius, 0, Math.PI * 2);
+              const dotRadius = 1.05 + intensity * 1.15;
+              ctx.beginPath();
+              ctx.arc(x, y, dotRadius, 0, Math.PI * 2);
 
-            if (intensity > 0.05) {
-              // Subtle emerald illumination near cursor
-              const r = isDark ? 16 : 5;
-              const g = isDark ? 185 : 150;
-              const b = isDark ? 129 : 105;
-              const alpha = 0.22 + intensity * 0.65;
-              ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
-            } else {
-              ctx.fillStyle = isDark ? 'rgba(250, 250, 250, 0.14)' : 'rgba(24, 24, 27, 0.15)';
+              if (intensity > 0.05) {
+                const r = isDark ? 16 : 5;
+                const g = isDark ? 185 : 150;
+                const b = isDark ? 129 : 105;
+                const alpha = 0.22 + intensity * 0.65;
+                ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
+              } else {
+                ctx.fillStyle = isDark ? 'rgba(250, 250, 250, 0.14)' : 'rgba(24, 24, 27, 0.15)';
+              }
+              ctx.fill();
             }
-            ctx.fill();
           }
         }
-      }
 
-      dotBannerContainer.addEventListener('mousemove', (e) => {
-        const rect = dotBannerContainer.getBoundingClientRect();
-        pointer.x = e.clientX - rect.left;
-        pointer.y = e.clientY - rect.top;
-        pointer.active = true;
-        requestAnimationFrame(drawDotMatrix);
-      });
-
-      dotBannerContainer.addEventListener('mouseleave', () => {
-        pointer.active = false;
-        requestAnimationFrame(drawDotMatrix);
-      });
-
-      dotBannerContainer.addEventListener(
-        'touchmove',
-        (e) => {
-          if (!e.touches.length) return;
+        function resizeCanvas() {
           const rect = dotBannerContainer.getBoundingClientRect();
-          pointer.x = e.touches[0].clientX - rect.left;
-          pointer.y = e.touches[0].clientY - rect.top;
+          if (!rect.width || !rect.height) return;
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          canvasWidth = rect.width;
+          canvasHeight = rect.height;
+          canvas.width = Math.floor(canvasWidth * dpr);
+          canvas.height = Math.floor(canvasHeight * dpr);
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          drawDotMatrix();
+        }
+
+        redrawDotMatrix = drawDotMatrix;
+
+        dotBannerContainer.addEventListener('mousemove', (e) => {
+          const rect = dotBannerContainer.getBoundingClientRect();
+          pointer.x = e.clientX - rect.left;
+          pointer.y = e.clientY - rect.top;
           pointer.active = true;
           requestAnimationFrame(drawDotMatrix);
-        },
-        { passive: true }
-      );
+        });
 
-      dotBannerContainer.addEventListener('touchend', () => {
-        pointer.active = false;
-        requestAnimationFrame(drawDotMatrix);
-      });
+        dotBannerContainer.addEventListener('mouseleave', () => {
+          pointer.active = false;
+          requestAnimationFrame(drawDotMatrix);
+        });
 
-      window.addEventListener('resize', resizeCanvas);
+        dotBannerContainer.addEventListener(
+          'touchmove',
+          (e) => {
+            if (!e.touches.length) return;
+            const rect = dotBannerContainer.getBoundingClientRect();
+            pointer.x = e.touches[0].clientX - rect.left;
+            pointer.y = e.touches[0].clientY - rect.top;
+            pointer.active = true;
+            requestAnimationFrame(drawDotMatrix);
+          },
+          { passive: true }
+        );
+
+        dotBannerContainer.addEventListener('touchend', () => {
+          pointer.active = false;
+          requestAnimationFrame(drawDotMatrix);
+        });
+
+        if (typeof ResizeObserver === 'function') {
+          const ro = new ResizeObserver(resizeCanvas);
+          ro.observe(dotBannerContainer);
+        } else {
+          window.addEventListener('resize', resizeCanvas);
+        }
+
+        resizeCanvas();
+      }
 
       /* ---------------------------------------------------------------------
        * 6. ROTATING VERTICAL TEXT-SWAP SUBTITLE (EVERY 2.8s)
        * ------------------------------------------------------------------- */
-      const roleItems = document.querySelectorAll('.role-item');
-      let currentRoleIdx = 0;
+      function initRoleRotator() {
+        const roleItems = document.querySelectorAll('.role-item');
+        if (roleItems.length <= 1) return;
 
-      if (roleItems.length > 1) {
+        let currentRoleIdx = 0;
         setInterval(() => {
           const prevIdx = currentRoleIdx;
           currentRoleIdx = (currentRoleIdx + 1) % roleItems.length;
@@ -1770,6 +1738,7 @@
        * 7. RENDER PROJECTS & FILTERING + CASE STUDY MODAL
        * ------------------------------------------------------------------- */
       function renderProjects() {
+        if (!projectsGrid) return;
         const list =
           activeProjectFilter === 'All'
             ? PROJECTS
@@ -1899,34 +1868,37 @@
         });
       }
 
-      projectsGrid.addEventListener('click', (e) => {
-        const directLink = e.target.closest('[data-card-link]');
-        if (directLink) {
-          e.preventDefault();
-          e.stopPropagation();
-          showToast(directLink.dataset.cardLink);
-          return;
-        }
-        const card = e.target.closest('[data-project-card]');
-        if (card) {
-          openProjectModal(card.dataset.projectCard);
-        }
-      });
-
-      projectsGrid.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+      if (projectsGrid) {
+        projectsGrid.addEventListener('click', (e) => {
+          const directLink = e.target.closest('[data-card-link]');
+          if (directLink) {
+            e.preventDefault();
+            e.stopPropagation();
+            showToast(directLink.dataset.cardLink);
+            return;
+          }
           const card = e.target.closest('[data-project-card]');
           if (card) {
-            e.preventDefault();
             openProjectModal(card.dataset.projectCard);
           }
-        }
-      });
+        });
+
+        projectsGrid.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            const card = e.target.closest('[data-project-card]');
+            if (card) {
+              e.preventDefault();
+              openProjectModal(card.dataset.projectCard);
+            }
+          }
+        });
+      }
 
       /* ---------------------------------------------------------------------
        * 8. RENDER EXPERIENCE ACCORDION (FIRST EXPANDED BY DEFAULT)
        * ------------------------------------------------------------------- */
       function renderExperience() {
+        if (!experienceList) return;
         experienceList.innerHTML = EXPERIENCE.map((item) => {
           const isOpen = item.id === openExperienceId;
           return `
@@ -1982,25 +1954,29 @@
         }).join('');
       }
 
-      experienceList.addEventListener('click', (e) => {
-        const trigger = e.target.closest('.exp-trigger');
-        if (!trigger) return;
-        const itemEl = trigger.closest('.accordion-item');
-        const id = itemEl.dataset.expId;
+      if (experienceList) {
+        experienceList.addEventListener('click', (e) => {
+          const trigger = e.target.closest('.exp-trigger');
+          if (!trigger) return;
+          const itemEl = trigger.closest('.accordion-item');
+          if (!itemEl) return;
+          const id = itemEl.dataset.expId;
 
-        openExperienceId = openExperienceId === id ? null : id;
-        experienceList.querySelectorAll('.accordion-item').forEach((row) => {
-          const match = row.dataset.expId === openExperienceId;
-          row.setAttribute('data-open', String(match));
-          const btn = row.querySelector('.exp-trigger');
-          if (btn) btn.setAttribute('aria-expanded', String(match));
+          openExperienceId = openExperienceId === id ? null : id;
+          experienceList.querySelectorAll('.accordion-item').forEach((row) => {
+            const match = row.dataset.expId === openExperienceId;
+            row.setAttribute('data-open', String(match));
+            const btn = row.querySelector('.exp-trigger');
+            if (btn) btn.setAttribute('aria-expanded', String(match));
+          });
         });
-      });
+      }
 
       /* ---------------------------------------------------------------------
        * 9. RENDER TECH STACK & CATEGORY FILTERING
        * ------------------------------------------------------------------- */
       function renderStack() {
+        if (!stackGrid) return;
         const list =
           activeStackFilter === 'All'
             ? STACK
@@ -2034,6 +2010,7 @@
        * 10. RENDER TECHNICAL NOTES INDEX & READER MODAL
        * ------------------------------------------------------------------- */
       function renderNotes() {
+        if (!notesIndex) return;
         notesIndex.innerHTML = NOTES.map(
           (note) => `
           <button
@@ -2055,30 +2032,33 @@
         ).join('');
       }
 
-      notesIndex.addEventListener('click', (e) => {
-        const row = e.target.closest('[data-note-id]');
-        if (!row) return;
-        const note = NOTES.find((n) => n.id === row.dataset.noteId);
-        if (!note) return;
+      if (notesIndex) {
+        notesIndex.addEventListener('click', (e) => {
+          const row = e.target.closest('[data-note-id]');
+          if (!row) return;
+          const note = NOTES.find((n) => n.id === row.dataset.noteId);
+          if (!note) return;
 
-        openModal({
-          kicker: `TECHNICAL NOTE · ${note.date.toUpperCase()} · ${note.readTime.toUpperCase()} READ`,
-          title: note.title,
-          footerNote: `manav.here / notes / ${note.id}`,
-          html:
-            note.paragraphs.map((p) => `<p>${p}</p>`).join('') +
-            `<pre class="mt-4 p-4 rounded-lg border theme-border theme-surface font-mono text-xs text-[var(--text)] overflow-x-auto leading-relaxed"><code>${note.code}</code></pre>`,
+          openModal({
+            kicker: `TECHNICAL NOTE · ${note.date.toUpperCase()} · ${note.readTime.toUpperCase()} READ`,
+            title: note.title,
+            footerNote: `manav.here / notes / ${note.id}`,
+            html:
+              note.paragraphs.map((p) => `<p>${p}</p>`).join('') +
+              `<pre class="mt-4 p-4 rounded-lg border theme-border theme-surface font-mono text-xs text-[var(--text)] overflow-x-auto leading-relaxed"><code>${note.code}</code></pre>`,
+          });
         });
-      });
+      }
 
       /* ---------------------------------------------------------------------
        * 11. REUSABLE MODAL CONTROLLER (CASE STUDY, NOTES, RESUME PREVIEW)
        * ------------------------------------------------------------------- */
       function openModal({ kicker, title, html, footerNote }) {
-        modalKicker.textContent = kicker;
-        modalHeading.textContent = title;
-        modalContent.innerHTML = html;
-        modalFooterNote.textContent = footerNote || 'manav.here';
+        if (!modalOverlay || !modalPanel) return;
+        if (modalKicker) modalKicker.textContent = kicker;
+        if (modalHeading) modalHeading.textContent = title;
+        if (modalContent) modalContent.innerHTML = html;
+        if (modalFooterNote) modalFooterNote.textContent = footerNote || 'manav.here';
 
         modalOverlay.classList.remove('hidden');
         modalOverlay.classList.add('flex');
@@ -2092,6 +2072,7 @@
       }
 
       function closeModal() {
+        if (!modalOverlay || !modalPanel) return;
         modalOverlay.classList.add('opacity-0');
         modalPanel.classList.remove('scale-100', 'opacity-100');
         modalPanel.classList.add('scale-95', 'opacity-0');
@@ -2103,18 +2084,22 @@
         }, 200);
       }
 
-      modalCloseBtn.addEventListener('click', closeModal);
-      modalDoneBtn.addEventListener('click', closeModal);
-      modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) closeModal();
-      });
+      if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+      if (modalDoneBtn) modalDoneBtn.addEventListener('click', closeModal);
+      if (modalOverlay) {
+        modalOverlay.addEventListener('click', (e) => {
+          if (e.target === modalOverlay) closeModal();
+        });
+      }
 
-      resumeBtn.addEventListener('click', () => {
-        openModal({
-          kicker: 'DOCUMENT PREVIEW · UPDATED NOV 2026',
-          title: 'Manav Chaudhari',
-          footerNote: 'Manav_Chaudhari_Resume.pdf · 1 page',
-          html: `
+      /* Resume PDF Preview Modal */
+      if (resumeBtn) {
+        resumeBtn.addEventListener('click', () => {
+          openModal({
+            kicker: 'DOCUMENT PREVIEW · UPDATED NOV 2026',
+            title: 'Manav Chaudhari',
+            footerNote: 'Manav_Chaudhari_Resume.pdf · 1 page',
+            html: `
             <div class="p-4 rounded-lg border theme-border theme-surface space-y-3 text-[13px]">
               <div class="flex items-center justify-between flex-wrap gap-2 pb-2 border-b theme-border">
                 <span class="font-semibold text-[var(--text)]">B.S. Computer Science (Systems Track)</span>
@@ -2130,11 +2115,12 @@
               </button>
             </div>
           `,
+          });
         });
-      });
+      }
 
       /* ---------------------------------------------------------------------
-       * 12. GLOBAL MOCK LINK FEEDBACK & BACK TO TOP
+       * 12. GLOBAL MOCK LINK FEEDBACK
        * ------------------------------------------------------------------- */
       document.addEventListener('click', (e) => {
         const mockEl = e.target.closest('[data-mock-action]');
@@ -2143,46 +2129,36 @@
         showToast(mockEl.dataset.mockAction);
       });
 
-      backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-
       /* ---------------------------------------------------------------------
-       * 13. LIVE TICKING LOCAL CLOCK IN FOOTER
-       * ------------------------------------------------------------------- */
-      function updateClock() {
-        try {
-          const now = new Date();
-          liveClockEl.textContent = now.toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          });
-        } catch (e) {
-          liveClockEl.textContent = '--:--:--';
-        }
-      }
-      updateClock();
-      setInterval(updateClock, 1000);
-
-      /* ---------------------------------------------------------------------
-       * 14. INTERSECTION OBSERVERS: SCROLL-REVEAL & DESKTOP SCROLL-SPY RAIL
+       * 13. INTERSECTION OBSERVERS: SCROLL-REVEAL & DESKTOP SCROLL-SPY RAIL
        * ------------------------------------------------------------------- */
       function initObservers() {
         const revealEls = document.querySelectorAll('.reveal');
-        const revealObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                revealObserver.unobserve(entry.target);
-              }
-            });
-          },
-          { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
-        );
-        revealEls.forEach((el) => revealObserver.observe(el));
+
+        if (typeof IntersectionObserver === 'function') {
+          const revealObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('is-visible');
+                  revealObserver.unobserve(entry.target);
+                }
+              });
+            },
+            { threshold: 0.05, rootMargin: '0px 0px -20px 0px' }
+          );
+
+          revealEls.forEach((el) => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.95) {
+              el.classList.add('is-visible');
+            } else {
+              revealObserver.observe(el);
+            }
+          });
+        } else {
+          revealEls.forEach((el) => el.classList.add('is-visible'));
+        }
 
         const sections = ['hero', 'projects', 'experience', 'stack', 'notes', 'footer'];
         const spyLinks = document.querySelectorAll('.spy-link');
@@ -2207,27 +2183,29 @@
           });
         }
 
-        const spyObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                setActiveSpy(entry.target.id);
-              }
-            });
-          },
-          { rootMargin: '-35% 0px -55% 0px', threshold: 0 }
-        );
+        if (typeof IntersectionObserver === 'function') {
+          const spyObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  setActiveSpy(entry.target.id);
+                }
+              });
+            },
+            { rootMargin: '-35% 0px -55% 0px', threshold: 0 }
+          );
 
-        sections.forEach((id) => {
-          const el = document.getElementById(id);
-          if (el) spyObserver.observe(el);
-        });
+          sections.forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) spyObserver.observe(el);
+          });
+        }
 
         setActiveSpy('hero');
       }
 
       /* ---------------------------------------------------------------------
-       * 15. DYNAMIC FAVICON CONTROLLER (ROBUST DOM-REPLACEMENT SWAP)
+       * 14. DYNAMIC FAVICON CONTROLLER (ROBUST DOM-REPLACEMENT SWAP)
        * ------------------------------------------------------------------- */
       function initDynamicFavicon() {
         let currentState = null;
@@ -2265,7 +2243,7 @@
       }
 
       /* ---------------------------------------------------------------------
-       * 16. 8-WAY SPRITE AVATAR TRACKING + DIZZY / ANNOYED EASTER EGG
+       * 15. 8-WAY SPRITE AVATAR TRACKING + DIZZY / ANNOYED EASTER EGG
        * ------------------------------------------------------------------- */
       function initInteractiveAvatar() {
         const avatar = document.getElementById('brandAvatar');
@@ -2349,7 +2327,7 @@
         sheet.src = 'images/avatar-sheet.png';
 
         function initTracking() {
-          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
           const POSITIONS = {
             '0': '100% 50%',
@@ -2435,10 +2413,10 @@
       }
 
       /* ---------------------------------------------------------------------
-       * 17. SPIDER-VERSE INTERMITTENT NAME GLITCH EFFECT
+       * 16. SPIDER-VERSE INTERMITTENT NAME GLITCH EFFECT
        * ------------------------------------------------------------------- */
-      (function () {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      function initNameGlitch() {
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
         const words = Array.from(document.querySelectorAll('.glitch-word'));
         const trigger = document.getElementById('brandTrigger');
@@ -2498,10 +2476,10 @@
         if (trigger) {
           trigger.addEventListener('mouseenter', () => fireGlitch(false));
         }
-      })();
+      }
 
       /* ---------------------------------------------------------------------
-       * 18. MORPHING NAVBAR SCROLL CONTROLLER (FULL-WIDTH -> FLOATING 780px)
+       * 17. MORPHING NAVBAR SCROLL CONTROLLER (FULL-WIDTH -> FLOATING 780px)
        * ------------------------------------------------------------------- */
       function initMorphingNavbar() {
         const navWrap = document.getElementById('siteNavWrap');
@@ -2521,21 +2499,15 @@
       }
 
       /* ---------------------------------------------------------------------
-       * 19. HIGH-DPI SPACEX STARBASE — OPTION 1: SEAMLESS HORIZON BLEED
-       *     + RISING SIDE SILHOUETTES (PURE ENGINEERED ZINC + EMERALD)
+       * 18. HIGH-DPI SPACEX STARBASE — OPEN HORIZON FOOTER
        *     - ResizeObserver-locked native Retina rendering (zero stretch)
-       *     - Seamless 160px top alpha fade into var(--bg)
-       *     - Wide (>960px): Mega Bay + Tank Farm + Floodlight Mast rise in
-       *       left gutter; Mission Control + Comm Mast + Palms rise in right
-       *     - Center: Mechazilla + Starship Flight 14 sit cleanly below Notes
-       *     - Full-width Walkway (9 Engineers) + Highway 4 (Cybertrucks/Teslas)
-       *     - Interactive 4-Second Raptor Static Fire Ignition on Click
+       *     - Seamless 110px top fade into var(--bg)
+       *     - Highway 4 grounded cleanly along the bottom edge
+       *     - Silent 4-Second Raptor Static Fire Ignition on Pad Click
        * ------------------------------------------------------------------- */
       function initStarbaseFooter() {
         const footerEl = document.getElementById('footer');
         const sbCanvas = document.getElementById('starbaseFooterCanvas');
-        const starbaseHint = document.getElementById('starbaseHint');
-        const staticFireHud = document.getElementById('staticFireHud');
         if (!footerEl || !sbCanvas) return;
 
         const sctx = sbCanvas.getContext('2d');
@@ -2551,13 +2523,13 @@
         let lastTime = performance.now();
         let startTime = lastTime;
 
-        // 4-second Raptor Static Fire state
+        // 4-second Raptor Static Fire state (silent, no HUD text)
         const STATIC_FIRE_DURATION = 4000;
         let staticFireStart = -10000;
         let staticFireEnd = 0;
         let padHitbox = { x: 0, y: 0, w: 0, h: 0 };
 
-        // Subtle night-sky stars (concentrated cleanly below the top fade zone)
+        // Subtle night-sky stars
         const STARS = Array.from({ length: 92 }, (_, i) => ({
           u: ((i * 73 + 17) % 100) / 100,
           v: 0.14 + ((i * 41 + 9) % 68) / 100,
@@ -2567,10 +2539,10 @@
 
         // Wispy coastal daylight clouds
         const CLOUDS = [
-          { u: 0.08, v: 0.36, scale: 1.05, speed: 0.0020 },
-          { u: 0.30, v: 0.30, scale: 1.15, speed: 0.0015 },
-          { u: 0.72, v: 0.34, scale: 1.1, speed: 0.0018 },
-          { u: 0.92, v: 0.28, scale: 0.95, speed: 0.0014 },
+          { u: 0.08, v: 0.34, scale: 1.05, speed: 0.0020 },
+          { u: 0.30, v: 0.28, scale: 1.15, speed: 0.0015 },
+          { u: 0.72, v: 0.32, scale: 1.1, speed: 0.0018 },
+          { u: 0.92, v: 0.26, scale: 0.95, speed: 0.0014 },
         ];
 
         // Volumetric cryo vapor plumes & static-fire deluge steam clouds
@@ -2586,7 +2558,7 @@
           { type: 'tesla', lane: 0, u: 0.94, speed: -0.035, finish: 'silver' },
         ];
 
-        // 9 naturally proportioned engineers strolling along the observation walkway
+        // 9 naturally proportioned engineers strolling along the concrete walkway
         const ENGINEERS = [
           { u: 0.10, dir: 1, speed: 0.0052, jacket: 'emerald', hat: 'white', clipboard: true, pauseTimer: 0, walkPhase: 0.3 },
           { u: 0.21, dir: -1, speed: 0.0046, jacket: 'dark', hat: 'yellow', clipboard: false, pauseTimer: 1.8, walkPhase: 1.4 },
@@ -2613,32 +2585,29 @@
           renderFrame(performance.now(), 0);
         }
 
-        // Vertical & horizontal geometry accounting for the 128px/160px top bleed overlap
+        // Vertical & horizontal geometry with Highway 4 grounded to the bottom edge
         function getMetrics() {
           const isMobile = width < 640;
           const isWide = width > 960;
-          const overlapTop = isMobile ? 128 : 160;
-          const roadBottom = height - (isMobile ? 112 : 84);
-          const roadHeight = 38;
-          const roadTop = roadBottom - roadHeight;
-          const walkwayH = 18;
+          const roadBottom = height - 2;
+          const roadTop = height - 38;
+          const roadHeight = roadBottom - roadTop;
+          const walkwayH = 16;
           const groundY = roadTop - walkwayH;
 
-          // Center Starship cleanly at horizontal midpoint below 04 / Notes
+          // Keep tallest structures cleanly below y >= 70px so nothing clips into top fade
           const padX = width * 0.5;
-          const availableCenterH = Math.max(210, groundY - overlapTop - 16);
-          const centerScale = Math.min(1.06, Math.max(0.76, availableCenterH / 252));
+          const availableH = Math.max(200, groundY - 76);
+          const centerScale = Math.min(1.0, Math.max(0.72, availableH / 260));
 
-          // Side silhouettes can rise taller into the empty left & right gutters on wide screens
           const leftMargin = isWide ? (width - 780) * 0.5 : 0;
           const sideScale = isWide
-            ? Math.min(1.36, Math.max(1.05, (groundY - 40) / 260))
-            : centerScale * 0.92;
+            ? Math.min(1.02, Math.max(0.84, availableH / 235))
+            : centerScale * 0.88;
 
           return {
             isMobile,
             isWide,
-            overlapTop,
             roadBottom,
             roadHeight,
             roadTop,
@@ -2696,11 +2665,9 @@
           sctx.fillStyle = waterGrad;
           sctx.fillRect(0, waterY, width, 18);
 
-          // Subtle horizon shimmer line
           sctx.fillStyle = isDark ? 'rgba(16, 185, 129, 0.18)' : 'rgba(255, 255, 255, 0.75)';
           sctx.fillRect(0, waterY, width, 1);
 
-          // Layered Boca Chica coastal dunes
           sctx.beginPath();
           sctx.moveTo(0, groundY);
           for (let x = 0; x <= width + 50; x += 50) {
@@ -2712,12 +2679,11 @@
           sctx.fillStyle = isDark ? '#111114' : '#ececef';
           sctx.fill();
 
-          // Compacted concrete pad apron
           sctx.fillStyle = isDark ? '#18181b' : '#e4e4e7';
           sctx.fillRect(0, groundY - 5, width, 5);
         }
 
-        // Articulated Boca Chica palm tree (Zinc silhouette + subtle emerald rim)
+        // Articulated Boca Chica palm tree
         function drawPalm(x, groundY, h, lean, elapsedSec, phase, isDark) {
           const sway = reducedMotion ? 0 : Math.sin(elapsedSec * 1.25 + phase) * 3.4;
           const topX = x + lean * 14 + sway * 0.78;
@@ -2728,7 +2694,6 @@
           sctx.save();
           sctx.lineCap = 'round';
 
-          // Tapered curved trunk
           sctx.strokeStyle = isDark ? '#27272a' : '#71717a';
           sctx.lineWidth = Math.max(3.2, h * 0.055);
           sctx.beginPath();
@@ -2736,7 +2701,6 @@
           sctx.quadraticCurveTo(ctrlX, ctrlY, topX, topY);
           sctx.stroke();
 
-          // Subtle emerald/zinc highlight along trunk edge
           sctx.strokeStyle = isDark ? 'rgba(16, 185, 129, 0.24)' : 'rgba(5, 150, 105, 0.22)';
           sctx.lineWidth = 1.0;
           sctx.beginPath();
@@ -2805,12 +2769,11 @@
           sctx.restore();
         }
 
-        // Tall Stadium Floodlight Mast (Rises into Left Gutter beside 04 / Notes)
+        // Tall Stadium Floodlight Mast (Left Wing)
         function drawFloodlightMast(x, groundY, h, elapsedSec, isDark) {
           sctx.save();
           const topY = groundY - h;
 
-          // Tapered lattice mast
           sctx.strokeStyle = isDark ? '#3f3f46' : '#a1a1aa';
           sctx.lineWidth = 1.6;
           sctx.beginPath();
@@ -2820,7 +2783,6 @@
           sctx.lineTo(x + 1.2, topY);
           sctx.stroke();
 
-          // Cross-bracing rungs
           sctx.lineWidth = 0.8;
           for (let ry = groundY - 14; ry > topY + 10; ry -= 16) {
             const t = (groundY - ry) / h;
@@ -2833,11 +2795,9 @@
             sctx.stroke();
           }
 
-          // Head lamp bank
-          sctx.fillStyle = isDark ? '#52525b' : '#52525b';
+          sctx.fillStyle = '#52525b';
           sctx.fillRect(x - 8, topY - 4, 16, 4.5);
 
-          // Glowing LED array + volumetric light cone in Dark Mode
           if (isDark) {
             sctx.fillStyle = '#ecfdf5';
             sctx.fillRect(x - 6.5, topY - 2.5, 13, 2);
@@ -2859,7 +2819,6 @@
             sctx.fillRect(x - 6.5, topY - 2.5, 13, 2);
           }
 
-          // Blinking red top obstruction light
           const pulse = reducedMotion ? 0.9 : 0.2 + 0.8 * (0.5 + 0.5 * Math.sin(elapsedSec * 2.4 + 1.1));
           sctx.fillStyle = `rgba(239, 68, 68, ${pulse.toFixed(2)})`;
           sctx.beginPath();
@@ -2869,7 +2828,7 @@
           sctx.restore();
         }
 
-        // Left Wing: Mega Bay 1 & 2 High-Bay Hangars (Taller Silhouette Rising into Left Margin)
+        // Left Wing: Mega Bay 1 & 2 High-Bay Hangars
         function drawMegaBays(baseX, groundY, scale, isWide, elapsedSec, isDark) {
           sctx.save();
           const bay1W = isWide ? Math.min(88, Math.max(66, width * 0.065)) : Math.min(62, Math.max(44, width * 0.08));
@@ -2892,7 +2851,6 @@
             sctx.fillStyle = wallGrad;
             sctx.fillRect(x, topY, w, h);
 
-            // Vertical architectural cladding ribs
             sctx.strokeStyle = isDark ? 'rgba(255,255,255,0.035)' : 'rgba(24,24,27,0.05)';
             sctx.lineWidth = 1;
             for (let rx = x + 6; rx < x + w - 4; rx += 6) {
@@ -2902,14 +2860,12 @@
               sctx.stroke();
             }
 
-            // Roof fascia + HVAC penthouses
             sctx.fillStyle = isDark ? '#3f3f46' : '#a1a1aa';
             sctx.fillRect(x - 1.5, topY - 2.5, w + 3, 2.5);
             sctx.fillStyle = isDark ? '#27272a' : '#d4d4d8';
             sctx.fillRect(x + 8, topY - 8, 15, 5.5);
             sctx.fillRect(x + w - 21, topY - 10, 11, 7.5);
 
-            // Rooftop bridge crane jib rising above Mega Bay 1
             if (hasCrane) {
               const cx = x + w * 0.62;
               sctx.strokeStyle = isDark ? '#52525b' : '#71717a';
@@ -2922,12 +2878,10 @@
               sctx.lineTo(cx - 10, topY - 18);
               sctx.stroke();
 
-              // Counterweight block
               sctx.fillStyle = isDark ? '#3f3f46' : '#71717a';
               sctx.fillRect(cx - 13, topY - 20, 6, 4);
             }
 
-            // Lit architectural clerestory window strips (Warm Amber + Crisp Emerald)
             const winY1 = topY + 13;
             const winY2 = topY + 27;
             sctx.fillStyle = isDark ? 'rgba(245, 158, 11, 0.42)' : 'rgba(5, 150, 105, 0.28)';
@@ -2935,14 +2889,12 @@
             sctx.fillStyle = isDark ? 'rgba(16, 185, 129, 0.36)' : 'rgba(24, 24, 27, 0.16)';
             sctx.fillRect(x + 5, winY2, w - 10, 4.5);
 
-            // Window mullions
             sctx.fillStyle = isDark ? '#161619' : '#ececef';
             for (let mx = x + 13; mx < x + w - 8; mx += 9) {
               sctx.fillRect(mx, winY1, 1.3, 6.5);
               sctx.fillRect(mx, winY2, 1.3, 4.5);
             }
 
-            // High-bay roll-up door with warm interior glow & booster section inside
             if (showDoor) {
               const doorW = Math.min(30, w * 0.44);
               const doorH = Math.min(62 * scale, h * 0.50);
@@ -2957,11 +2909,9 @@
               sctx.fillStyle = glow;
               sctx.fillRect(doorX + 1, doorY + 1, doorW - 2, doorH - 1);
 
-              // Overhead gantry crane beam
               sctx.fillStyle = '#f59e0b';
               sctx.fillRect(doorX + 2, doorY + 5, doorW - 4, 2.2);
 
-              // Booster section standing inside Mega Bay
               const bW = Math.max(6.5, doorW * 0.28);
               const bX = doorX + (doorW - bW) * 0.5;
               const bGrad = sctx.createLinearGradient(bX, doorY + 10, bX + bW, doorY + 10);
@@ -2979,7 +2929,6 @@
               sctx.fillText(label, x + w * 0.5, topY + 43);
             }
 
-            // Crisp architectural border
             sctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(24, 24, 27, 0.12)';
             sctx.lineWidth = 1;
             sctx.strokeRect(x + 0.5, topY + 0.5, w - 1, h - 1);
@@ -2988,7 +2937,6 @@
           drawSingleBay(baseX, bay1W, bay1H, 'MEGA BAY 1', true, isWide);
           drawSingleBay(baseX + bay1W + 6, bay2W, bay2H, 'BAY 2', false, false);
 
-          // Roof red aviation strobe on Mega Bay 1
           const pulse = reducedMotion ? 0.9 : 0.22 + 0.78 * (0.5 + 0.5 * Math.sin(elapsedSec * 2.5));
           sctx.fillStyle = `rgba(239, 68, 68, ${pulse.toFixed(2)})`;
           sctx.beginPath();
@@ -3007,7 +2955,6 @@
           const spacing = isCompact ? 13 : 15;
           const tankW = isCompact ? 9.5 : 11;
 
-          // Overhead stainless pipe bridge running from tank farm into OLM
           const bridgeEndX = padX - 44 * scale;
           if (bridgeEndX > startX + 10) {
             const pipeY = groundY - 14 * scale;
@@ -3029,7 +2976,6 @@
             }
           }
 
-          // Row of vertical cylindrical LOX / CH4 tanks
           for (let i = 0; i < vertCount; i++) {
             const tx = startX + i * spacing;
             const th = (50 + (i % 2) * 10) * scale;
@@ -3054,12 +3000,10 @@
             sctx.fill();
             sctx.fillRect(tx, ty + 3.5, tankW, th - 7);
 
-            // Concrete skirt
             sctx.fillStyle = isDark ? '#27272a' : '#a1a1aa';
             sctx.fillRect(tx + 1, groundY - 3.5, tankW - 2, 3.5);
           }
 
-          // Horizontal cylindrical cryo bullet tanks
           if (!isCompact) {
             const bulletStartX = startX + vertCount * spacing + 6;
             const bulletW = 34;
@@ -3086,7 +3030,6 @@
             }
           }
 
-          // Subtle cryo vent wisps off vertical tanks
           if (!reducedMotion) {
             for (let v = 0; v < 3; v++) {
               const life = ((elapsedSec * 0.34 + v * 0.33) % 1 + 1) % 1;
@@ -3107,14 +3050,13 @@
           sctx.restore();
         }
 
-        // Right Wing: Mission Control & Launch Operations Tower + Tall Lattice Comm Mast + Panning Dish
+        // Right Wing: Mission Control + Tall Lattice Comm Mast + Panning Satellite Dish
         function drawMissionControl(x, groundY, scale, isWide, elapsedSec, isDark) {
           sctx.save();
           const w = isWide ? Math.min(132, Math.max(102, width * 0.095)) : Math.min(96, Math.max(76, width * 0.14));
           const h = isWide ? 48 : 38;
           const topY = groundY - h;
 
-          // Sleek low-slung concrete & glass Mission Control bunker
           sctx.fillStyle = isDark ? '#18181b' : '#ececef';
           sctx.beginPath();
           sctx.moveTo(x, groundY);
@@ -3124,7 +3066,6 @@
           sctx.closePath();
           sctx.fill();
 
-          // Second-tier Launch Operations observation deck on wide screens
           const deckW = w * 0.46;
           const deckH = isWide ? 28 * scale : 0;
           const deckX = x + w - deckW - 6;
@@ -3135,7 +3076,6 @@
             sctx.fillStyle = isDark ? '#3f3f46' : '#a1a1aa';
             sctx.fillRect(deckX - 2, deckTopY - 2, deckW + 4, 2);
 
-            // Upper ops control room window glowing emerald/amber
             sctx.fillStyle = isDark ? '#09090b' : '#27272a';
             sctx.fillRect(deckX + 5, deckTopY + 6, deckW - 10, 9);
             sctx.fillStyle = isDark ? 'rgba(16, 185, 129, 0.78)' : 'rgba(5, 150, 105, 0.65)';
@@ -3148,11 +3088,9 @@
             sctx.strokeRect(deckX + 0.5, deckTopY + 0.5, deckW - 1, deckH - 1);
           }
 
-          // Overhanging roofline fascia
           sctx.fillStyle = isDark ? '#3f3f46' : '#a1a1aa';
           sctx.fillRect(x + 2, topY - 2.5, w + 1, 2.5);
 
-          // Panoramic dark glass window band
           const glassX = x + 10;
           const glassY = topY + 10;
           const glassW = w - 18;
@@ -3160,7 +3098,6 @@
           sctx.fillStyle = isDark ? '#09090b' : '#27272a';
           sctx.fillRect(glassX, glassY, glassW, glassH);
 
-          // Glowing interior telemetry monitor strips (Emerald + Cool White + Amber)
           sctx.fillStyle = isDark ? 'rgba(16, 185, 129, 0.85)' : 'rgba(5, 150, 105, 0.75)';
           sctx.fillRect(glassX + 4, glassY + 3.5, glassW * 0.26, 6);
           sctx.fillStyle = isDark ? 'rgba(228, 228, 231, 0.65)' : 'rgba(161, 161, 170, 0.7)';
@@ -3168,19 +3105,16 @@
           sctx.fillStyle = isDark ? 'rgba(245, 158, 11, 0.82)' : 'rgba(217, 119, 6, 0.72)';
           sctx.fillRect(glassX + glassW * 0.67, glassY + 3.5, glassW * 0.24, 6);
 
-          // Window mullions
           sctx.fillStyle = isDark ? '#18181b' : '#ececef';
           sctx.fillRect(glassX + glassW * 0.32, glassY, 1.5, glassH);
           sctx.fillRect(glassX + glassW * 0.64, glassY, 1.5, glassH);
 
-          // Recessed entryway
           sctx.fillStyle = isDark ? '#09090b' : '#3f3f46';
           sctx.fillRect(x + 10, groundY - 13, 10, 13);
 
-          // Tall Lattice Communications & Telemetry Mast rising into the right margin
           const mastX = isWide ? deckX + deckW * 0.72 : x + w - 16;
           const mastBaseY = isWide ? deckTopY - 2 : topY - 2.5;
-          const mastH = (isWide ? 118 : 54) * scale;
+          const mastH = (isWide ? 116 : 54) * scale;
           const mastTopY = mastBaseY - mastH;
 
           sctx.strokeStyle = isDark ? '#52525b' : '#71717a';
@@ -3192,7 +3126,6 @@
           sctx.lineTo(mastX + 1.0, mastTopY);
           sctx.stroke();
 
-          // Lattice cross-bracing
           sctx.lineWidth = 0.85;
           for (let ry = mastBaseY - 12; ry > mastTopY + 8; ry -= 14) {
             const t = (mastBaseY - ry) / mastH;
@@ -3205,7 +3138,6 @@
             sctx.stroke();
           }
 
-          // Blinking red strobe + emerald telemetry ping on comm mast
           const pulse = reducedMotion ? 0.9 : 0.2 + 0.8 * (0.5 + 0.5 * Math.sin(elapsedSec * 2.6 + 0.6));
           if (isDark) {
             const glow = sctx.createRadialGradient(mastX, mastTopY - 2, 0.5, mastX, mastTopY - 2, 10);
@@ -3221,7 +3153,6 @@
           sctx.arc(mastX, mastTopY - 2, 1.9, 0, Math.PI * 2);
           sctx.fill();
 
-          // Slowly panning rooftop satellite telemetry dish
           const dishBaseX = isWide ? x + 24 : x + 22;
           const dishBaseY = topY - 2.5;
           const panAngle = reducedMotion ? -0.45 : -0.45 + Math.sin(elapsedSec * 0.6) * 0.30;
@@ -3252,7 +3183,6 @@
           sctx.fill();
           sctx.restore();
 
-          // Border
           sctx.strokeStyle = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(24,24,27,0.12)';
           sctx.lineWidth = 1;
           sctx.strokeRect(x + 0.5, topY + 0.5, w - 1, h - 1);
@@ -3260,12 +3190,12 @@
           sctx.restore();
         }
 
-        // Centerpiece: Orbital Launch Mount (OLM) + 9-Bay Mechazilla + Starship Flight 14 (S34 / B16)
+        // Centerpiece: Orbital Launch Mount (OLM) + 9-Bay Mechazilla + Starship Flight 14
         function drawLaunchComplex(padX, groundY, scale, elapsedSec, isDark, isFiring, fireIntensity) {
           sctx.save();
 
           const towerW = 28 * scale;
-          const towerH = 222 * scale;
+          const towerH = 220 * scale;
           const towerX = padX - towerW - 22 * scale;
           const towerTopY = groundY - towerH;
 
@@ -3273,7 +3203,6 @@
           const steelBright = isDark ? '#a1a1aa' : '#71717a';
           const steelDark = isDark ? '#27272a' : '#3f3f46';
 
-          // Stadium pad floodlight beams in Dark Mode (clean monochrome/emerald -> warm amber during Static Fire)
           if (isDark) {
             const floodGrad = sctx.createLinearGradient(padX, groundY, padX, towerTopY - 12);
             if (isFiring) {
@@ -3311,11 +3240,9 @@
             sctx.stroke();
           }
 
-          // Internal elevator shaft core
           sctx.fillStyle = isDark ? 'rgba(39, 39, 42, 0.72)' : 'rgba(161, 161, 170, 0.36)';
           sctx.fillRect(towerX + towerW * 0.33, towerTopY + 10, towerW * 0.34, towerH - 10);
 
-          // Front-face crisp X-bracing & horizontal floor girders
           sctx.strokeStyle = steelMain;
           sctx.lineWidth = 1.25;
           for (let i = 0; i < bays; i++) {
@@ -3331,21 +3258,18 @@
             sctx.stroke();
           }
 
-          // Heavy vertical corner box columns
           sctx.fillStyle = steelBright;
           sctx.fillRect(towerX, towerTopY, 3, towerH);
           sctx.fillStyle = steelDark;
           sctx.fillRect(towerX + towerW - 3, towerTopY, 3, towerH);
 
-          // Top observation deck & crane housing
           sctx.fillStyle = steelDark;
           sctx.fillRect(towerX - 3.5, towerTopY - 4.5, towerW + 7, 4.5);
           sctx.fillStyle = steelBright;
           sctx.fillRect(towerX + 3.5, towerTopY - 9, towerW - 7, 4.5);
 
-          // Tall lightning mast + slow blinking red aviation strobe
           const spireX = towerX + towerW * 0.5;
-          const spireH = 24 * scale;
+          const spireH = 22 * scale;
           const beaconY = towerTopY - 9 - spireH;
           sctx.strokeStyle = steelBright;
           sctx.lineWidth = 1.5;
@@ -3369,7 +3293,7 @@
           sctx.arc(spireX, beaconY, 2.2, 0, Math.PI * 2);
           sctx.fill();
 
-          // --- 2. ORBITAL LAUNCH MOUNT (OLM) & WATER DELUGE RING ---
+          // --- 2. ORBITAL LAUNCH MOUNT (OLM) ---
           const olmW = 50 * scale;
           const olmH = 28 * scale;
           const olmX = padX - olmW * 0.5;
@@ -3386,13 +3310,13 @@
           sctx.fillRect(olmX + 2, olmTopY + 5, 9 * scale, olmH - 5);
           sctx.fillRect(olmX + olmW - 2 - 9 * scale, olmTopY + 5, 9 * scale, olmH - 5);
 
-          sctx.fillStyle = isDark ? '#52525b' : '#52525b';
+          sctx.fillStyle = '#52525b';
           roundRectPath(olmX - 2.5, olmTopY, olmW + 5, 7.5 * scale, 2.5);
           sctx.fill();
           sctx.fillStyle = isDark ? '#71717a' : '#a1a1aa';
           sctx.fillRect(olmX + 5, olmTopY - 2.2, olmW - 10, 2.4);
 
-          // --- 3. STARSHIP FLIGHT 14 + SUPER HEAVY BOOSTER (S34 / B16) ---
+          // --- 3. STARSHIP FLIGHT 14 + SUPER HEAVY BOOSTER ---
           const shipW = 19 * scale;
           const boosterH = 104 * scale;
           const interstageH = 7 * scale;
@@ -3400,7 +3324,6 @@
           const stackBaseY = olmTopY - 1.5;
           const shipX = padX - shipW * 0.5;
 
-          // 33-Raptor Static Fire Exhaust Plume + White-Amber Mach Diamonds
           if (isFiring && fireIntensity > 0.02) {
             const plumeH = (28 + Math.sin(elapsedSec * 52) * 3.5) * scale * fireIntensity;
 
@@ -3442,7 +3365,6 @@
             }
           }
 
-          // Cylindrical brushed stainless-steel metallic gradient
           const ssGrad = sctx.createLinearGradient(shipX, 0, shipX + shipW, 0);
           if (isDark) {
             ssGrad.addColorStop(0, '#71717a');
@@ -3462,12 +3384,10 @@
           sctx.fillStyle = ssGrad;
           sctx.fillRect(shipX, boosterTopY, shipW, boosterH);
 
-          // Cryogenic frosted LOX / CH4 bands
           sctx.fillStyle = isDark ? 'rgba(240, 249, 255, 0.24)' : 'rgba(255, 255, 255, 0.56)';
           sctx.fillRect(shipX + 1, boosterTopY + boosterH * 0.16, shipW - 2, boosterH * 0.28);
           sctx.fillRect(shipX + 1, boosterTopY + boosterH * 0.54, shipW - 2, boosterH * 0.30);
 
-          // Horizontal stainless weld-ring seams
           sctx.strokeStyle = isDark ? 'rgba(24, 24, 27, 0.28)' : 'rgba(71, 85, 105, 0.22)';
           sctx.lineWidth = 0.75;
           for (let wy = boosterTopY + 13; wy < stackBaseY - 6; wy += 13 * scale) {
@@ -3477,7 +3397,6 @@
             sctx.stroke();
           }
 
-          // Titanium grid fins
           const finY = boosterTopY + 7 * scale;
           sctx.fillStyle = '#18181b';
           sctx.fillRect(shipX - 5.5 * scale, finY, 5.5 * scale, 5 * scale);
@@ -3485,7 +3404,6 @@
           sctx.fillRect(shipX + 3 * scale, finY, 3.5 * scale, 5 * scale);
           sctx.fillRect(shipX + shipW - 6.5 * scale, finY, 3.5 * scale, 5 * scale);
 
-          // Perforated black hot-staging interstage ring
           const interstageTopY = boosterTopY - interstageH;
           sctx.fillStyle = '#18181b';
           sctx.fillRect(shipX, interstageTopY, shipW, interstageH);
@@ -3494,7 +3412,6 @@
             sctx.fillRect(vx, interstageTopY + 1.5, 1.5, interstageH - 3);
           }
 
-          // Starship Upper Stage (S34 / Flight 14) with smooth Bezier ogive nosecone
           const upperBaseY = interstageTopY;
           const bodyH = upperH * 0.58;
           const noseH = upperH - bodyH;
@@ -3514,7 +3431,6 @@
           sctx.fill();
           sctx.clip();
 
-          // Black windward ceramic TPS heat-shield edge along left side
           sctx.fillStyle = isDark ? '#14151a' : '#18181b';
           sctx.fillRect(shipX, tipY, shipW * 0.43, upperH);
 
@@ -3527,7 +3443,6 @@
           sctx.fillText('14', shipX + shipW * 0.73, upperBaseY - bodyH * 0.42);
           sctx.restore();
 
-          // Aft aerodynamic flaps
           sctx.fillStyle = '#18181b';
           sctx.beginPath();
           sctx.moveTo(shipX, upperBaseY - 18 * scale);
@@ -3537,7 +3452,7 @@
           sctx.closePath();
           sctx.fill();
 
-          sctx.fillStyle = isDark ? '#52525b' : '#52525b';
+          sctx.fillStyle = '#52525b';
           sctx.beginPath();
           sctx.moveTo(shipX + shipW, upperBaseY - 18 * scale);
           sctx.lineTo(shipX + shipW + 7 * scale, upperBaseY - 4.5 * scale);
@@ -3546,7 +3461,6 @@
           sctx.closePath();
           sctx.fill();
 
-          // Forward aerodynamic flaps
           sctx.fillStyle = '#18181b';
           sctx.beginPath();
           sctx.moveTo(shipX + 1.5, noseStartY - 9 * scale);
@@ -3555,7 +3469,7 @@
           sctx.closePath();
           sctx.fill();
 
-          sctx.fillStyle = isDark ? '#52525b' : '#52525b';
+          sctx.fillStyle = '#52525b';
           sctx.beginPath();
           sctx.moveTo(shipX + shipW - 1.5, noseStartY - 9 * scale);
           sctx.lineTo(shipX + shipW + 4.5 * scale, noseStartY + 1.5 * scale);
@@ -3563,7 +3477,6 @@
           sctx.closePath();
           sctx.fill();
 
-          // Warm orange edge reflection on Mechazilla & Starship during static fire
           if (isFiring && fireIntensity > 0.05) {
             sctx.fillStyle = `rgba(251, 146, 60, ${(0.24 * fireIntensity).toFixed(2)})`;
             sctx.fillRect(towerX + towerW - 3, groundY - boosterH * 0.9, 3, boosterH * 0.9);
@@ -3601,7 +3514,6 @@
           sctx.lineTo(shipX - 3, qdY);
           sctx.stroke();
 
-          // Update click hitbox for interactive static fire
           padHitbox = {
             x: towerX - 16,
             y: towerTopY - spireH - 16,
@@ -3683,7 +3595,6 @@
           sctx.closePath();
           sctx.fill();
 
-          // White front LED lightbar & crisp red rear taillight bar
           sctx.fillStyle = '#ffffff';
           sctx.fillRect(18.2, -8.2, 2.5, 1.6);
           sctx.fillStyle = '#ef4444';
@@ -3807,7 +3718,6 @@
           sctx.ellipse(0, 0, 3.8, 1.1, 0, 0, Math.PI * 2);
           sctx.fill();
 
-          // Smooth walking legs
           sctx.strokeStyle = isDark ? '#71717a' : '#27272a';
           sctx.lineWidth = 1.6;
           sctx.lineCap = 'round';
@@ -3818,7 +3728,6 @@
           sctx.lineTo(0.8 + swing, -0.4);
           sctx.stroke();
 
-          // High-vis vest / engineering jacket (Emerald, Amber, Slate)
           const vestCol =
             eng.jacket === 'emerald'
               ? isDark
@@ -4017,19 +3926,6 @@
             else fireIntensity = 1;
           }
 
-          // Update HUD pill & integrated bar hint
-          if (staticFireHud) {
-            staticFireHud.classList.toggle('opacity-100', isFiring);
-            staticFireHud.classList.toggle('translate-y-0', isFiring);
-            staticFireHud.classList.toggle('opacity-0', !isFiring);
-            staticFireHud.classList.toggle('-translate-y-1', !isFiring);
-          }
-          if (starbaseHint) {
-            starbaseHint.textContent = isFiring
-              ? '05 / STARBASE · static fire active'
-              : '05 / STARBASE · click pad for static fire';
-          }
-
           sctx.save();
 
           // Subtle camera micro-rumble during static fire
@@ -4038,7 +3934,7 @@
             sctx.translate((Math.random() - 0.5) * mag, (Math.random() - 0.5) * mag * 0.6);
           }
 
-          // --- 1. SEAMLESS ATMOSPHERIC SKY (DISSOLVES FROM var(--bg) AT TOP) ---
+          // --- 1. SEAMLESS ATMOSPHERIC SKY ---
           const skyGrad = sctx.createLinearGradient(0, 0, 0, groundY);
           if (isDark) {
             skyGrad.addColorStop(0, '#09090b');
@@ -4055,7 +3951,6 @@
           sctx.fillRect(-4, -4, width + 8, groundY + 8);
 
           if (isDark) {
-            // Subtle atmospheric horizon glow behind Starship
             const horGlow = sctx.createRadialGradient(padX, groundY, 20, padX, groundY, width * 0.48);
             horGlow.addColorStop(0, isFiring ? 'rgba(251, 146, 60, 0.34)' : 'rgba(16, 185, 129, 0.09)');
             horGlow.addColorStop(0.55, 'rgba(39, 39, 42, 0.14)');
@@ -4063,7 +3958,6 @@
             sctx.fillStyle = horGlow;
             sctx.fillRect(0, 0, width, groundY);
 
-            // Twinkling stars (fading in smoothly below the top 160px edge)
             for (let i = 0; i < STARS.length; i++) {
               const st = STARS[i];
               const sy = st.v * groundY;
@@ -4076,7 +3970,6 @@
               sctx.fill();
             }
           } else {
-            // Drifting coastal daylight clouds
             for (let c = 0; c < CLOUDS.length; c++) {
               const cl = CLOUDS[c];
               const cu = ((cl.u + elapsedSec * cl.speed) % 1.24) - 0.12;
@@ -4087,13 +3980,12 @@
           // --- 2. DISTANT GULF HORIZON & BOCA CHICA DUNES ---
           drawGulfAndDunes(groundY, isDark);
 
-          // --- 3. RISING SIDE SILHOUETTES (LEFT & RIGHT MARGINS ON WIDE SCREENS) ---
+          // --- 3. LEFT & RIGHT BASE WINGS ---
           const leftGutterStart = isWide ? Math.max(18, leftMargin * 0.08) : 14;
           const rightGutterX = isWide
             ? width - leftMargin + Math.max(22, leftMargin * 0.14)
             : width - Math.min(110, width * 0.18);
 
-          // Left Wing: Mega Bay 1 & 2 + Cryogenic Tank Farm + Tall Floodlight Mast
           const afterMegaX = drawMegaBays(leftGutterStart, groundY, sideScale, isWide, elapsedSec, isDark);
           const tankStartX = isWide
             ? Math.min(afterMegaX + 6, leftMargin + 40)
@@ -4102,15 +3994,13 @@
 
           if (isWide) {
             const mastX = Math.max(leftMargin - 18, afterMegaX + 24);
-            drawFloodlightMast(mastX, groundY, 210 * sideScale, elapsedSec, isDark);
+            drawFloodlightMast(mastX, groundY, 188 * sideScale, elapsedSec, isDark);
           }
 
-          // Right Wing: Mission Control + Tall Lattice Comm Mast + Panning Dish
           drawMissionControl(rightGutterX, groundY, sideScale, isWide, elapsedSec, isDark);
 
           // --- 4. BOCA CHICA COASTAL PALMS & SCRUB ---
           if (isWide) {
-            // Taller framing palms rising into the empty left & right margins
             drawPalm(Math.max(12, leftGutterStart - 12), groundY, 82 * sideScale, -0.85, elapsedSec, 0.4, isDark);
             drawPalm(leftMargin + 18, groundY, 54 * centerScale, 0.75, elapsedSec, 1.5, isDark);
             drawPalm(width - leftMargin - 16, groundY, 56 * centerScale, -0.75, elapsedSec, 2.2, isDark);
@@ -4133,10 +4023,8 @@
           // --- 5. CENTERPIECE: OLM + MECHAZILLA + STARSHIP FLIGHT 14 ---
           const vents = drawLaunchComplex(padX, groundY, centerScale, elapsedSec, isDark, isFiring, fireIntensity);
 
-          // Advance simulation
           updateSimulation(dt, now, vents);
 
-          // Static cryo puffs when reduced-motion is enabled
           if (reducedMotion && vents) {
             for (let k = 0; k < 3; k++) {
               const px = vents.interstageVentX + 7 + k * 9;
@@ -4152,7 +4040,6 @@
             }
           }
 
-          // Volumetric cryo LOX vapor plumes
           for (let i = 0; i < cryoPuffs.length; i++) {
             const pt = cryoPuffs[i];
             const alpha = (1 - pt.life / pt.maxLife) * (isDark ? 0.40 : 0.50);
@@ -4165,7 +4052,6 @@
             sctx.fill();
           }
 
-          // Billowing water-deluge steam clouds during Static Fire
           for (let i = 0; i < steamClouds.length; i++) {
             const sc = steamClouds[i];
             const ratio = sc.life / sc.maxLife;
@@ -4207,12 +4093,10 @@
           sctx.fillStyle = roadGrad;
           sctx.fillRect(0, roadTop, width, roadHeight);
 
-          // Crisp white shoulder lines
           sctx.fillStyle = isDark ? 'rgba(244, 244, 245, 0.16)' : 'rgba(255, 255, 255, 0.36)';
           sctx.fillRect(0, roadTop + 2, width, 1);
           sctx.fillRect(0, roadBottom - 3, width, 1);
 
-          // Dashed center lane markings
           sctx.save();
           sctx.strokeStyle = isDark ? 'rgba(250, 204, 21, 0.55)' : 'rgba(251, 191, 36, 0.88)';
           sctx.lineWidth = 1.5;
@@ -4225,8 +4109,8 @@
 
           drawWalkwayBollardsAndLamps(groundY, roadTop, isDark);
 
-          const lane0Y = roadTop + 15;
-          const lane1Y = roadTop + 33;
+          const lane0Y = roadTop + 14;
+          const lane1Y = roadTop + 31;
           for (let lane = 0; lane <= 1; lane++) {
             const vy = lane === 0 ? lane0Y : lane1Y;
             for (let i = 0; i < VEHICLES.length; i++) {
@@ -4242,22 +4126,10 @@
             }
           }
 
-          // --- 8. FOREGROUND COASTAL APRON BELOW ROAD (BEHIND FROSTED BAR) ---
-          const fgGrad = sctx.createLinearGradient(0, roadBottom, 0, height);
-          if (isDark) {
-            fgGrad.addColorStop(0, '#111113');
-            fgGrad.addColorStop(1, '#09090b');
-          } else {
-            fgGrad.addColorStop(0, '#f4f4f5');
-            fgGrad.addColorStop(1, '#ffffff');
-          }
-          sctx.fillStyle = fgGrad;
-          sctx.fillRect(0, roadBottom, width, height - roadBottom);
-
           sctx.restore();
         }
 
-        // Click Starship or Mechazilla to trigger 4-second Raptor Static Fire
+        // Silent click on Starship or Mechazilla triggers 4-second Raptor Static Fire
         function isPointOnPad(clientX, clientY) {
           const box = sbCanvas.getBoundingClientRect();
           const x = clientX - box.left;
@@ -4279,9 +4151,6 @@
             const now = performance.now();
             staticFireStart = now;
             staticFireEnd = now + STATIC_FIRE_DURATION;
-            if (reducedMotion) {
-              showToast('Starship Flight 14 — 33 Raptors Ready');
-            }
           }
         });
 
@@ -4314,23 +4183,25 @@
           }
         }
 
-        // Instant redraw hook when toggling Light/Dark mode
         redrawStarbaseFooter = () => renderFrame(performance.now(), 0);
 
-        // Pause animation when footer is scrolled out of view
-        const visibilityObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              isVisible = entry.isIntersecting;
-              if (isVisible) startLoop();
-              else stopLoop();
-            });
-          },
-          { threshold: 0.01 }
-        );
-        visibilityObserver.observe(footerEl);
+        if (typeof IntersectionObserver === 'function') {
+          const visibilityObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                isVisible = entry.isIntersecting;
+                if (isVisible) startLoop();
+                else stopLoop();
+              });
+            },
+            { threshold: 0.01 }
+          );
+          visibilityObserver.observe(footerEl);
+        } else {
+          isVisible = true;
+          startLoop();
+        }
 
-        // ResizeObserver keeps HiDPI canvas crisp with zero stretch on any resize
         if (typeof ResizeObserver === 'function') {
           const ro = new ResizeObserver(() => resizeStarbase());
           ro.observe(footerEl);
@@ -4342,18 +4213,30 @@
       }
 
       /* ---------------------------------------------------------------------
-       * 20. INITIALIZE APPLICATION ON LOAD
+       * 19. BULLETPROOF INITIALIZATION (ISOLATED TRY/CATCH PER MODULE)
        * ------------------------------------------------------------------- */
-      renderProjects();
-      renderExperience();
-      renderStack();
-      renderNotes();
-      initObservers();
-      initDynamicFavicon();
-      initInteractiveAvatar();
-      initMorphingNavbar();
-      initStarbaseFooter();
-      resizeCanvas();
+      const initializers = [
+        renderProjects,
+        renderExperience,
+        renderStack,
+        renderNotes,
+        initObservers,
+        initDynamicFavicon,
+        initInteractiveAvatar,
+        initNameGlitch,
+        initRoleRotator,
+        initMorphingNavbar,
+        initDotMatrix,
+        initStarbaseFooter,
+      ];
+
+      initializers.forEach((fn) => {
+        try {
+          fn();
+        } catch (err) {
+          console.error('Portfolio module init failed:', fn.name, err);
+        }
+      });
     })();
   </script>
 </body>
