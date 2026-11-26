@@ -840,6 +840,25 @@
             transition: background 220ms ease;
         }
 
+        /* Location Stamp + WebGL 3D Globe */
+        .header-location {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+            font-size: 12px;
+        }
+
+        .globe-3d {
+            display: block;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+
         /* Starbase Sky Top Fade Overlay (110px Seamless Dissolve Out of var(--bg)) */
         .starbase-fade-overlay {
             background: linear-gradient(to bottom,
@@ -1165,10 +1184,11 @@
     <!-- ======================================================================= -->
     <div id="siteNavWrap" class="site-nav-wrap">
         <header class="site-nav">
-            <div class="px-5 sm:px-7 h-14 flex items-center justify-between gap-3">
+            <div class="px-5 sm:px-7 h-14 flex sm:grid sm:grid-cols-[1fr_auto_1fr] items-center justify-between gap-3">
+
                 <!-- Left: Minimal Brand Mark -->
                 <a href="#hero"
-                    class="inline-flex items-center gap-2 font-mono text-xs font-medium tracking-tight text-[var(--text)] hover:opacity-75 transition-opacity shrink-0"
+                    class="inline-flex items-center gap-2 font-sans text-base font-semibold tracking-tight text-[var(--text)] hover:opacity-75 transition-opacity shrink-0 sm:justify-self-start"
                     aria-label="Manav Chaudhari Home">
                     <span class="hidden sm:inline">Manav</span>
                 </a>
@@ -1183,32 +1203,41 @@
                     <a href="#stack" class="hover:text-[var(--text)] transition-colors py-1 shrink-0">stack</a>
                     <a href="#notes" class="hover:text-[var(--text)] transition-colors py-1 shrink-0">notes</a>
                     <a href="#reads" class="hover:text-[var(--text)] transition-colors py-1 shrink-0">reads</a>
+                    <a href="#connect" class="hover:text-[var(--text)] transition-colors py-1 shrink-0">contact</a>
                 </nav>
 
-                <!-- Right: Crisp Light/Dark Toggle Button + Tooltip -->
-                <div class="relative group shrink-0">
-                    <button id="themeToggleBtn" type="button" aria-label="Toggle color theme"
-                        class="w-8 h-8 rounded-lg border theme-border hover:border-[var(--border-strong)] hover:bg-[var(--surface)] flex items-center justify-center text-[var(--text)] transition-all cursor-pointer">
-                        <!-- Sun Icon (shown in Dark Mode) -->
-                        <svg id="sunIcon" class="w-4 h-4 hidden dark:block" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="4"></circle>
-                            <path
-                                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41">
-                            </path>
-                        </svg>
-                        <!-- Moon Icon (shown in Light Mode) -->
-                        <svg id="moonIcon" class="w-4 h-4 block dark:hidden" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-                        </svg>
+                <!-- Right: Command Palette + Theme Toggle -->
+                <div class="flex items-center gap-2 shrink-0 sm:justify-self-end">
+                    <button id="cmdPaletteBtn" type="button" aria-label="Open command palette"
+                        class="hidden sm:inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg border theme-border hover:border-[var(--border-strong)] hover:bg-[var(--surface)] font-mono text-[11px] text-[var(--muted)] hover:text-[var(--text)] transition-all cursor-pointer">
+                        <span>⌘K</span>
                     </button>
 
-                    <!-- Hover Tooltip: Press T -->
-                    <span
-                        class="pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity absolute right-0 top-10 whitespace-nowrap px-2 py-1 rounded-md border theme-border bg-[var(--bg)] text-[10px] font-mono text-[var(--muted)] shadow-sm">
-                        Press <kbd class="text-[var(--text)] font-medium">T</kbd>
-                    </span>
+                    <!-- Crisp Light/Dark Toggle Button + Tooltip -->
+                    <div class="relative group shrink-0">
+                        <button id="themeToggleBtn" type="button" aria-label="Toggle color theme"
+                            class="w-8 h-8 rounded-lg border theme-border hover:border-[var(--border-strong)] hover:bg-[var(--surface)] flex items-center justify-center text-[var(--text)] transition-all cursor-pointer">
+                            <!-- Sun Icon (shown in Dark Mode) -->
+                            <svg id="sunIcon" class="w-4 h-4 hidden dark:block" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="4"></circle>
+                                <path
+                                    d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41">
+                                </path>
+                            </svg>
+                            <!-- Moon Icon (shown in Light Mode) -->
+                            <svg id="moonIcon" class="w-4 h-4 block dark:hidden" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+                            </svg>
+                        </button>
+
+                        <!-- Hover Tooltip: Press T -->
+                        <span
+                            class="pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity absolute right-0 top-10 whitespace-nowrap px-2 py-1 rounded-md border theme-border bg-[var(--bg)] text-[10px] font-mono text-[var(--muted)] shadow-sm">
+                            Press <kbd class="text-[var(--text)] font-medium">T</kbd>
+                        </span>
+                    </div>
                 </div>
             </div>
         </header>
@@ -1262,8 +1291,73 @@
                 <span
                     class="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[10px] text-[var(--muted)]">Reads</span>
             </a>
+            <a href="#connect" data-spy="connect"
+                class="spy-link group flex items-center gap-2.5 py-1 text-[11px] font-mono text-[var(--muted)] hover:text-[var(--text)] transition-colors">
+                <span class="spy-bar w-[2px] h-3.5 rounded-full bg-[var(--border)] transition-all duration-200"></span>
+                <span>06</span>
+                <span
+                    class="opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[10px] text-[var(--muted)]">Connect</span>
+            </a>
         </nav>
     </aside>
+    <!-- ======================================================================= -->
+    <!-- MOBILE FLOATING SECTION-JUMP PILL & POPOVER (VISIBLE < 1024px)          -->
+    <!-- ======================================================================= -->
+    <div id="mobileSpyWrap" class="lg:hidden fixed bottom-5 right-5 z-40 flex flex-col items-end gap-2">
+        <!-- Popover Menu -->
+        <nav id="mobileSpyMenu" aria-label="Mobile section shortcuts"
+            class="hidden w-48 p-1.5 rounded-xl border theme-border shadow-xl backdrop-blur-md transition-all duration-200 origin-bottom-right"
+            style="background-color: var(--glass);">
+            <a href="#hero" data-mobile-spy="hero"
+                class="mobile-spy-link flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface)] transition-colors">
+                <span>00 / Intro</span>
+                <span class="mobile-spy-dot w-1.5 h-1.5 rounded-full bg-transparent transition-colors"></span>
+            </a>
+            <a href="#projects" data-mobile-spy="projects"
+                class="mobile-spy-link flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface)] transition-colors">
+                <span>01 / Projects</span>
+                <span class="mobile-spy-dot w-1.5 h-1.5 rounded-full bg-transparent transition-colors"></span>
+            </a>
+            <a href="#experience" data-mobile-spy="experience"
+                class="mobile-spy-link flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface)] transition-colors">
+                <span>02 / Experience</span>
+                <span class="mobile-spy-dot w-1.5 h-1.5 rounded-full bg-transparent transition-colors"></span>
+            </a>
+            <a href="#stack" data-mobile-spy="stack"
+                class="mobile-spy-link flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface)] transition-colors">
+                <span>03 / Stack</span>
+                <span class="mobile-spy-dot w-1.5 h-1.5 rounded-full bg-transparent transition-colors"></span>
+            </a>
+            <a href="#notes" data-mobile-spy="notes"
+                class="mobile-spy-link flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface)] transition-colors">
+                <span>04 / Notes</span>
+                <span class="mobile-spy-dot w-1.5 h-1.5 rounded-full bg-transparent transition-colors"></span>
+            </a>
+            <a href="#reads" data-mobile-spy="reads"
+                class="mobile-spy-link flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface)] transition-colors">
+                <span>05 / Reads</span>
+                <span class="mobile-spy-dot w-1.5 h-1.5 rounded-full bg-transparent transition-colors"></span>
+            </a>
+            <a href="#connect" data-mobile-spy="connect"
+                class="mobile-spy-link flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface)] transition-colors">
+                <span>06 / Connect</span>
+                <span class="mobile-spy-dot w-1.5 h-1.5 rounded-full bg-transparent transition-colors"></span>
+            </a>
+        </nav>
+
+        <!-- Trigger Pill -->
+        <button id="mobileSpyBtn" type="button" aria-expanded="false" aria-controls="mobileSpyMenu"
+            class="inline-flex items-center gap-2 px-3.5 py-2 rounded-full border theme-border shadow-lg backdrop-blur-md font-mono text-[11.5px] text-[var(--text)] cursor-pointer active:scale-95 transition-transform"
+            style="background-color: var(--glass);">
+            <span class="w-1.5 h-1.5 rounded-full" style="background-color: var(--accent);"></span>
+            <span id="mobileSpyLabel">00 / Intro</span>
+            <svg id="mobileSpyChevron" class="w-3.5 h-3.5 text-[var(--muted)] transition-transform duration-200"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true">
+                <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+        </button>
+    </div>
 
     <!-- ======================================================================= -->
     <!-- FULL-WIDTH OPEN ORBITAL TRAJECTORY HEADER (MIRRORING OPEN FOOTER)       -->
@@ -1278,15 +1372,6 @@
         <!-- Seamless Bottom 72px Fade Dissolving Orbital Sky into var(--bg) -->
         <div class="orbital-fade-overlay pointer-events-none absolute inset-x-0 bottom-0 h-[72px] z-10"
             aria-hidden="true"></div>
-
-        <!-- Column-Aligned Minimal Telemetry Stamp (Never Collides with Scroll-Spy Rail) -->
-        <div class="pointer-events-none absolute inset-x-0 bottom-3 z-20">
-            <div class="max-w-[780px] mx-auto px-5 sm:px-7 flex justify-end">
-                <span class="font-mono text-[10px] tracking-wider text-[var(--muted)] opacity-65">
-                    00 / ORBIT · LEO 408 KM
-                </span>
-            </div>
-        </div>
     </div>
 
     <!-- ======================================================================= -->
@@ -1301,16 +1386,16 @@
             <section id="hero" class="scroll-mt-20">
                 <!-- Hero Content Area -->
                 <div class="px-5 sm:px-7 pt-6 pb-8 sm:pt-7 sm:pb-9">
-                    <!-- Profile Row: 8-Way Interactive Avatar + Name -->
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div id="brandTrigger" class="flex items-center gap-4">
+                    <!-- Profile Row: 8-Way Interactive Avatar + Name + Location -->
+                    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2.5 sm:gap-4">
+                        <div id="brandTrigger" class="flex items-center gap-4 min-w-0 flex-1">
                             <!-- 8-Way Sprite Avatar + Easter Egg Pill -->
                             <div class="avatar-wrap">
                                 <div class="brand-avatar" id="brandAvatar" role="img" aria-label="Manav"></div>
                                 <span class="avatar-pill" id="avatarPill" aria-live="polite"></span>
                             </div>
 
-                            <div>
+                            <div class="min-w-0 flex-1">
                                 <div class="flex items-center gap-2.5 flex-wrap">
                                     <h1 class="text-xl sm:text-2xl font-semibold tracking-tight text-[var(--text)] inline-flex items-center gap-[0.32em]"
                                         aria-label="Manav Chaudhari">
@@ -1328,6 +1413,12 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Rotating WebGL 3D Globe + Location -->
+                        <span class="header-location shrink-0 pl-[70px] sm:pl-0 sm:pb-[2px]">
+                            <canvas class="globe-3d" id="globe3d" width="64" height="64" aria-hidden="true"></canvas>
+                            <span>Bengaluru, India</span>
+                        </span>
                     </div>
 
                     <!-- High-Density About: Strictly 3 Scannable Engineering Bullets -->
@@ -1361,60 +1452,6 @@
                                 </span>
                             </li>
                         </ul>
-                    </div>
-
-                    <!-- Quick Contact Strip: Direct Links + Resume Preview -->
-                    <div class="mt-7 flex items-center flex-wrap gap-2">
-                        <!-- Direct Email Link -->
-                        <a href="mailto:hello@manav.here"
-                            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border theme-border text-xs font-mono text-[var(--text)] hover:border-[var(--border-strong)] hover:bg-[var(--surface)] transition-all">
-                            <svg class="w-3.5 h-3.5 text-[var(--muted)]" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                            </svg>
-                            Email
-                            <span class="text-[var(--muted)]">↗</span>
-                        </a>
-
-                        <!-- GitHub External Link -->
-                        <a href="https://github.com/manavgpt" target="_blank" rel="noopener noreferrer"
-                            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border theme-border text-xs font-mono text-[var(--text)] hover:border-[var(--border-strong)] hover:bg-[var(--surface)] transition-all">
-                            <svg class="w-3.5 h-3.5 text-[var(--muted)]" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <path
-                                    d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4">
-                                </path>
-                                <path d="M9 18c-4.51 2-5-2-7-2"></path>
-                            </svg>
-                            GitHub
-                            <span class="text-[var(--muted)]">↗</span>
-                        </a>
-
-                        <!-- Twitter External Link -->
-                        <a href="https://x.com/manavgpt" target="_blank" rel="noopener noreferrer"
-                            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border theme-border text-xs font-mono text-[var(--text)] hover:border-[var(--border-strong)] hover:bg-[var(--surface)] transition-all">
-                            <svg class="w-3.5 h-3.5 text-[var(--muted)]" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
-                                <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
-                            </svg>
-                            Twitter
-                            <span class="text-[var(--muted)]">↗</span>
-                        </a>
-
-                        <!-- Resume PDF Preview Button -->
-                        <button id="resumeBtn" type="button"
-                            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border theme-border text-xs font-mono text-[var(--text)] hover:border-[var(--border-strong)] hover:bg-[var(--surface)] transition-all cursor-pointer">
-                            <svg class="w-3.5 h-3.5 text-[var(--muted)]" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
-                                <line x1="16" x2="8" y1="13" y2="13"></line>
-                                <line x1="16" x2="8" y1="17" y2="17"></line>
-                            </svg>
-                            Resume
-                        </button>
                     </div>
                 </div>
             </section>
@@ -1568,9 +1605,8 @@
 
             <!-- =================================================================== -->
             <!-- SECTION 05: INTERACTIVE 3D BOOKSHELF (READING)                      -->
-            <!-- Generous bottom padding ensures clean separation above Starbase     -->
             <!-- =================================================================== -->
-            <section id="reads" class="px-5 sm:px-7 pt-9 pb-16 sm:pb-20 scroll-mt-20 reveal">
+            <section id="reads" class="px-5 sm:px-7 py-9 scroll-mt-20 reveal">
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
                     <div>
                         <p class="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--muted)]">
@@ -1594,6 +1630,154 @@
                     Click the cover for details
                 </p>
             </section>
+            <!-- HATCHED DIVIDER -->
+            <div class="hatch-divider" aria-hidden="true"></div>
+
+            <!-- =================================================================== -->
+            <!-- SECTION 06: SOCIALS & CONTACT (2x2 ARCHITECTURAL LEDGER GRID)       -->
+            <!-- Generous bottom padding keeps clean separation above Starbase       -->
+            <!-- =================================================================== -->
+            <section id="connect" class="px-5 sm:px-7 pt-9 pb-16 sm:pb-20 scroll-mt-20 reveal">
+                <div class="mb-5">
+                    <p class="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--muted)]">
+                        06 / Connect
+                    </p>
+                    <h2 class="text-lg font-semibold tracking-tight text-[var(--text)] mt-0.5">
+                        Socials &amp; Contact
+                    </h2>
+                </div>
+
+                <!-- Hairline Bordered Grid (gap-px prevents Tailwind divide-y overrides) -->
+                <div
+                    class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[var(--border)] border theme-border rounded-xl overflow-hidden">
+
+                    <!-- Cell 1: GitHub -->
+                    <a href="https://github.com/manavgpt" target="_blank" rel="noopener noreferrer"
+                        class="group flex items-center justify-between gap-3 p-4 bg-[var(--bg)] hover:bg-[var(--surface)] transition-colors">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <span
+                                class="w-10 h-10 rounded-lg border theme-border theme-surface flex items-center justify-center text-[var(--text)] shrink-0">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path
+                                        d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4">
+                                    </path>
+                                    <path d="M9 18c-4.51 2-5-2-7-2"></path>
+                                </svg>
+                            </span>
+                            <div class="min-w-0">
+                                <div class="text-[14px] font-medium text-[var(--text)] leading-tight">GitHub</div>
+                                <div class="font-mono text-[11.5px] text-[var(--muted)] mt-0.5 truncate">@manavgpt</div>
+                            </div>
+                        </div>
+                        <span
+                            class="font-mono text-xs text-[var(--muted)] group-hover:text-[var(--text)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0">↗</span>
+                    </a>
+
+                    <!-- Cell 2: Twitter -->
+                    <a href="https://x.com/manavgpt" target="_blank" rel="noopener noreferrer"
+                        class="group flex items-center justify-between gap-3 p-4 bg-[var(--bg)] hover:bg-[var(--surface)] transition-colors">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <span
+                                class="w-10 h-10 rounded-lg border theme-border theme-surface flex items-center justify-center text-[var(--text)] shrink-0">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
+                                    <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+                                </svg>
+                            </span>
+                            <div class="min-w-0">
+                                <div class="text-[14px] font-medium text-[var(--text)] leading-tight">Twitter</div>
+                                <div class="font-mono text-[11.5px] text-[var(--muted)] mt-0.5 truncate">@manavgpt</div>
+                            </div>
+                        </div>
+                        <span
+                            class="font-mono text-xs text-[var(--muted)] group-hover:text-[var(--text)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0">↗</span>
+                    </a>
+
+                    <!-- Cell 3: Matiks -->
+                    <a href="https://www.matiks.com/profile/manavgpt" target="_blank" rel="noopener noreferrer"
+                        class="group flex items-center justify-between gap-3 p-4 bg-[var(--bg)] hover:bg-[var(--surface)] transition-colors">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <span
+                                class="w-10 h-10 rounded-lg border theme-border theme-surface flex items-center justify-center text-[var(--text)] shrink-0">
+                                <!-- Minimalist Arithmetic (+ - × ÷) Icon -->
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M6 4v5M3.5 6.5h5"></path>
+                                    <path d="M15.5 6.5h5"></path>
+                                    <path d="M4 15.5l4 4M8 15.5l-4 4"></path>
+                                    <path d="M15.5 17.5h5"></path>
+                                    <circle cx="18" cy="14.2" r="0.7" fill="currentColor" stroke="none"></circle>
+                                    <circle cx="18" cy="20.8" r="0.7" fill="currentColor" stroke="none"></circle>
+                                </svg>
+                            </span>
+                            <div class="min-w-0">
+                                <div class="text-[14px] font-medium text-[var(--text)] leading-tight">Matiks</div>
+                                <div class="font-mono text-[11.5px] text-[var(--muted)] mt-0.5 truncate">@manavgpt</div>
+                            </div>
+                        </div>
+                        <span
+                            class="font-mono text-xs text-[var(--muted)] group-hover:text-[var(--text)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0">↗</span>
+                    </a>
+
+                    <!-- Cell 4: Email (Click to Mail + Copy Button) -->
+                    <div
+                        class="group flex items-center justify-between gap-3 p-4 bg-[var(--bg)] hover:bg-[var(--surface)] transition-colors">
+                        <a href="mailto:hello@manav.here" class="flex items-center gap-3.5 min-w-0 flex-1">
+                            <span
+                                class="w-10 h-10 rounded-lg border theme-border theme-surface flex items-center justify-center text-[var(--text)] shrink-0">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                                </svg>
+                            </span>
+                            <div class="min-w-0">
+                                <div class="text-[14px] font-medium text-[var(--text)] leading-tight">Email</div>
+                                <div class="font-mono text-[11.5px] text-[var(--muted)] mt-0.5 truncate">
+                                    hello@manav.here
+                                </div>
+                            </div>
+                        </a>
+                        <button id="copyEmailBtn" type="button" aria-label="Copy email address" title="Copy email"
+                            class="p-1.5 rounded-md text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface-hover)] transition-colors cursor-pointer shrink-0">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Cell 5: Resume (Full-Width Bottom Bar) -->
+                    <button id="resumeBtn" type="button"
+                        class="sm:col-span-2 group w-full text-left flex items-center justify-between gap-3 p-4 bg-[var(--bg)] hover:bg-[var(--surface)] transition-colors cursor-pointer">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <span
+                                class="w-10 h-10 rounded-lg border theme-border theme-surface flex items-center justify-center text-[var(--text)] shrink-0">
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z">
+                                    </path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" x2="8" y1="13" y2="13"></line>
+                                    <line x1="16" x2="8" y1="17" y2="17"></line>
+                                </svg>
+                            </span>
+                            <div class="min-w-0">
+                                <div class="text-[14px] font-medium text-[var(--text)] leading-tight">Resume</div>
+                                <div class="font-mono text-[11.5px] text-[var(--muted)] mt-0.5 truncate">
+                                    Preview PDF · 1 page
+                                </div>
+                            </div>
+                        </div>
+                        <span
+                            class="font-mono text-xs text-[var(--muted)] group-hover:text-[var(--text)] transition-colors shrink-0">↓</span>
+                    </button>
+                </div>
+            </section>
+
         </main>
     </div>
 
@@ -1642,7 +1826,41 @@
             </div>
         </div>
     </div>
+    <!-- ======================================================================= -->
+    <!-- COMMAND PALETTE (⌘K / Ctrl+K)                                           -->
+    <!-- ======================================================================= -->
+    <div id="cmdOverlay"
+        class="fixed inset-0 z-50 hidden items-start justify-center pt-[14vh] px-4 bg-black/50 backdrop-blur-[2px] modal-backdrop opacity-0"
+        role="dialog" aria-modal="true" aria-label="Command palette">
+        <div id="cmdPanel"
+            class="w-full max-w-[520px] rounded-xl border theme-border bg-[var(--bg)] shadow-2xl overflow-hidden modal-panel scale-95 opacity-0">
+            <!-- Search Input -->
+            <div class="flex items-center gap-3 px-4 h-12 border-b theme-border">
+                <svg class="w-4 h-4 text-[var(--muted)] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                </svg>
+                <input id="cmdInput" type="text" autocomplete="off" spellcheck="false"
+                    placeholder="Type a command or search..."
+                    class="w-full bg-transparent text-[13.5px] text-[var(--text)] placeholder:text-[var(--muted)] focus:outline-none" />
+                <kbd
+                    class="px-1.5 py-0.5 rounded border theme-border font-mono text-[10px] text-[var(--muted)] shrink-0">ESC</kbd>
+            </div>
 
+            <!-- Dynamic Results List -->
+            <div id="cmdList" class="max-h-[300px] overflow-y-auto p-1.5 space-y-0.5" role="listbox">
+                <!-- Rendered via JS -->
+            </div>
+
+            <!-- Footer Hints -->
+            <div
+                class="px-4 py-2 border-t theme-border theme-surface flex items-center justify-between font-mono text-[10px] text-[var(--muted)]">
+                <span>↑↓ navigate · ↵ select</span>
+                <span>⌘K / Ctrl+K</span>
+            </div>
+        </div>
+    </div>
     <!-- ======================================================================= -->
     <!-- SLEEK BOTTOM-RIGHT TOAST NOTIFICATION                                   -->
     <!-- ======================================================================= -->
@@ -2482,24 +2700,65 @@
                 if (typeof redrawOrbitalHeader === 'function') redrawOrbitalHeader();
                 if (typeof redrawStarbaseFooter === 'function') redrawStarbaseFooter();
             }
+            /* Subtle Dual-Tone Theme Switch Sound (Web Audio API) */
+            const playThemeSwitchSound = (function () {
+                let ctx = null;
+                return function (toDark) {
+                    try {
+                        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                        if (!AudioCtx) return;
+                        if (!ctx) ctx = new AudioCtx();
+                        if (ctx.state === 'suspended') ctx.resume().catch(() => { });
 
+                        const now = ctx.currentTime;
+                        const master = ctx.createGain();
+                        master.gain.setValueAtTime(0.11, now);
+                        master.connect(ctx.destination);
+
+                        // Gentle two-note harmonic (descending for night, ascending for day)
+                        const notes = toDark ? [523.25, 349.23] : [392.0, 587.33];
+                        notes.forEach((freq, i) => {
+                            const start = now + i * 0.055;
+                            const osc = ctx.createOscillator();
+                            const gain = ctx.createGain();
+                            osc.type = 'sine';
+                            osc.frequency.setValueAtTime(freq, start);
+
+                            gain.gain.setValueAtTime(0.0001, start);
+                            gain.gain.linearRampToValueAtTime(i === 0 ? 0.55 : 0.4, start + 0.014);
+                            gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.24);
+
+                            osc.connect(gain);
+                            gain.connect(master);
+                            osc.start(start);
+                            osc.stop(start + 0.26);
+                        });
+                    } catch (_) {
+                        // Fail silently in restricted audio environments
+                    }
+                };
+            })();
             function applyThemeSwitch() {
                 userOverrodeTheme = true;
-                htmlEl.classList.toggle('dark');
+                const isNowDark = htmlEl.classList.toggle('dark');
+                playThemeSwitchSound(isNowDark);
                 redrawAllCanvases();
             }
 
+            let isThemeTransitioning = false;
+
             function toggleTheme(event) {
+                // Prevent overlapping GPU snapshots on rapid toggles
+                if (isThemeTransitioning) return;
+
                 const reducedMotion =
                     window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-                // Graceful fallback if View Transitions API isn't supported or reduced motion is on
                 if (reducedMotion || typeof document.startViewTransition !== 'function') {
                     applyThemeSwitch();
                     return;
                 }
 
-                // Origin: exact click coordinates, or center of the theme button when triggered via 'T' key
                 let x = window.innerWidth - 36;
                 let y = 28;
                 if (event && typeof event.clientX === 'number' && event.clientX > 0) {
@@ -2511,56 +2770,56 @@
                     y = rect.top + rect.height / 2;
                 }
 
-                // Distance to the farthest corner of the viewport
                 const endRadius = Math.hypot(
                     Math.max(x, window.innerWidth - x),
                     Math.max(y, window.innerHeight - y)
                 );
 
+                isThemeTransitioning = true;
                 htmlEl.classList.add('theme-transitioning');
 
                 const transition = document.startViewTransition(() => {
                     applyThemeSwitch();
                 });
 
-                transition.ready.then(() => {
-                    const timing = {
-                        duration: 1200,
-                        easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
-                    };
+                transition.ready
+                    .then(() => {
+                        const timing = {
+                            duration: 750,
+                            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+                        };
 
-                    // Incoming theme: expanding radial reveal + soft blur-in
-                    document.documentElement.animate(
-                        {
-                            clipPath: [
-                                `circle(0px at ${x}px ${y}px)`,
-                                `circle(${endRadius}px at ${x}px ${y}px)`,
-                            ],
-                            filter: ['blur(10px)', 'blur(0px)'],
-                            opacity: [0.72, 1],
-                        },
-                        {
-                            ...timing,
-                            pseudoElement: '::view-transition-new(root)',
-                        }
-                    );
+                        document.documentElement.animate(
+                            {
+                                clipPath: [
+                                    `circle(0px at ${x}px ${y}px)`,
+                                    `circle(${endRadius}px at ${x}px ${y}px)`,
+                                ],
+                                filter: ['blur(8px)', 'blur(0px)'],
+                                opacity: [0.75, 1],
+                            },
+                            {
+                                ...timing,
+                                pseudoElement: '::view-transition-new(root)',
+                            }
+                        );
 
-                    // Outgoing theme: subtle blur-out as the wave sweeps over it
-                    document.documentElement.animate(
-                        {
-                            filter: ['blur(0px)', 'blur(6px)'],
-                            opacity: [1, 0.85],
-                        },
-                        {
-                            ...timing,
-                            pseudoElement: '::view-transition-old(root)',
-                        }
-                    );
-                });
-
+                        document.documentElement.animate(
+                            {
+                                filter: ['blur(0px)', 'blur(4px)'],
+                                opacity: [1, 0.88],
+                            },
+                            {
+                                ...timing,
+                                pseudoElement: '::view-transition-old(root)',
+                            }
+                        );
+                    })
+                    .catch(() => { });
 
                 transition.finished.finally(() => {
                     htmlEl.classList.remove('theme-transitioning');
+                    isThemeTransitioning = false;
                 });
             }
 
@@ -2592,6 +2851,11 @@
                 if (e.key === 't' || e.key === 'T') {
                     toggleTheme();
                 }
+                if (e.key === 't' || e.key === 'T') {
+                    if (e.repeat) return;
+                    toggleTheme();
+                }
+
             });
 
             /* ---------------------------------------------------------------------
@@ -3865,6 +4129,36 @@
                     });
                 });
             }
+            /* One-Click Copy Email in 06 / Connect (Inline Tick Feedback) */
+            const copyEmailBtn = document.getElementById('copyEmailBtn');
+            if (copyEmailBtn) {
+                const copyIconSvg = copyEmailBtn.innerHTML;
+                const checkIconSvg = `
+                    <svg class="w-3.5 h-3.5" style="color: var(--accent);" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                `;
+                let copyResetTimer = null;
+
+                copyEmailBtn.addEventListener('click', () => {
+                    const markCopied = () => {
+                        clearTimeout(copyResetTimer);
+                        copyEmailBtn.innerHTML = checkIconSvg;
+                        copyEmailBtn.setAttribute('aria-label', 'Email copied');
+                        copyResetTimer = setTimeout(() => {
+                            copyEmailBtn.innerHTML = copyIconSvg;
+                            copyEmailBtn.setAttribute('aria-label', 'Copy email address');
+                        }, 1800);
+                    };
+
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText('hello@manav.here').then(markCopied).catch(markCopied);
+                    } else {
+                        markCopied();
+                    }
+                });
+            }
 
             /* ---------------------------------------------------------------------
              * 12. GLOBAL MOCK LINK FEEDBACK
@@ -3907,10 +4201,54 @@
                     revealEls.forEach((el) => el.classList.add('is-visible'));
                 }
 
-                const sections = ['hero', 'projects', 'experience', 'stack', 'notes', 'reads', 'footer'];
+                const sections = ['hero', 'projects', 'experience', 'stack', 'notes', 'reads', 'connect'];
                 const spyLinks = document.querySelectorAll('.spy-link');
+                const mobileSpyWrap = document.getElementById('mobileSpyWrap');
+                const mobileSpyBtn = document.getElementById('mobileSpyBtn');
+                const mobileSpyMenu = document.getElementById('mobileSpyMenu');
+                const mobileSpyLabel = document.getElementById('mobileSpyLabel');
+                const mobileSpyChevron = document.getElementById('mobileSpyChevron');
+                const mobileSpyLinks = document.querySelectorAll('.mobile-spy-link');
+
+                const SECTION_LABELS = {
+                    hero: '00 / Intro',
+                    projects: '01 / Projects',
+                    experience: '02 / Experience',
+                    stack: '03 / Stack',
+                    notes: '04 / Notes',
+                    reads: '05 / Reads',
+                    connect: '06 / Connect',
+                };
+
+                function setMobileMenuOpen(open) {
+                    if (!mobileSpyMenu || !mobileSpyBtn) return;
+                    mobileSpyMenu.classList.toggle('hidden', !open);
+                    mobileSpyBtn.setAttribute('aria-expanded', String(open));
+                    if (mobileSpyChevron) {
+                        mobileSpyChevron.style.transform = open ? 'rotate(180deg)' : '';
+                    }
+                }
+
+                if (mobileSpyBtn && mobileSpyMenu) {
+                    mobileSpyBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const isOpen = !mobileSpyMenu.classList.contains('hidden');
+                        setMobileMenuOpen(!isOpen);
+                    });
+
+                    mobileSpyLinks.forEach((link) => {
+                        link.addEventListener('click', () => setMobileMenuOpen(false));
+                    });
+
+                    document.addEventListener('click', (e) => {
+                        if (mobileSpyWrap && !mobileSpyWrap.contains(e.target)) {
+                            setMobileMenuOpen(false);
+                        }
+                    });
+                }
 
                 function setActiveSpy(id) {
+                    // Desktop rail
                     spyLinks.forEach((link) => {
                         const isMatch = link.dataset.spy === id;
                         const bar = link.querySelector('.spy-bar');
@@ -3926,6 +4264,19 @@
                                 bar.style.background = 'var(--border)';
                                 bar.style.height = '14px';
                             }
+                        }
+                    });
+
+                    // Mobile floating pill + active dot
+                    if (mobileSpyLabel && SECTION_LABELS[id]) {
+                        mobileSpyLabel.textContent = SECTION_LABELS[id];
+                    }
+                    mobileSpyLinks.forEach((link) => {
+                        const isMatch = link.dataset.mobileSpy === id;
+                        const dot = link.querySelector('.mobile-spy-dot');
+                        link.style.color = isMatch ? 'var(--text)' : 'var(--muted)';
+                        if (dot) {
+                            dot.style.backgroundColor = isMatch ? 'var(--accent)' : 'transparent';
                         }
                     });
                 }
@@ -5942,6 +6293,475 @@
 
                 resizeStarbase();
             }
+            /* ---------------------------------------------------------------------
+ * 18B. SHARED IST CLOCK & WEBGL 3D EARTH GLOBE (HERO LOCATION)
+ * ------------------------------------------------------------------- */
+            const skyClock = (function () {
+                function getISTDate() {
+                    const now = new Date();
+                    const utcMs = now.getTime() + now.getTimezoneOffset() * 60000;
+                    return new Date(utcMs + 5.5 * 3600000);
+                }
+
+                function getHour() {
+                    const ist = getISTDate();
+                    return ist.getHours() + ist.getMinutes() / 60 + ist.getSeconds() / 3600;
+                }
+
+                function getLightingState(h) {
+                    let dayAmount = 0;
+                    let goldenAmount = 0;
+
+                    if (h >= 5 && h < 7.5) {
+                        const t = (h - 5) / 2.5;
+                        dayAmount = t;
+                        goldenAmount = Math.sin(t * Math.PI);
+                    } else if (h >= 7.5 && h < 16.5) {
+                        dayAmount = 1;
+                        goldenAmount = 0;
+                    } else if (h >= 16.5 && h < 19.5) {
+                        const t = (h - 16.5) / 3;
+                        dayAmount = 1 - t;
+                        goldenAmount = Math.sin(t * Math.PI);
+                    }
+
+                    const sunAngle = ((h - 6) / 12) * Math.PI;
+                    return { dayAmount, goldenAmount, sunAngle };
+                }
+
+                return { getHour, getLightingState };
+            })();
+
+            function initGlobe3D() {
+                const canvas = document.getElementById('globe3d');
+                if (!canvas) return;
+
+                const gl = canvas.getContext('webgl', { alpha: true, antialias: true });
+                const reducedMotion =
+                    window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+                function createEarthTexture() {
+                    const texCanvas = document.createElement('canvas');
+                    texCanvas.width = 256;
+                    texCanvas.height = 128;
+                    const tctx = texCanvas.getContext('2d');
+                    const w = texCanvas.width;
+                    const h = texCanvas.height;
+                    const img = tctx.createImageData(w, h);
+                    const d = img.data;
+
+                    function hash(x, y) {
+                        const n = Math.sin(x * 127.1 + y * 311.7) * 43758.5453123;
+                        return n - Math.floor(n);
+                    }
+
+                    function smoothNoise(x, y) {
+                        const ix = Math.floor(x);
+                        const iy = Math.floor(y);
+                        const fx = x - ix;
+                        const fy = y - iy;
+                        const ux = fx * fx * (3 - 2 * fx);
+                        const uy = fy * fy * (3 - 2 * fy);
+                        const a = hash(ix, iy);
+                        const b = hash(ix + 1, iy);
+                        const c = hash(ix, iy + 1);
+                        const d1 = hash(ix + 1, iy + 1);
+                        return a + (b - a) * ux + (c - a) * uy + (a - b - c + d1) * ux * uy;
+                    }
+
+                    function fbm(x, y) {
+                        let val = 0;
+                        let amp = 0.5;
+                        let freq = 1;
+                        for (let i = 0; i < 4; i++) {
+                            val += amp * smoothNoise(x * freq, y * freq);
+                            freq *= 2.02;
+                            amp *= 0.5;
+                        }
+                        return val;
+                    }
+
+                    const blobs = [
+                        { u: 0.22, v: 0.34, ru: 0.11, rv: 0.14 },
+                        { u: 0.29, v: 0.62, ru: 0.065, rv: 0.18 },
+                        { u: 0.50, v: 0.26, ru: 0.065, rv: 0.09 },
+                        { u: 0.52, v: 0.54, ru: 0.08, rv: 0.18 },
+                        { u: 0.66, v: 0.32, ru: 0.16, rv: 0.14 },
+                        { u: 0.68, v: 0.45, ru: 0.045, rv: 0.08 },
+                        { u: 0.79, v: 0.70, ru: 0.07, rv: 0.08 },
+                    ];
+
+                    for (let y = 0; y < h; y++) {
+                        const v = y / (h - 1);
+                        const latAbs = Math.abs(v - 0.5) * 2;
+                        for (let x = 0; x < w; x++) {
+                            const u = x / (w - 1);
+                            const idx = (y * w + x) * 4;
+
+                            let landMask = 0;
+                            for (let b = 0; b < blobs.length; b++) {
+                                const bl = blobs[b];
+                                let du = Math.abs(u - bl.u);
+                                if (du > 0.5) du = 1 - du;
+                                const dv = (v - bl.v) / bl.rv;
+                                const dist = Math.sqrt((du / bl.ru) ** 2 + dv * dv);
+                                if (dist < 1.25) {
+                                    landMask = Math.max(landMask, 1 - dist / 1.25);
+                                }
+                            }
+
+                            const n = fbm(u * 14, v * 7);
+                            const elevation = landMask * 0.85 + (n - 0.42) * 0.65;
+
+                            let rCol, gCol, bCol;
+                            if (latAbs > 0.86 + (n - 0.5) * 0.08) {
+                                rCol = 226; gCol = 236; bCol = 245;
+                            } else if (elevation > 0.36) {
+                                const t = Math.min(1, (elevation - 0.36) / 0.45);
+                                const arid = Math.max(0, 1 - Math.abs(latAbs - 0.28) * 5);
+                                rCol = Math.round(58 + t * 85 + arid * 55);
+                                gCol = Math.round(126 + t * 35 - arid * 22);
+                                bCol = Math.round(68 + t * 20 + arid * 12);
+                            } else {
+                                const depth = Math.max(0, Math.min(1, (0.36 - elevation) / 0.36));
+                                rCol = Math.round(28 - depth * 16);
+                                gCol = Math.round(118 - depth * 68);
+                                bCol = Math.round(196 - depth * 92);
+                            }
+
+                            d[idx] = rCol;
+                            d[idx + 1] = gCol;
+                            d[idx + 2] = bCol;
+                            d[idx + 3] = 255;
+                        }
+                    }
+
+                    tctx.putImageData(img, 0, 0);
+                    return texCanvas;
+                }
+
+                if (!gl) return;
+
+                const vsSource = `
+                    attribute vec3 aPos;
+                    attribute vec2 aTex;
+                    uniform float uRot;
+                    varying vec2 vTex;
+                    varying vec3 vNormal;
+                    void main() {
+                        float c = cos(uRot);
+                        float s = sin(uRot);
+                        vec3 rotPos = vec3(
+                            aPos.x * c + aPos.z * s,
+                            aPos.y,
+                            -aPos.x * s + aPos.z * c
+                        );
+                        vTex = aTex;
+                        vNormal = normalize(rotPos);
+                        gl_Position = vec4(rotPos.xy, -rotPos.z * 0.5, 1.0);
+                    }
+                `;
+
+                const fsSource = `
+                    precision mediump float;
+                    uniform sampler2D uTex;
+                    uniform vec3 uLightDir;
+                    uniform float uAmbient;
+                    uniform float uSpecStrength;
+                    uniform vec3 uLightTint;
+                    varying vec2 vTex;
+                    varying vec3 vNormal;
+                    void main() {
+                        vec3 texCol = texture2D(uTex, vTex).rgb;
+                        vec3 n = normalize(vNormal);
+                        float diff = max(0.0, dot(n, normalize(uLightDir)));
+                        vec3 viewDir = vec3(0.0, 0.0, 1.0);
+                        vec3 halfVec = normalize(normalize(uLightDir) + viewDir);
+                        float spec = pow(max(0.0, dot(n, halfVec)), 22.0) * uSpecStrength;
+                        vec3 lit = texCol * (uAmbient + diff * 0.85) * uLightTint + vec3(spec) * uLightTint;
+                        gl_FragColor = vec4(lit, 1.0);
+                    }
+                `;
+
+                function compileShader(type, src) {
+                    const sh = gl.createShader(type);
+                    gl.shaderSource(sh, src);
+                    gl.compileShader(sh);
+                    return sh;
+                }
+
+                const prog = gl.createProgram();
+                gl.attachShader(prog, compileShader(gl.VERTEX_SHADER, vsSource));
+                gl.attachShader(prog, compileShader(gl.FRAGMENT_SHADER, fsSource));
+                gl.linkProgram(prog);
+                gl.useProgram(prog);
+
+                const latSegs = 24;
+                const lonSegs = 36;
+                const positions = [];
+                const texCoords = [];
+                const indices = [];
+
+                for (let y = 0; y <= latSegs; y++) {
+                    const v = y / latSegs;
+                    const phi = v * Math.PI;
+                    const sinPhi = Math.sin(phi);
+                    const cosPhi = Math.cos(phi);
+
+                    for (let x = 0; x <= lonSegs; x++) {
+                        const u = x / lonSegs;
+                        const theta = u * Math.PI * 2;
+                        positions.push(sinPhi * Math.cos(theta) * 0.96, cosPhi * 0.96, sinPhi * Math.sin(theta) * 0.96);
+                        texCoords.push(1.0 - u, 1.0 - v);
+                    }
+                }
+
+                for (let y = 0; y < latSegs; y++) {
+                    for (let x = 0; x < lonSegs; x++) {
+                        const a = y * (lonSegs + 1) + x;
+                        const b = a + lonSegs + 1;
+                        indices.push(a, b, a + 1, b, b + 1, a + 1);
+                    }
+                }
+
+                const posBuf = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+                const aPos = gl.getAttribLocation(prog, 'aPos');
+                gl.enableVertexAttribArray(aPos);
+                gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);
+
+                const texBuf = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, texBuf);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texCoords), gl.STATIC_DRAW);
+                const aTex = gl.getAttribLocation(prog, 'aTex');
+                gl.enableVertexAttribArray(aTex);
+                gl.vertexAttribPointer(aTex, 2, gl.FLOAT, false, 0, 0);
+
+                const idxBuf = gl.createBuffer();
+                gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, idxBuf);
+                gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+
+                const texture = gl.createTexture();
+                gl.bindTexture(gl.TEXTURE_2D, texture);
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, createEarthTexture());
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+                const uRot = gl.getUniformLocation(prog, 'uRot');
+                const uLightDir = gl.getUniformLocation(prog, 'uLightDir');
+                const uAmbient = gl.getUniformLocation(prog, 'uAmbient');
+                const uSpecStrength = gl.getUniformLocation(prog, 'uSpecStrength');
+                const uLightTint = gl.getUniformLocation(prog, 'uLightTint');
+
+                gl.enable(gl.DEPTH_TEST);
+                gl.viewport(0, 0, canvas.width, canvas.height);
+
+                let rot = 0.6;
+
+                function draw() {
+                    const h = skyClock.getHour();
+                    const { dayAmount, goldenAmount, sunAngle } = skyClock.getLightingState(h);
+
+                    const lx = -Math.cos(sunAngle) * 0.72;
+                    const ly = 0.25 + Math.max(0, Math.sin(sunAngle)) * 0.45;
+                    const lz = 0.55 + dayAmount * 0.25;
+
+                    const ambient = 0.14 + dayAmount * 0.22;
+                    const spec = 0.12 + dayAmount * 0.28;
+
+                    const nightTint = [0.68, 0.78, 1.05];
+                    const dayTint = [1.05, 1.04, 1.0];
+                    const goldenTint = [1.22, 0.92, 0.74];
+
+                    const baseR = nightTint[0] + (dayTint[0] - nightTint[0]) * dayAmount;
+                    const baseG = nightTint[1] + (dayTint[1] - nightTint[1]) * dayAmount;
+                    const baseB = nightTint[2] + (dayTint[2] - nightTint[2]) * dayAmount;
+
+                    const tintR = baseR + (goldenTint[0] - baseR) * goldenAmount * 0.75;
+                    const tintG = baseG + (goldenTint[1] - baseG) * goldenAmount * 0.75;
+                    const tintB = baseB + (goldenTint[2] - baseB) * goldenAmount * 0.75;
+
+                    gl.clearColor(0, 0, 0, 0);
+                    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+                    gl.uniform1f(uRot, rot);
+                    gl.uniform3f(uLightDir, lx, ly, lz);
+                    gl.uniform1f(uAmbient, ambient);
+                    gl.uniform1f(uSpecStrength, spec);
+                    gl.uniform3f(uLightTint, tintR, tintG, tintB);
+                    gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+                }
+
+                function loop() {
+                    if (!document.hidden) {
+                        if (!reducedMotion) {
+                            rot = (rot + 0.025) % (Math.PI * 2);
+                        }
+                        draw();
+                    }
+                    requestAnimationFrame(loop);
+                }
+
+                draw();
+                requestAnimationFrame(loop);
+            }
+            /* ---------------------------------------------------------------------
+ * 18C. COMMAND PALETTE (⌘K / Ctrl+K)
+ * ------------------------------------------------------------------- */
+            function initCommandPalette() {
+                const overlay = document.getElementById('cmdOverlay');
+                const panel = document.getElementById('cmdPanel');
+                const input = document.getElementById('cmdInput');
+                const listEl = document.getElementById('cmdList');
+                const triggerBtn = document.getElementById('cmdPaletteBtn');
+                if (!overlay || !panel || !input || !listEl) return;
+
+                let activeIdx = 0;
+                let filtered = [];
+
+                const jumpTo = (id) => {
+                    const el = document.getElementById(id);
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                };
+
+                const COMMANDS = [
+                    { group: 'Actions', label: 'Toggle Light / Dark Theme', hint: 'T', run: () => toggleTheme() },
+                    { group: 'Actions', label: 'Preview Resume PDF', hint: 'PDF', run: () => document.getElementById('resumeBtn')?.click() },
+                    { group: 'Actions', label: 'Copy Email (hello@manav.here)', hint: 'Copy', run: () => document.getElementById('copyEmailBtn')?.click() },
+                    {
+                        group: 'Actions',
+                        label: 'Fire Raptor Engines (Starbase)',
+                        hint: 'Audio',
+                        run: () => {
+                            jumpTo('footer');
+                            playStarshipTakeoffAudio(4.0);
+                        },
+                    },
+                    { group: 'Navigate', label: '00 / About & Intro', hint: 'Section', run: () => jumpTo('hero') },
+                    { group: 'Navigate', label: '01 / Projects', hint: 'Section', run: () => jumpTo('projects') },
+                    { group: 'Navigate', label: '02 / Experience', hint: 'Section', run: () => jumpTo('experience') },
+                    { group: 'Navigate', label: '03 / Tech Stack', hint: 'Section', run: () => jumpTo('stack') },
+                    { group: 'Navigate', label: '04 / Technical Notes', hint: 'Section', run: () => jumpTo('notes') },
+                    { group: 'Navigate', label: '05 / Reading Bookshelf', hint: 'Section', run: () => jumpTo('reads') },
+                    { group: 'Navigate', label: '06 / Socials & Contact', hint: 'Section', run: () => jumpTo('connect') },
+                    ...PROJECTS.map((p) => ({
+                        group: 'Projects',
+                        label: `${p.title} — ${p.tagline}`,
+                        hint: p.category,
+                        run: () => openProjectModal(p.id),
+                    })),
+                    { group: 'Links', label: 'GitHub (@manavgpt)', hint: '↗', run: () => window.open('https://github.com/manavgpt', '_blank', 'noopener') },
+                    { group: 'Links', label: 'Twitter / X (@manavgpt)', hint: '↗', run: () => window.open('https://x.com/manavgpt', '_blank', 'noopener') },
+                    { group: 'Links', label: 'Matiks (@manavgpt)', hint: '↗', run: () => window.open('https://www.matiks.com/profile/manavgpt', '_blank', 'noopener') },
+                ];
+
+                function renderList() {
+                    const q = input.value.trim().toLowerCase();
+                    filtered = q
+                        ? COMMANDS.filter((c) => `${c.label} ${c.group} ${c.hint}`.toLowerCase().includes(q))
+                        : COMMANDS;
+
+                    if (activeIdx >= filtered.length) activeIdx = 0;
+
+                    if (!filtered.length) {
+                        listEl.innerHTML = `<div class="px-3 py-6 text-center font-mono text-xs text-[var(--muted)]">No matching commands</div>`;
+                        return;
+                    }
+
+                    listEl.innerHTML = filtered
+                        .map(
+                            (cmd, i) => `
+                        <button type="button" data-cmd-idx="${i}" role="option" aria-selected="${i === activeIdx}"
+                            class="w-full text-left px-3 py-2 rounded-lg flex items-center justify-between gap-3 transition-colors cursor-pointer ${i === activeIdx ? 'bg-[var(--surface-hover)] text-[var(--text)]' : 'text-[var(--text-secondary)] hover:bg-[var(--surface)]'}">
+                            <span class="text-[13px] truncate">${cmd.label}</span>
+                            <span class="font-mono text-[10.5px] text-[var(--muted)] shrink-0">${cmd.hint}</span>
+                        </button>
+                    `
+                        )
+                        .join('');
+
+                    const activeBtn = listEl.querySelector(`[data-cmd-idx="${activeIdx}"]`);
+                    if (activeBtn) activeBtn.scrollIntoView({ block: 'nearest' });
+                }
+
+                function openPalette() {
+                    input.value = '';
+                    activeIdx = 0;
+                    renderList();
+                    overlay.classList.remove('hidden');
+                    overlay.classList.add('flex');
+                    document.body.style.overflow = 'hidden';
+                    requestAnimationFrame(() => {
+                        overlay.classList.remove('opacity-0');
+                        panel.classList.remove('scale-95', 'opacity-0');
+                        panel.classList.add('scale-100', 'opacity-100');
+                        input.focus();
+                    });
+                }
+
+                function closePalette() {
+                    if (overlay.classList.contains('hidden')) return;
+                    overlay.classList.add('opacity-0');
+                    panel.classList.remove('scale-100', 'opacity-100');
+                    panel.classList.add('scale-95', 'opacity-0');
+                    document.body.style.overflow = '';
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                        overlay.classList.remove('flex');
+                    }, 180);
+                }
+
+                function runCommand(idx) {
+                    const cmd = filtered[idx];
+                    if (!cmd) return;
+                    closePalette();
+                    setTimeout(() => cmd.run(), 190);
+                }
+
+                if (triggerBtn) triggerBtn.addEventListener('click', openPalette);
+
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) closePalette();
+                });
+
+                listEl.addEventListener('click', (e) => {
+                    const btn = e.target.closest('[data-cmd-idx]');
+                    if (btn) runCommand(Number(btn.dataset.cmdIdx));
+                });
+
+                input.addEventListener('input', () => {
+                    activeIdx = 0;
+                    renderList();
+                });
+
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        activeIdx = (activeIdx + 1) % Math.max(1, filtered.length);
+                        renderList();
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        activeIdx = (activeIdx - 1 + filtered.length) % Math.max(1, filtered.length);
+                        renderList();
+                    } else if (e.key === 'Enter') {
+                        e.preventDefault();
+                        runCommand(activeIdx);
+                    } else if (e.key === 'Escape') {
+                        e.preventDefault();
+                        closePalette();
+                    }
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+                        e.preventDefault();
+                        if (overlay.classList.contains('hidden')) openPalette();
+                        else closePalette();
+                    }
+                });
+            }
 
             /* ---------------------------------------------------------------------
              * 19. BULLETPROOF INITIALIZATION (ISOLATED TRY/CATCH PER MODULE)
@@ -5959,7 +6779,9 @@
                 initRoleRotator,
                 initMorphingNavbar,
                 initOrbitalHeader,
+                initGlobe3D,
                 initStarbaseFooter,
+                initCommandPalette,
             ];
 
             initializers.forEach((fn) => {
