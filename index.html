@@ -802,14 +802,6 @@
             box-shadow: 0 12px 32px -10px rgba(0, 0, 0, 0.65);
         }
 
-        /* On mobile (< 640px), hide cramped section links once scrolled; bottom pill handles jumps */
-        @media (max-width: 639px) {
-            .site-nav-wrap.is-scrolled .site-nav nav[aria-label="Primary Navigation"] {
-                display: none;
-            }
-        }
-
-
         /* Bookend Dissolving 780px Framed Column Guides (Fade at BOTH Top 80px & Bottom 100px) */
         .framed-column {
             position: relative;
@@ -1203,8 +1195,9 @@
 
 
                 <!-- Center: Clean Section Links -->
+                <!-- Center: Clean Section Links (Desktop only; mobile uses bottom jump pill) -->
                 <nav aria-label="Primary Navigation"
-                    class="flex items-center gap-3 sm:gap-5 text-[12.5px] sm:text-[13px] text-[var(--muted)] overflow-x-auto no-scrollbar">
+                    class="hidden sm:flex items-center gap-3 sm:gap-5 text-[12.5px] sm:text-[13px] text-[var(--muted)] overflow-x-auto no-scrollbar">
                     <a href="#hero" class="hover:text-[var(--text)] transition-colors py-1 shrink-0">about</a>
                     <a href="#projects" class="hover:text-[var(--text)] transition-colors py-1 shrink-0">projects</a>
                     <a href="#experience"
@@ -1214,6 +1207,7 @@
                     <a href="#reads" class="hover:text-[var(--text)] transition-colors py-1 shrink-0">reads</a>
                     <a href="#connect" class="hover:text-[var(--text)] transition-colors py-1 shrink-0">contact</a>
                 </nav>
+
 
                 <!-- Right: Command Palette + Theme Toggle -->
                 <div class="flex items-center gap-2 shrink-0 sm:justify-self-end">
