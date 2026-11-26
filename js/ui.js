@@ -343,155 +343,134 @@ export function initMorphingNavbar() {
 /* ---------------------------------------------------------------------
 * 18C. COMMAND PALETTE (⌘K / Ctrl+K)
 * ------------------------------------------------------------------- */
-           export function initCommandPalette(openProjectModal) {
-               const overlay = document.getElementById('cmdOverlay');
-               const panel = document.getElementById('cmdPanel');
-               const input = document.getElementById('cmdInput');
-               const listEl = document.getElementById('cmdList');
-               const triggerBtn = document.getElementById('cmdPaletteBtn');
-               if (!overlay || !panel || !input || !listEl) return;
+export function initCommandPalette(openProjectModal) {
+    const overlay = document.getElementById('cmdOverlay');
+    const panel = document.getElementById('cmdPanel');
+    const input = document.getElementById('cmdInput');
+    const listEl = document.getElementById('cmdList');
+    const triggerBtn = document.getElementById('cmdPaletteBtn');
+    if (!overlay || !panel || !input || !listEl) return;
 
-               let activeIdx = 0;
-               let filtered = [];
+    let activeIdx = 0;
+    let filtered = [];
 
-               const jumpTo = (id) => {
-                   const el = document.getElementById(id);
-                   if (el) el.scrollIntoView({ behavior: 'smooth' });
-               };
+    const jumpTo = (id) => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+    };
 
-               const COMMANDS = [
-                   { group: 'Actions', label: 'Toggle Light / Dark Theme', hint: 'T', run: () => toggleTheme() },
-                   { group: 'Actions', label: 'Preview Resume PDF', hint: 'PDF', run: () => document.getElementById('resumeBtn')?.click() },
-                   { group: 'Actions', label: 'Copy Email (hello@manav.here)', hint: 'Copy', run: () => document.getElementById('copyEmailBtn')?.click() },
-                   {
-                       group: 'Actions',
-                       label: 'Fire Raptor Engines (Starbase)',
-                       hint: 'Audio',
-                       run: () => {
-                           jumpTo('footer');
-                           playStarshipTakeoffAudio(4.0);
-                       },
-                   },
-                   { group: 'Navigate', label: '00 / About & Intro', hint: 'Section', run: () => jumpTo('hero') },
-                   { group: 'Navigate', label: '01 / Projects', hint: 'Section', run: () => jumpTo('projects') },
-                   { group: 'Navigate', label: '02 / Experience', hint: 'Section', run: () => jumpTo('experience') },
-                   { group: 'Navigate', label: '03 / Tech Stack', hint: 'Section', run: () => jumpTo('stack') },
-                   { group: 'Navigate', label: '04 / Technical Notes', hint: 'Section', run: () => jumpTo('notes') },
-                   { group: 'Navigate', label: '05 / Reading Bookshelf', hint: 'Section', run: () => jumpTo('reads') },
-                   { group: 'Navigate', label: '06 / Socials & Contact', hint: 'Section', run: () => jumpTo('connect') },
-                   ...PROJECTS.map((p) => ({
-                       group: 'Projects',
-                       label: `${p.title} — ${p.tagline}`,
-                       hint: p.category,
-                       run: () => openProjectModal(p.id),
-                   })),
-                   { group: 'Links', label: 'GitHub (@manavgpt)', hint: '↗', run: () => window.open('https://github.com/manavgpt', '_blank', 'noopener') },
-                   { group: 'Links', label: 'Twitter / X (@manavgpt)', hint: '↗', run: () => window.open('https://x.com/manavgpt', '_blank', 'noopener') },
-                   { group: 'Links', label: 'Matiks (@manavgpt)', hint: '↗', run: () => window.open('https://www.matiks.com/profile/manavgpt', '_blank', 'noopener') },
-               ];
+    const COMMANDS = [
+        { group: 'Navigate', label: 'About & Intro', hint: 'Section', run: () => jumpTo('hero') },
+        { group: 'Navigate', label: 'Projects', hint: 'Section', run: () => jumpTo('projects') },
+        { group: 'Navigate', label: 'Experience', hint: 'Section', run: () => jumpTo('experience') },
+        { group: 'Navigate', label: 'Tech Stack', hint: 'Section', run: () => jumpTo('stack') },
+        { group: 'Navigate', label: 'Technical Notes', hint: 'Section', run: () => jumpTo('notes') },
+        { group: 'Navigate', label: 'Reading Bookshelf', hint: 'Section', run: () => jumpTo('reads') },
+        { group: 'Navigate', label: 'Socials & Contact', hint: 'Section', run: () => jumpTo('connect') },
+    ];
 
-               function renderList() {
-                   const q = input.value.trim().toLowerCase();
-                   filtered = q
-                       ? COMMANDS.filter((c) => `${c.label} ${c.group} ${c.hint}`.toLowerCase().includes(q))
-                       : COMMANDS;
+    function renderList() {
+        const q = input.value.trim().toLowerCase();
+        filtered = q
+            ? COMMANDS.filter((c) => `${c.label} ${c.group} ${c.hint}`.toLowerCase().includes(q))
+            : COMMANDS;
 
-                   if (activeIdx >= filtered.length) activeIdx = 0;
+        if (activeIdx >= filtered.length) activeIdx = 0;
 
-                   if (!filtered.length) {
-                       listEl.innerHTML = `<div class="px-3 py-6 text-center font-mono text-xs text-[var(--muted)]">No matching commands</div>`;
-                       return;
-                   }
+        if (!filtered.length) {
+            listEl.innerHTML = `<div class="px-3 py-6 text-center font-mono text-xs text-[var(--muted)]">No matching commands</div>`;
+            return;
+        }
 
-                   listEl.innerHTML = filtered
-                       .map(
-                           (cmd, i) => `
+        listEl.innerHTML = filtered
+            .map(
+                (cmd, i) => `
                        <button type="button" data-cmd-idx="${i}" role="option" aria-selected="${i === activeIdx}"
                            class="w-full text-left px-3 py-2 rounded-lg flex items-center justify-between gap-3 transition-colors cursor-pointer ${i === activeIdx ? 'bg-[var(--surface-hover)] text-[var(--text)]' : 'text-[var(--text-secondary)] hover:bg-[var(--surface)]'}">
                            <span class="text-[13px] truncate">${cmd.label}</span>
                            <span class="font-mono text-[10.5px] text-[var(--muted)] shrink-0">${cmd.hint}</span>
                        </button>
                    `
-                       )
-                       .join('');
+            )
+            .join('');
 
-                   const activeBtn = listEl.querySelector(`[data-cmd-idx="${activeIdx}"]`);
-                   if (activeBtn) activeBtn.scrollIntoView({ block: 'nearest' });
-               }
+        const activeBtn = listEl.querySelector(`[data-cmd-idx="${activeIdx}"]`);
+        if (activeBtn) activeBtn.scrollIntoView({ block: 'nearest' });
+    }
 
-               function openPalette() {
-                   input.value = '';
-                   activeIdx = 0;
-                   renderList();
-                   overlay.classList.remove('hidden');
-                   overlay.classList.add('flex');
-                   document.body.style.overflow = 'hidden';
-                   requestAnimationFrame(() => {
-                       overlay.classList.remove('opacity-0');
-                       panel.classList.remove('scale-95', 'opacity-0');
-                       panel.classList.add('scale-100', 'opacity-100');
-                       input.focus();
-                   });
-               }
+    function openPalette() {
+        input.value = '';
+        activeIdx = 0;
+        renderList();
+        overlay.classList.remove('hidden');
+        overlay.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+        requestAnimationFrame(() => {
+            overlay.classList.remove('opacity-0');
+            panel.classList.remove('scale-95', 'opacity-0');
+            panel.classList.add('scale-100', 'opacity-100');
+            input.focus();
+        });
+    }
 
-               function closePalette() {
-                   if (overlay.classList.contains('hidden')) return;
-                   overlay.classList.add('opacity-0');
-                   panel.classList.remove('scale-100', 'opacity-100');
-                   panel.classList.add('scale-95', 'opacity-0');
-                   document.body.style.overflow = '';
-                   setTimeout(() => {
-                       overlay.classList.add('hidden');
-                       overlay.classList.remove('flex');
-                   }, 180);
-               }
+    function closePalette() {
+        if (overlay.classList.contains('hidden')) return;
+        overlay.classList.add('opacity-0');
+        panel.classList.remove('scale-100', 'opacity-100');
+        panel.classList.add('scale-95', 'opacity-0');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+            overlay.classList.add('hidden');
+            overlay.classList.remove('flex');
+        }, 180);
+    }
 
-               function runCommand(idx) {
-                   const cmd = filtered[idx];
-                   if (!cmd) return;
-                   closePalette();
-                   setTimeout(() => cmd.run(), 190);
-               }
+    function runCommand(idx) {
+        const cmd = filtered[idx];
+        if (!cmd) return;
+        closePalette();
+        setTimeout(() => cmd.run(), 190);
+    }
 
-               if (triggerBtn) triggerBtn.addEventListener('click', openPalette);
+    if (triggerBtn) triggerBtn.addEventListener('click', openPalette);
 
-               overlay.addEventListener('click', (e) => {
-                   if (e.target === overlay) closePalette();
-               });
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closePalette();
+    });
 
-               listEl.addEventListener('click', (e) => {
-                   const btn = e.target.closest('[data-cmd-idx]');
-                   if (btn) runCommand(Number(btn.dataset.cmdIdx));
-               });
+    listEl.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-cmd-idx]');
+        if (btn) runCommand(Number(btn.dataset.cmdIdx));
+    });
 
-               input.addEventListener('input', () => {
-                   activeIdx = 0;
-                   renderList();
-               });
+    input.addEventListener('input', () => {
+        activeIdx = 0;
+        renderList();
+    });
 
-               input.addEventListener('keydown', (e) => {
-                   if (e.key === 'ArrowDown') {
-                       e.preventDefault();
-                       activeIdx = (activeIdx + 1) % Math.max(1, filtered.length);
-                       renderList();
-                   } else if (e.key === 'ArrowUp') {
-                       e.preventDefault();
-                       activeIdx = (activeIdx - 1 + filtered.length) % Math.max(1, filtered.length);
-                       renderList();
-                   } else if (e.key === 'Enter') {
-                       e.preventDefault();
-                       runCommand(activeIdx);
-                   } else if (e.key === 'Escape') {
-                       e.preventDefault();
-                       closePalette();
-                   }
-               });
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            activeIdx = (activeIdx + 1) % Math.max(1, filtered.length);
+            renderList();
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            activeIdx = (activeIdx - 1 + filtered.length) % Math.max(1, filtered.length);
+            renderList();
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            runCommand(activeIdx);
+        } else if (e.key === 'Escape') {
+            e.preventDefault();
+            closePalette();
+        }
+    });
 
-               document.addEventListener('keydown', (e) => {
-                   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-                       e.preventDefault();
-                       if (overlay.classList.contains('hidden')) openPalette();
-                       else closePalette();
-                   }
-               });
-           }
+    document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+            e.preventDefault();
+            if (overlay.classList.contains('hidden')) openPalette();
+            else closePalette();
+        }
+    });
+}
