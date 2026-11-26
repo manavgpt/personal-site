@@ -802,6 +802,14 @@
             box-shadow: 0 12px 32px -10px rgba(0, 0, 0, 0.65);
         }
 
+        /* On mobile (< 640px), hide cramped section links once scrolled; bottom pill handles jumps */
+        @media (max-width: 639px) {
+            .site-nav-wrap.is-scrolled .site-nav nav[aria-label="Primary Navigation"] {
+                display: none;
+            }
+        }
+
+
         /* Bookend Dissolving 780px Framed Column Guides (Fade at BOTH Top 80px & Bottom 100px) */
         .framed-column {
             position: relative;
@@ -1190,8 +1198,9 @@
                 <a href="#hero"
                     class="inline-flex items-center gap-2 font-sans text-base font-semibold tracking-tight text-[var(--text)] hover:opacity-75 transition-opacity shrink-0 sm:justify-self-start"
                     aria-label="Manav Chaudhari Home">
-                    <span class="hidden sm:inline">Manav</span>
+                    <span>Manav</span>
                 </a>
+
 
                 <!-- Center: Clean Section Links -->
                 <nav aria-label="Primary Navigation"
@@ -2847,9 +2856,6 @@
                 const tag = e.target && e.target.tagName ? e.target.tagName.toLowerCase() : '';
                 if (tag === 'input' || tag === 'textarea' || e.metaKey || e.ctrlKey || e.altKey) {
                     return;
-                }
-                if (e.key === 't' || e.key === 'T') {
-                    toggleTheme();
                 }
                 if (e.key === 't' || e.key === 'T') {
                     if (e.repeat) return;
