@@ -57,7 +57,7 @@
     <!-- Design Tokens, Hatched Dividers, Subtle Animations & Micro-Interactions -->
     <style>
         :root {
-            --bg: #f8f7f4;
+            --bg: #ffffff;
             --surface: #fafafa;
             --surface-hover: #f4f4f5;
             --border: #e4e4e7;
@@ -1137,6 +1137,9 @@
         /* =====================================================================
          * SNOW — SLEEPING PERSIAN CAT SITTING ON SECTION LINE WITH TAIL DRAPE
          * =================================================================== */
+        /* =====================================================================
+         * SNOW — SLEEPING PERSIAN WITH CONTINUOUSLY SWINGING TAIL
+         * =================================================================== */
         .shelf-cat-perch {
             position: absolute;
             right: 18px;
@@ -1148,9 +1151,80 @@
             -webkit-tap-highlight-color: transparent;
             outline: none;
             pointer-events: auto;
-            transform-origin: 45% 48%;
-            animation: snow-gentle-breathe 4.4s ease-in-out infinite;
             transition: filter 220ms ease;
+        }
+
+        @media (max-width: 639px) {
+            .shelf-cat-perch {
+                right: 10px;
+                bottom: -41px;
+                width: 82px;
+            }
+        }
+
+        .snow-body-base,
+        .snow-tail-swing {
+            display: block;
+            width: 100%;
+            height: auto;
+            pointer-events: none;
+        }
+
+        .snow-body-base {
+            clip-path: polygon(0% 0%, 100% 0%, 100% 47%, 75% 47%, 75% 100%, 0% 100%);
+            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.14));
+        }
+
+        html.dark .snow-tail-swing {
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.65));
+        }
+
+        html.dark .snow-body-base {
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.65));
+        }
+
+        /* Isolate only the hanging tail on the right side so it swings independently */
+        .snow-tail-swing {
+            position: absolute;
+            inset: 0;
+            clip-path: polygon(74% 45%, 100% 45%, 100% 100%, 70% 100%);
+            transform-origin: 86% 47%;
+            animation: snow-tail-swing 3.4s ease-in-out infinite;
+            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.14));
+        }
+
+
+        .shelf-cat-perch:hover .snow-tail-swing,
+        .shelf-cat-perch.is-purring .snow-tail-swing {
+            animation-duration: 1.5s;
+        }
+
+        @keyframes snow-tail-swing {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            35% {
+                transform: rotate(5.5deg);
+            }
+
+            72% {
+                transform: rotate(-4deg);
+            }
+        }
+
+        .shelf-cat-perch:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 4px;
+            border-radius: 10px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .snow-tail-swing {
+                animation: none !important;
+            }
         }
 
         .snow-mote {
@@ -1177,14 +1251,6 @@
             100% {
                 opacity: 0;
                 transform: translate(-50%, -34px) translateX(var(--drift, 8px)) scale(0.95);
-            }
-        }
-
-        @media (max-width: 639px) {
-            .shelf-cat-perch {
-                right: 10px;
-                bottom: -41px;
-                width: 82px;
             }
         }
 
@@ -1268,11 +1334,6 @@
 
                 <!-- Right: Command Palette + Theme Toggle -->
                 <div class="flex items-center gap-2 shrink-0 sm:justify-self-end">
-                    <button id="cmdPaletteBtn" type="button" aria-label="Open command palette"
-                        class="hidden sm:inline-flex items-center gap-1.5 h-8 px-2.5 rounded-lg border theme-border hover:border-[var(--border-strong)] hover:bg-[var(--surface)] font-mono text-[11px] text-[var(--muted)] hover:text-[var(--text)] transition-all cursor-pointer">
-                        <span>⌘K</span>
-                    </button>
-
                     <!-- Crisp Light/Dark Toggle Button + Tooltip -->
                     <div class="relative group shrink-0">
                         <button id="themeToggleBtn" type="button" aria-label="Toggle color theme"
@@ -1870,8 +1931,8 @@
                     KICKER
                 </span>
                 <button id="modalCloseBtn" type="button" aria-label="Close modal"
-                    class="px-2 py-1 rounded-md border theme-border font-mono text-[11px] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface)] transition-colors cursor-pointer">
-                    ESC ✕
+                    class="px-2 py-1 rounded-md theme-border font-mono text-[17px] text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--surface)] transition-colors cursor-pointer">
+                    ✕
                 </button>
             </div>
 
@@ -3891,10 +3952,10 @@
             const SNOW_PERCH_HTML = `
                 <div id="snowCatSlot" class="shelf-cat-perch" role="button" tabindex="0"
                     aria-label="Snow, white Persian cat sleeping on the bookshelf ledge. Click to hear her purr.">
-                    <img src="images/snow.png" alt="Snow sleeping" draggable="false" />
+                    <img class="snow-body-base" src="images/snow.png" alt="Snow sleeping" draggable="false" />
+                    <img class="snow-tail-swing" src="images/snow.png" alt="" aria-hidden="true" draggable="false" />
                 </div>
             `;
-
 
             function renderBookshelf() {
                 if (!bookshelfRow) return;
@@ -4184,7 +4245,7 @@
                         spawnPurrMotes(3);
                         snowEl.classList.add('is-purring');
                         clearTimeout(purrClassTimer);
-                        purrClassTimer = setTimeout(() => {
+                        snowPurrTimer = setTimeout(() => {
                             snowEl.classList.remove('is-purring');
                         }, 1400);
                     }
@@ -6811,34 +6872,14 @@
                 };
 
                 const COMMANDS = [
-                    { group: 'Actions', label: 'Toggle Light / Dark Theme', hint: 'T', run: () => toggleTheme() },
                     { group: 'Actions', label: 'Preview Resume PDF', hint: 'PDF', run: () => document.getElementById('resumeBtn')?.click() },
-                    { group: 'Actions', label: 'Copy Email (hello@manav.here)', hint: 'Copy', run: () => document.getElementById('copyEmailBtn')?.click() },
-                    {
-                        group: 'Actions',
-                        label: 'Fire Raptor Engines (Starbase)',
-                        hint: 'Audio',
-                        run: () => {
-                            jumpTo('footer');
-                            playStarshipTakeoffAudio(4.0);
-                        },
-                    },
-                    { group: 'Navigate', label: '00 / About & Intro', hint: 'Section', run: () => jumpTo('hero') },
-                    { group: 'Navigate', label: '01 / Projects', hint: 'Section', run: () => jumpTo('projects') },
-                    { group: 'Navigate', label: '02 / Experience', hint: 'Section', run: () => jumpTo('experience') },
-                    { group: 'Navigate', label: '03 / Tech Stack', hint: 'Section', run: () => jumpTo('stack') },
-                    { group: 'Navigate', label: '04 / Technical Notes', hint: 'Section', run: () => jumpTo('notes') },
-                    { group: 'Navigate', label: '05 / Reading Bookshelf', hint: 'Section', run: () => jumpTo('reads') },
-                    { group: 'Navigate', label: '06 / Socials & Contact', hint: 'Section', run: () => jumpTo('connect') },
-                    ...PROJECTS.map((p) => ({
-                        group: 'Projects',
-                        label: `${p.title} — ${p.tagline}`,
-                        hint: p.category,
-                        run: () => openProjectModal(p.id),
-                    })),
-                    { group: 'Links', label: 'GitHub (@manavgpt)', hint: '↗', run: () => window.open('https://github.com/manavgpt', '_blank', 'noopener') },
-                    { group: 'Links', label: 'Twitter / X (@manavgpt)', hint: '↗', run: () => window.open('https://x.com/manavgpt', '_blank', 'noopener') },
-                    { group: 'Links', label: 'Matiks (@manavgpt)', hint: '↗', run: () => window.open('https://www.matiks.com/profile/manavgpt', '_blank', 'noopener') },
+                    { group: 'Navigate', label: 'About', hint: 'Section', run: () => jumpTo('hero') },
+                    { group: 'Navigate', label: 'Projects', hint: 'Section', run: () => jumpTo('projects') },
+                    { group: 'Navigate', label: 'Experience', hint: 'Section', run: () => jumpTo('experience') },
+                    { group: 'Navigate', label: 'Tech Stack', hint: 'Section', run: () => jumpTo('stack') },
+                    { group: 'Navigate', label: 'Technical Notes', hint: 'Section', run: () => jumpTo('notes') },
+                    { group: 'Navigate', label: 'Reading Bookshelf', hint: 'Section', run: () => jumpTo('reads') },
+                    { group: 'Navigate', label: 'Socials & Contact', hint: 'Section', run: () => jumpTo('connect') },
                 ];
 
                 function renderList() {
