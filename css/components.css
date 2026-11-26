@@ -1,0 +1,799 @@
+/* 8-Way Sprite Avatar + Dizzy / Annoyed Easter Egg Pill */
+.avatar-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.brand-avatar {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: transparent;
+    background-image: url("../images/idle.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html:not(.dark) .brand-avatar {
+    filter: drop-shadow(0 3px 8px rgba(17, 17, 20, 0.14));
+}
+
+.brand-avatar.sprite-ready {
+    background-image: url("../images/avatar-sheet.png");
+    background-size: 300% 300%;
+    background-position: 50% 50%;
+}
+
+.brand-avatar.is-reacting {
+    background-size: 88% !important;
+    background-position: center !important;
+    border-color: var(--accent);
+}
+
+.brand-avatar.is-dizzy {
+    background-image: url("../images/dizzy.png") !important;
+    animation: avatar-dizzy 520ms ease-in-out;
+}
+
+.brand-avatar.is-annoyed {
+    background-image: url("../images/poked.png") !important;
+    animation: avatar-shake 360ms ease-in-out;
+}
+
+@keyframes avatar-dizzy {
+    0% {
+        transform: rotate(0deg) scale(1);
+    }
+
+    20% {
+        transform: rotate(-14deg) scale(1.06);
+    }
+
+    45% {
+        transform: rotate(12deg) scale(1.04);
+    }
+
+    70% {
+        transform: rotate(-7deg) scale(1.02);
+    }
+
+    88% {
+        transform: rotate(4deg) scale(1);
+    }
+
+    100% {
+        transform: rotate(0deg) scale(1);
+    }
+}
+
+@keyframes avatar-shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-3px) rotate(-4deg);
+    }
+
+    40% {
+        transform: translateX(3px) rotate(4deg);
+    }
+
+    60% {
+        transform: translateX(-2px) rotate(-2deg);
+    }
+
+    80% {
+        transform: translateX(2px) rotate(2deg);
+    }
+}
+
+.avatar-pill {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px) scale(0.95);
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    color: var(--text);
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 20;
+}
+
+.avatar-pill.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+}
+
+/* Spider-Verse Name Glitch Effect (Dual-Mode Tuned) */
+.glitch-word {
+    position: relative;
+    display: inline-block;
+    will-change: transform, filter;
+}
+
+.glitch-word::before,
+.glitch-word::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+}
+
+/* Mode 1: Horizontal Slice Shear + CMY Ghost */
+.glitch-word.glitch-slice {
+    color: transparent;
+    animation: g-slice-base 360ms steps(1, end) forwards;
+}
+
+.glitch-word.glitch-slice::before {
+    color: var(--text);
+    opacity: 1;
+    clip-path: inset(0 0 48% 0);
+    animation: g-slice-top 360ms steps(1, end) forwards;
+}
+
+.glitch-word.glitch-slice::after {
+    color: var(--text);
+    opacity: 1;
+    clip-path: inset(52% 0 0 0);
+    animation: g-slice-bot 360ms steps(1, end) forwards;
+}
+
+@keyframes g-slice-base {
+
+    0%,
+    45% {
+        color: transparent;
+    }
+
+    55% {
+        color: var(--text);
+        text-shadow: -2.5px 1px 0 #00f0ff, 2.5px -1px 0 #ff0080, 0 2px 0 #ffe600;
+    }
+
+    80% {
+        color: var(--text);
+        text-shadow: 1.5px -1px 0 #00f0ff, -1.5px 1px 0 #ff0080;
+    }
+
+    100% {
+        color: var(--text);
+        text-shadow: none;
+    }
+}
+
+@keyframes g-slice-top {
+    0% {
+        transform: translate(-3px, -1.5px);
+        color: var(--text);
+        opacity: 1;
+    }
+
+    30% {
+        transform: translate(2.5px, -1px) skewX(-6deg);
+        color: #00f0ff;
+        opacity: 1;
+    }
+
+    55% {
+        transform: translate(-2px, 1px);
+        color: #ff0080;
+        opacity: 0.85;
+        clip-path: inset(0 0 0 0);
+        mix-blend-mode: var(--glitch-blend);
+    }
+
+    85%,
+    100% {
+        opacity: 0;
+        transform: none;
+    }
+}
+
+@keyframes g-slice-bot {
+    0% {
+        transform: translate(3.5px, 1.5px);
+        color: var(--text);
+        opacity: 1;
+    }
+
+    30% {
+        transform: translate(-2.5px, 1px) skewX(6deg);
+        color: #ffe600;
+        opacity: 1;
+    }
+
+    55% {
+        transform: translate(2px, -1px);
+        color: #00f0ff;
+        opacity: 0.85;
+        clip-path: inset(0 0 0 0);
+        mix-blend-mode: var(--glitch-blend);
+    }
+
+    85%,
+    100% {
+        opacity: 0;
+        transform: none;
+    }
+}
+
+/* Mode 2: CMY Chromatic Split */
+.glitch-word.glitch-cmy {
+    animation: g-cmy-base 420ms steps(1, end) forwards;
+}
+
+.glitch-word.glitch-cmy::before {
+    color: #00f0ff;
+    mix-blend-mode: var(--glitch-blend);
+    animation: g-cmy-cyan 420ms steps(1, end) forwards;
+}
+
+.glitch-word.glitch-cmy::after {
+    color: #ff0080;
+    mix-blend-mode: var(--glitch-blend);
+    animation: g-cmy-mag 420ms steps(1, end) forwards;
+}
+
+@keyframes g-cmy-base {
+    0% {
+        transform: translate(0, 0);
+        text-shadow: 2px 2px 0 #ffe600;
+    }
+
+    25% {
+        transform: translate(-1.5px, 0.5px) skewX(-4deg);
+        text-shadow: -2px 2px 0 #ffe600;
+    }
+
+    50% {
+        transform: translate(1.5px, -0.5px);
+        text-shadow: 2px -1.5px 0 #ffe600;
+    }
+
+    75% {
+        transform: translate(-0.5px, 0);
+        text-shadow: -1.5px 1px 0 #00f0ff, 1.5px -1px 0 #ff0080;
+    }
+
+    100% {
+        transform: none;
+        text-shadow: none;
+    }
+}
+
+@keyframes g-cmy-cyan {
+    0% {
+        opacity: 0.9;
+        transform: translate(-3px, -1.5px);
+    }
+
+    25% {
+        opacity: 0.95;
+        transform: translate(3px, 1px);
+    }
+
+    50% {
+        opacity: 0.85;
+        transform: translate(-2px, 1.5px);
+    }
+
+    75% {
+        opacity: 0.7;
+        transform: translate(-1.5px, 0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: none;
+    }
+}
+
+@keyframes g-cmy-mag {
+    0% {
+        opacity: 0.9;
+        transform: translate(3px, 1.5px);
+    }
+
+    25% {
+        opacity: 0.95;
+        transform: translate(-3px, -1px);
+    }
+
+    50% {
+        opacity: 0.85;
+        transform: translate(2.5px, -1.5px);
+    }
+
+    75% {
+        opacity: 0.7;
+        transform: translate(1.5px, 0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: none;
+    }
+}
+
+/* Mode 3: Comic Halftone + Color Block Burst */
+.glitch-word.glitch-comic {
+    animation: g-comic-base 480ms steps(1, end) forwards;
+}
+
+.glitch-word.glitch-comic::before {
+    content: "";
+    inset: -4px -6px;
+    background-image:
+        radial-gradient(#ff0080 1.2px, transparent 1.2px),
+        radial-gradient(#00f0ff 1.2px, transparent 1.2px),
+        radial-gradient(#ffe600 1px, transparent 1px);
+    background-size: 6px 6px, 7px 7px, 5px 5px;
+    background-position: 0 0, 3px 2px, 1px 4px;
+    mix-blend-mode: var(--glitch-blend);
+    animation: g-comic-dots 480ms steps(1, end) forwards;
+}
+
+.glitch-word.glitch-comic::after {
+    content: attr(data-text);
+    mix-blend-mode: var(--glitch-blend);
+    animation: g-comic-block 480ms steps(1, end) forwards;
+}
+
+@keyframes g-comic-base {
+    0% {
+        transform: skewX(-8deg);
+        text-shadow: -3px -2px 0 #ff0080, 3px 2px 0 #00f0ff;
+    }
+
+    22% {
+        transform: translate(2px, -1px) skewX(6deg);
+        text-shadow: 2px 2px 0 #ffe600, -2px -1px 0 #00f0ff;
+    }
+
+    48% {
+        background: linear-gradient(115deg, #22c55e 0 36%, #3b82f6 36% 68%, #f97316 68% 100%);
+        color: #000000;
+        padding: 0 3px;
+        margin: 0 -3px;
+        transform: skewX(-10deg) scale(1.03);
+        text-shadow: none;
+    }
+
+    72% {
+        background: transparent;
+        color: var(--text);
+        padding: 0;
+        margin: 0;
+        transform: translate(-1px, 0);
+        text-shadow: -2px 0 0 #00f0ff, 2px 0 0 #ff0080, 0 1.5px 0 #ffe600;
+    }
+
+    100% {
+        background: transparent;
+        color: var(--text);
+        padding: 0;
+        margin: 0;
+        transform: none;
+        text-shadow: none;
+    }
+}
+
+@keyframes g-comic-dots {
+    0% {
+        opacity: 0.9;
+        transform: translate(-2px, 1px);
+        clip-path: inset(0 15% 20% 0);
+    }
+
+    22% {
+        opacity: 1;
+        transform: translate(3px, -2px);
+        clip-path: inset(10% 0 0 10%);
+    }
+
+    48% {
+        opacity: 0.45;
+        transform: translate(-1px, 2px);
+        clip-path: inset(0 0 0 0);
+    }
+
+    72%,
+    100% {
+        opacity: 0;
+        transform: none;
+    }
+}
+
+@keyframes g-comic-block {
+    0% {
+        opacity: 0.9;
+        color: #00f0ff;
+        transform: translate(2.5px, -2px);
+        clip-path: inset(0 0 50% 0);
+    }
+
+    22% {
+        opacity: 0.9;
+        color: #ff0080;
+        transform: translate(-3px, 2px);
+        clip-path: inset(45% 0 0 0);
+    }
+
+    48% {
+        opacity: 0;
+    }
+
+    72% {
+        opacity: 0.8;
+        color: #ffe600;
+        transform: translate(1.5px, 1px);
+        clip-path: inset(0 0 0 0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: none;
+    }
+}
+
+
+/* =====================================================================
+ * 3D INTERACTIVE BOOKSHELF (05 / READING)
+ * True CSS 3D hinge animation: Spine (rotateY 90deg) <-> Cover (16deg)
+ * =================================================================== */
+.bookshelf-stage {
+    --book-h: 272px;
+    --spine-w: 48px;
+    --cover-w: 186px;
+    --slot-collapsed: 52px;
+    --slot-expanded: 198px;
+    perspective: 1400px;
+    perspective-origin: 50% 48%;
+}
+
+@media (max-width: 639px) {
+    .bookshelf-stage {
+        --book-h: 236px;
+        --spine-w: 42px;
+        --cover-w: 162px;
+        --slot-collapsed: 46px;
+        --slot-expanded: 174px;
+    }
+}
+
+.bookshelf-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 10px;
+    padding: 18px 8px 28px;
+    overflow-x: auto;
+    overflow-y: visible;
+    scrollbar-width: none;
+}
+
+.bookshelf-row::-webkit-scrollbar {
+    display: none;
+}
+
+@media (max-width: 520px) {
+    .bookshelf-row {
+        justify-content: flex-start;
+        padding-left: 4px;
+        padding-right: 12px;
+    }
+}
+
+.book-slot {
+    position: relative;
+    width: var(--slot-collapsed);
+    height: var(--book-h);
+    flex-shrink: 0;
+    cursor: pointer;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: width 540ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.book-slot[data-active="true"] {
+    width: var(--slot-expanded);
+    z-index: 15;
+}
+
+.book-slot:focus-visible .book-3d {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
+/* Ground shadow beneath each book */
+.book-shadow {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    bottom: -10px;
+    height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.24) 0%, rgba(0, 0, 0, 0) 72%);
+    opacity: 0.55;
+    pointer-events: none;
+    transition: opacity 420ms ease, transform 540ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html.dark .book-shadow {
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.68) 0%, rgba(0, 0, 0, 0) 72%);
+}
+
+.book-slot[data-active="true"] .book-shadow {
+    opacity: 0.95;
+    transform: scaleX(1.04) translateY(2px);
+}
+
+/* 3D Rigid Book Body */
+.book-3d {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--cover-w);
+    height: var(--book-h);
+    transform-style: preserve-3d;
+    transform-origin: 0% 50%;
+    /* Collapsed: 48px spine faces straight forward inside 52px slot */
+    transform: translateX(calc(var(--spine-w) + 2px)) rotateY(90deg);
+    transition: transform 540ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+}
+
+.book-slot[data-active="true"] .book-3d {
+    /* Expanded: front cover opens smoothly to a physical 3D perspective angle */
+    transform: translateX(13px) rotateY(15deg) rotateX(1.5deg) translateY(-3px);
+}
+
+/* Front Cover Face */
+.book-cover {
+    position: absolute;
+    inset: 0;
+    width: var(--cover-w);
+    height: var(--book-h);
+    border-radius: 2px 6px 6px 2px;
+    overflow: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0px);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+        0 12px 26px -14px rgba(0, 0, 0, 0.45);
+}
+
+/* Physical left binding hinge crease + subtle glossy top-left sheen */
+.book-cover::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+            rgba(0, 0, 0, 0.34) 0px,
+            rgba(255, 255, 255, 0.22) 3px,
+            rgba(0, 0, 0, 0.18) 6px,
+            rgba(255, 255, 255, 0.08) 9px,
+            transparent 18px);
+    pointer-events: none;
+    z-index: 4;
+}
+
+.book-cover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(132deg,
+            rgba(255, 255, 255, 0.14) 0%,
+            rgba(255, 255, 255, 0.03) 34%,
+            transparent 52%);
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Spine Face (Attached to Left Edge, Extending Back Along -Z) */
+.book-spine {
+    position: absolute;
+    top: 0;
+    left: calc(-1 * var(--spine-w));
+    width: var(--spine-w);
+    height: var(--book-h);
+    border-radius: 5px 2px 2px 5px;
+    overflow: hidden;
+    transform-origin: right center;
+    transform: rotateY(-90deg);
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow:
+        inset 0 0 0 1px rgba(128, 128, 128, 0.22),
+        0 6px 14px -8px rgba(0, 0, 0, 0.35);
+}
+
+/* Cylindrical hardcover spine shading */
+.book-spine::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+            rgba(0, 0, 0, 0.22) 0%,
+            rgba(255, 255, 255, 0.12) 22%,
+            rgba(255, 255, 255, 0.02) 55%,
+            rgba(0, 0, 0, 0.26) 100%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.book-spine-cap {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.24);
+}
+
+.book-spine-title {
+    position: relative;
+    z-index: 3;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    max-height: 148px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.book-spine-author {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    font-size: 6.5px;
+    line-height: 1.28;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    text-align: center;
+    opacity: 0.72;
+    padding: 0 4px 10px;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+
+/* Physical Page Block Thickness on Right Edge */
+.book-pages {
+    position: absolute;
+    top: 3px;
+    left: calc(var(--cover-w) - 2px);
+    width: calc(var(--spine-w) - 4px);
+    height: calc(var(--book-h) - 6px);
+    transform-origin: left center;
+    transform: rotateY(90deg);
+    background: repeating-linear-gradient(90deg,
+            #f4f4f0 0px,
+            #f4f4f0 1.5px,
+            #e4e4dc 1.5px,
+            #e4e4dc 3px);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.18);
+    pointer-events: none;
+}
+
+/* Solid Back Cover Volume */
+.book-back {
+    position: absolute;
+    inset: 0;
+    width: var(--cover-w);
+    height: var(--book-h);
+    border-radius: 2px 6px 6px 2px;
+    transform: translateZ(calc(-1 * var(--spine-w)));
+    pointer-events: none;
+}
+
+
+/* =====================================================================
+ * SNOW — SLEEPING PERSIAN WITH 60 FPS FLEXIBLE TAIL WAVE (<canvas>)
+ * =================================================================== */
+.shelf-cat-perch {
+    position: absolute;
+    right: 18px;
+    bottom: -63px;
+    width: 112px;
+    z-index: 25;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    pointer-events: auto;
+    transition: filter 220ms ease;
+}
+
+@media (max-width: 639px) {
+    .shelf-cat-perch {
+        right: 10px;
+        bottom: -41px;
+        width: 82px;
+    }
+}
+
+.snow-canvas {
+    display: block;
+    width: calc(100% + 28px);
+    margin-left: -14px;
+    height: auto;
+    pointer-events: none;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.14));
+}
+
+html.dark .snow-canvas {
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.65));
+}
+
+.shelf-cat-perch:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 10px;
+}
+
+.snow-mote {
+    position: absolute;
+    pointer-events: none;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--accent);
+    z-index: 30;
+    animation: snow-mote-rise 1.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes snow-mote-rise {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 0) translateX(0px) scale(0.75);
+    }
+
+    20% {
+        opacity: 0.95;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -34px) translateX(var(--drift, 8px)) scale(0.95);
+    }
+}
