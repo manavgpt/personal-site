@@ -816,13 +816,11 @@
             bottom: 0;
             width: 1px;
             pointer-events: none;
-            background: linear-gradient(
-                to bottom,
-                transparent 0px,
-                var(--border) 80px,
-                var(--border) calc(100% - 100px),
-                transparent 100%
-            );
+            background: linear-gradient(to bottom,
+                    transparent 0px,
+                    var(--border) 80px,
+                    var(--border) calc(100% - 100px),
+                    transparent 100%);
             transition: background 220ms ease;
         }
 
@@ -836,21 +834,17 @@
 
         /* Orbital Header Bottom Fade Overlay (72px Seamless Dissolve into var(--bg)) */
         .orbital-fade-overlay {
-            background: linear-gradient(
-                to bottom,
-                transparent 0%,
-                var(--bg) 100%
-            );
+            background: linear-gradient(to bottom,
+                    transparent 0%,
+                    var(--bg) 100%);
             transition: background 220ms ease;
         }
 
         /* Starbase Sky Top Fade Overlay (110px Seamless Dissolve Out of var(--bg)) */
         .starbase-fade-overlay {
-            background: linear-gradient(
-                to bottom,
-                var(--bg) 0%,
-                transparent 100%
-            );
+            background: linear-gradient(to bottom,
+                    var(--bg) 0%,
+                    transparent 100%);
             transition: background 220ms ease;
         }
 
@@ -985,14 +979,12 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(
-                90deg,
-                rgba(0, 0, 0, 0.34) 0px,
-                rgba(255, 255, 255, 0.22) 3px,
-                rgba(0, 0, 0, 0.18) 6px,
-                rgba(255, 255, 255, 0.08) 9px,
-                transparent 18px
-            );
+            background: linear-gradient(90deg,
+                    rgba(0, 0, 0, 0.34) 0px,
+                    rgba(255, 255, 255, 0.22) 3px,
+                    rgba(0, 0, 0, 0.18) 6px,
+                    rgba(255, 255, 255, 0.08) 9px,
+                    transparent 18px);
             pointer-events: none;
             z-index: 4;
         }
@@ -1001,12 +993,10 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(
-                132deg,
-                rgba(255, 255, 255, 0.14) 0%,
-                rgba(255, 255, 255, 0.03) 34%,
-                transparent 52%
-            );
+            background: linear-gradient(132deg,
+                    rgba(255, 255, 255, 0.14) 0%,
+                    rgba(255, 255, 255, 0.03) 34%,
+                    transparent 52%);
             pointer-events: none;
             z-index: 5;
         }
@@ -1037,13 +1027,11 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(
-                90deg,
-                rgba(0, 0, 0, 0.22) 0%,
-                rgba(255, 255, 255, 0.12) 22%,
-                rgba(255, 255, 255, 0.02) 55%,
-                rgba(0, 0, 0, 0.26) 100%
-            );
+            background: linear-gradient(90deg,
+                    rgba(0, 0, 0, 0.22) 0%,
+                    rgba(255, 255, 255, 0.12) 22%,
+                    rgba(255, 255, 255, 0.02) 55%,
+                    rgba(0, 0, 0, 0.26) 100%);
             pointer-events: none;
             z-index: 2;
         }
@@ -1081,18 +1069,19 @@
         .book-spine-author {
             position: relative;
             z-index: 3;
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
+            width: 100%;
             font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
-            font-size: 8.5px;
-            letter-spacing: 0.08em;
+            font-size: 6.5px;
+            line-height: 1.28;
+            letter-spacing: 0.03em;
             text-transform: uppercase;
+            text-align: center;
             opacity: 0.72;
-            padding-bottom: 12px;
-            max-height: 76px;
-            overflow: hidden;
-            white-space: nowrap;
+            padding: 0 4px 10px;
+            white-space: normal;
+            overflow-wrap: break-word;
         }
+
 
         /* Physical Page Block Thickness on Right Edge */
         .book-pages {
@@ -1103,13 +1092,11 @@
             height: calc(var(--book-h) - 6px);
             transform-origin: left center;
             transform: rotateY(90deg);
-            background: repeating-linear-gradient(
-                90deg,
-                #f4f4f0 0px,
-                #f4f4f0 1.5px,
-                #e4e4dc 1.5px,
-                #e4e4dc 3px
-            );
+            background: repeating-linear-gradient(90deg,
+                    #f4f4f0 0px,
+                    #f4f4f0 1.5px,
+                    #e4e4dc 1.5px,
+                    #e4e4dc 3px);
             box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.18);
             pointer-events: none;
         }
@@ -1123,6 +1110,31 @@
             border-radius: 2px 6px 6px 2px;
             transform: translateZ(calc(-1 * var(--spine-w)));
             pointer-events: none;
+        }
+
+        /* =====================================================================
+         * RADIAL CIRCULAR THEME TRANSITION (VIEW TRANSITIONS API)
+         * =================================================================== */
+        ::view-transition-old(root),
+        ::view-transition-new(root) {
+            animation: none;
+            mix-blend-mode: normal;
+        }
+
+        ::view-transition-old(root) {
+            z-index: 1;
+        }
+
+        ::view-transition-new(root) {
+            z-index: 9999;
+        }
+
+        /* Temporarily pause CSS transitions during snapshot capture so the new theme is 100% crisp */
+        html.theme-transitioning,
+        html.theme-transitioning *,
+        html.theme-transitioning *::before,
+        html.theme-transitioning *::after {
+            transition: none !important;
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1568,9 +1580,6 @@
                             Bookshelf &amp; Key Reads
                         </h2>
                     </div>
-                    <span class="font-mono text-[11px] text-[var(--muted)]">
-                        Hover or click a spine · Click cover for notes
-                    </span>
                 </div>
 
                 <!-- 3D Perspective Shelf Stage -->
@@ -1592,8 +1601,7 @@
     <!-- SECTION 06: OPEN FULL-WIDTH STARBASE LAUNCH COMPLEX FOOTER              -->
     <!-- Clean separation below 05 / Reading, zero text/controls, ignition audio -->
     <!-- ======================================================================= -->
-    <footer id="footer"
-        class="relative w-full h-[400px] sm:h-[440px] mt-0 overflow-hidden select-none scroll-mt-20"
+    <footer id="footer" class="relative w-full h-[400px] sm:h-[440px] mt-0 overflow-hidden select-none scroll-mt-20"
         style="background-color: var(--bg);">
 
         <!-- Seamless Top 110px Fade Blending Sky Out of Page Background -->
@@ -2320,7 +2328,6 @@
                     title: 'Zero to One',
                     author: 'Peter Thiel',
                     category: 'Startups · Contrarian Strategy',
-                    year: '2014',
                     coverImg: null,
                     spineBg: '#09090b',
                     spineInk: '#fafafa',
@@ -2347,9 +2354,6 @@
                                 <span class="px-1.5 py-0.5 bg-white text-[#09090b] font-mono text-[8px] font-bold tracking-wider">
                                     0 → 1
                                 </span>
-                                <span class="font-mono text-[8px] text-[#a1a1aa] tracking-widest">
-                                    2014
-                                </span>
                             </div>
                             <div class="relative z-10 my-auto">
                                 <div class="text-[22px] font-bold tracking-tight leading-tight text-white">
@@ -2362,6 +2366,58 @@
                             <div class="relative z-10 border-t border-white/15 pt-2 flex items-center justify-between text-[8px] font-mono uppercase tracking-[0.12em] text-[#d4d4d8]">
                                 <span>Peter Thiel</span>
                                 <span class="text-[#10b981]">↗</span>
+                            </div>
+                        </div>
+                    `,
+                },
+                {
+                    id: 'stillness-is-the-key',
+                    num: '06',
+                    title: 'Stillness Is the Key',
+                    author: 'Ryan Holiday',
+                    category: 'Philosophy · Stoicism',
+                    year: '2019',
+                    coverImg: null,
+                    spineBg: '#0f2922',
+                    spineInk: '#f4f4f5',
+                    capBg: '#f4f1ea',
+                    capInk: '#0f2922',
+                    backBg: '#091b16',
+                    takeaways: [
+                        'Clarity under pressure requires actively guarding mental, spiritual, and physical stillness—not just working harder.',
+                        'Slowing down to observe before reacting separates signal from noise in both engineering decisions and daily life.',
+                        'Building deliberate routines—journaling, walking, unplugging—creates the space where deep work actually happens.',
+                    ],
+                    quote: 'Stillness is what aims the archer’s arrow. It inspires new ideas. It sharpens perspective and illuminates connections.',
+                    coverHtml: `
+                        <div class="w-full h-full flex flex-col justify-between p-4 select-none relative overflow-hidden"
+                             style="background: linear-gradient(170deg, #13352c 0%, #0d241e 58%, #071713 100%); color: #f4f1ea;">
+                            <!-- Subtle Classical Border -->
+                            <div class="absolute inset-2.5 border border-[#d6c297]/25 pointer-events-none"></div>
+                            <div class="relative z-10 text-center pt-1">
+                                <div class="text-[7px] font-mono uppercase tracking-[0.18em] text-[#d6c297]/80">
+                                    Ryan Holiday
+                                </div>
+                            </div>
+                            <div class="relative z-10 text-center my-auto px-1">
+                                <div class="text-[20px] font-semibold tracking-tight leading-[1.12] text-[#f8f5ee]" style="font-family: Georgia, serif;">
+                                    Stillness<br/>Is the Key
+                                </div>
+                                <!-- Minimalist Key & Concentric Ripple Motif -->
+                                <svg viewBox="0 0 120 56" class="w-[88px] h-auto mx-auto mt-3" aria-hidden="true">
+                                    <circle cx="60" cy="28" r="22" fill="none" stroke="#d6c297" stroke-width="0.7" opacity="0.28" />
+                                    <circle cx="60" cy="28" r="14" fill="none" stroke="#10b981" stroke-width="0.8" opacity="0.45" />
+                                    <!-- Key -->
+                                    <circle cx="44" cy="28" r="5.5" fill="none" stroke="#f4f1ea" stroke-width="1.5" />
+                                    <line x1="49.5" y1="28" x2="77" y2="28" stroke="#f4f1ea" stroke-width="1.5" stroke-linecap="round" />
+                                    <line x1="70" y1="28" x2="70" y2="33" stroke="#f4f1ea" stroke-width="1.5" stroke-linecap="round" />
+                                    <line x1="75" y1="28" x2="75" y2="32" stroke="#f4f1ea" stroke-width="1.5" stroke-linecap="round" />
+                                </svg>
+                            </div>
+                            <div class="relative z-10 text-center border-t border-[#d6c297]/20 pt-2">
+                                <div class="text-[7px] font-mono uppercase tracking-[0.14em] text-[#d6c297]/75">
+                                    Mind · Spirit · Body
+                                </div>
                             </div>
                         </div>
                     `,
@@ -2427,14 +2483,89 @@
                 if (typeof redrawStarbaseFooter === 'function') redrawStarbaseFooter();
             }
 
-            function toggleTheme() {
+            function applyThemeSwitch() {
                 userOverrodeTheme = true;
                 htmlEl.classList.toggle('dark');
                 redrawAllCanvases();
             }
 
+            function toggleTheme(event) {
+                const reducedMotion =
+                    window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+                // Graceful fallback if View Transitions API isn't supported or reduced motion is on
+                if (reducedMotion || typeof document.startViewTransition !== 'function') {
+                    applyThemeSwitch();
+                    return;
+                }
+
+                // Origin: exact click coordinates, or center of the theme button when triggered via 'T' key
+                let x = window.innerWidth - 36;
+                let y = 28;
+                if (event && typeof event.clientX === 'number' && event.clientX > 0) {
+                    x = event.clientX;
+                    y = event.clientY;
+                } else if (themeToggleBtn) {
+                    const rect = themeToggleBtn.getBoundingClientRect();
+                    x = rect.left + rect.width / 2;
+                    y = rect.top + rect.height / 2;
+                }
+
+                // Distance to the farthest corner of the viewport
+                const endRadius = Math.hypot(
+                    Math.max(x, window.innerWidth - x),
+                    Math.max(y, window.innerHeight - y)
+                );
+
+                htmlEl.classList.add('theme-transitioning');
+
+                const transition = document.startViewTransition(() => {
+                    applyThemeSwitch();
+                });
+
+                transition.ready.then(() => {
+                    const timing = {
+                        duration: 1200,
+                        easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+                    };
+
+                    // Incoming theme: expanding radial reveal + soft blur-in
+                    document.documentElement.animate(
+                        {
+                            clipPath: [
+                                `circle(0px at ${x}px ${y}px)`,
+                                `circle(${endRadius}px at ${x}px ${y}px)`,
+                            ],
+                            filter: ['blur(10px)', 'blur(0px)'],
+                            opacity: [0.72, 1],
+                        },
+                        {
+                            ...timing,
+                            pseudoElement: '::view-transition-new(root)',
+                        }
+                    );
+
+                    // Outgoing theme: subtle blur-out as the wave sweeps over it
+                    document.documentElement.animate(
+                        {
+                            filter: ['blur(0px)', 'blur(6px)'],
+                            opacity: [1, 0.85],
+                        },
+                        {
+                            ...timing,
+                            pseudoElement: '::view-transition-old(root)',
+                        }
+                    );
+                });
+
+
+                transition.finished.finally(() => {
+                    htmlEl.classList.remove('theme-transitioning');
+                });
+            }
+
             if (themeToggleBtn) {
-                themeToggleBtn.addEventListener('click', toggleTheme);
+                themeToggleBtn.addEventListener('click', (e) => toggleTheme(e));
             }
 
             if (window.matchMedia) {
@@ -3481,9 +3612,108 @@
                     `;
                 }).join('');
             }
+            /* Subtle Tactile Bookshelf Slide + Settle Sound (Web Audio API) */
+            const playBookSlideSound = (function () {
+                let ctx = null;
+                let slideBuffer = null;
+                let lastPlayed = 0;
 
+                function ensureContext() {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (!AudioCtx) return null;
+                    if (!ctx) ctx = new AudioCtx();
+                    if (ctx.state === 'suspended') {
+                        ctx.resume().catch(() => { });
+                    }
+                    return ctx;
+                }
+
+                // Unlock AudioContext on first user click/keypress so hover audio works smoothly
+                function unlockAudio() {
+                    ensureContext();
+                    window.removeEventListener('pointerdown', unlockAudio);
+                    window.removeEventListener('keydown', unlockAudio);
+                }
+                window.addEventListener('pointerdown', unlockAudio, { passive: true });
+                window.addEventListener('keydown', unlockAudio, { passive: true });
+
+                function getNoiseBuffer(audioCtx) {
+                    if (slideBuffer && slideBuffer.sampleRate === audioCtx.sampleRate) return slideBuffer;
+                    const len = Math.floor(audioCtx.sampleRate * 0.2);
+                    const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+                    const data = buf.getChannelData(0);
+                    let last = 0;
+                    for (let i = 0; i < len; i++) {
+                        const white = Math.random() * 2 - 1;
+                        last = (last + 0.08 * white) / 1.08; // Soft pink/brown tint
+                        data[i] = last * 2.4;
+                    }
+                    slideBuffer = buf;
+                    return buf;
+                }
+
+                return function triggerBookSound() {
+                    const nowMs = performance.now();
+                    if (nowMs - lastPlayed < 90) return; // Prevent audio stacking on fast sweeps
+                    lastPlayed = nowMs;
+
+                    try {
+                        const audioCtx = ensureContext();
+                        if (!audioCtx || audioCtx.state !== 'running') return;
+
+                        const now = audioCtx.currentTime;
+                        const pitchJitter = 0.94 + Math.random() * 0.12; // Natural variation per book
+
+                        // Master cap so it stays whisper-quiet
+                        const master = audioCtx.createGain();
+                        master.gain.setValueAtTime(0.15, now);
+                        master.connect(audioCtx.destination);
+
+                        // 1. Soft hardcover/paper brush slide
+                        const noise = audioCtx.createBufferSource();
+                        noise.buffer = getNoiseBuffer(audioCtx);
+
+                        const filter = audioCtx.createBiquadFilter();
+                        filter.type = 'bandpass';
+                        filter.Q.setValueAtTime(1.4, now);
+                        filter.frequency.setValueAtTime(680 * pitchJitter, now);
+                        filter.frequency.exponentialRampToValueAtTime(320 * pitchJitter, now + 0.11);
+
+                        const slideGain = audioCtx.createGain();
+                        slideGain.gain.setValueAtTime(0.0001, now);
+                        slideGain.gain.linearRampToValueAtTime(0.45, now + 0.02);
+                        slideGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+
+                        noise.connect(filter);
+                        filter.connect(slideGain);
+                        slideGain.connect(master);
+                        noise.start(now);
+                        noise.stop(now + 0.13);
+
+                        // 2. Subtle muted shelf settle thud (as the book tucks in)
+                        const thudStart = now + 0.065;
+                        const thudOsc = audioCtx.createOscillator();
+                        const thudGain = audioCtx.createGain();
+                        thudOsc.type = 'sine';
+                        thudOsc.frequency.setValueAtTime(148 * pitchJitter, thudStart);
+                        thudOsc.frequency.exponentialRampToValueAtTime(64 * pitchJitter, thudStart + 0.065);
+
+                        thudGain.gain.setValueAtTime(0.0001, thudStart);
+                        thudGain.gain.linearRampToValueAtTime(0.28, thudStart + 0.008);
+                        thudGain.gain.exponentialRampToValueAtTime(0.0001, thudStart + 0.075);
+
+                        thudOsc.connect(thudGain);
+                        thudGain.connect(master);
+                        thudOsc.start(thudStart);
+                        thudOsc.stop(thudStart + 0.08);
+                    } catch (_) {
+                        // Fail silently in restricted audio environments
+                    }
+                };
+            })();
             function setActiveBook(bookId) {
                 if (!bookshelfRow || !bookId || bookId === activeBookId) return;
+                playBookSlideSound();
                 activeBookId = bookId;
                 bookshelfRow.querySelectorAll('.book-slot').forEach((slot) => {
                     const isMatch = slot.dataset.bookId === activeBookId;
@@ -3511,15 +3741,15 @@
                                 </h4>
                                 <ul class="space-y-2">
                                     ${book.takeaways
-                                        .map(
-                                            (t) => `
+                            .map(
+                                (t) => `
                                         <li class="flex items-start gap-2.5 text-[13.5px] leading-relaxed text-[var(--text-secondary)]">
                                             <span class="font-mono text-xs mt-0.5 select-none" style="color: var(--accent);">→</span>
                                             <span>${t}</span>
                                         </li>
                                     `
-                                        )
-                                        .join('')}
+                            )
+                            .join('')}
                                 </ul>
                             </div>
                         </div>
