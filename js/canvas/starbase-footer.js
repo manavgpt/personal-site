@@ -1429,8 +1429,8 @@ export function initStarbaseFooter() {
             skyGrad.addColorStop(0.66, '#0d1117');
             skyGrad.addColorStop(1, '#141923');
         } else {
-            skyGrad.addColorStop(0, '#ffffff');
-            skyGrad.addColorStop(0.28, '#ffffff');
+            skyGrad.addColorStop(0, '#f8f7f4');
+            skyGrad.addColorStop(0.28, '#f8f7f4');
             skyGrad.addColorStop(0.68, '#f8fafc');
             skyGrad.addColorStop(1, '#eef2f6');
         }

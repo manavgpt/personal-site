@@ -327,7 +327,7 @@ export const BOOKS = [
                     <div class="text-[9.5px] tracking-[0.18em] uppercase mt-2 text-[#f8f5ee]/85">
                         Hermann Hesse
                     </div>
-                    <div class="text-[19px] tracking-[0.09em] uppercase font-semibold mt-1 text-[#f3dfb0]" style="font-family: Georgia, serif;">
+                    <div class="text-[13px] tracking-[0.09em] uppercase font-semibold mt-1 text-[#f3dfb0]" style="font-family: Georgia, serif;">
                         Siddhartha
                     </div>
                 </div>
@@ -435,7 +435,7 @@ export const BOOKS = [
                     </span>
                 </div>
                 <div class="relative z-10 my-auto">
-                    <div class="text-[22px] font-bold tracking-tight leading-tight text-white">
+                    <div class="text-[20px] font-bold tracking-tight leading-tight text-white">
                         Zero to One
                     </div>
                     <div class="text-[9.5px] leading-relaxed text-[#a1a1aa] mt-2">

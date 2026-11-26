@@ -1,5 +1,5 @@
 :root {
-    --bg: #ffffff;
+    --bg: #f8f7f4;
     --surface: #fafafa;
     --surface-hover: #f4f4f5;
     --border: #e4e4e7;
@@ -10,7 +10,7 @@
     --accent: #059669;
     --accent-soft: rgba(5, 150, 105, 0.1);
     --hatch: rgba(24, 24, 27, 0.065);
-    --glass: rgba(255, 255, 255, 0.84);
+    --glass: rgba(248, 247, 244, 0.84);
     --glitch-blend: multiply;
 }
 

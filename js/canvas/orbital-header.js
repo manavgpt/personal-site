@@ -232,9 +232,9 @@ export function initOrbitalHeader() {
             bgGrad.addColorStop(0.65, '#09090b');
             bgGrad.addColorStop(1, '#09090b');
         } else {
-            bgGrad.addColorStop(0, '#fafafa');
-            bgGrad.addColorStop(0.7, '#ffffff');
-            bgGrad.addColorStop(1, '#ffffff');
+            bgGrad.addColorStop(0, '#f8f7f4');
+            bgGrad.addColorStop(0.7, '#f8f7f4');
+            bgGrad.addColorStop(1, '#f8f7f4');
         }
         ctx.fillStyle = bgGrad;
         ctx.fillRect(0, 0, width, height);
