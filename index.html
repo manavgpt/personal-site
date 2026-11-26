@@ -1132,6 +1132,63 @@
         }
 
         /* =====================================================================
+         * SNOW — SLEEPING PERSIAN IN BOTTOM-RIGHT CORNER OVER SECTION LINES
+         * =================================================================== */
+        /* =====================================================================
+         * SNOW — SLEEPING PERSIAN CAT SITTING ON SECTION LINE WITH TAIL DRAPE
+         * =================================================================== */
+        .shelf-cat-perch {
+            position: absolute;
+            right: 18px;
+            bottom: -63px;
+            width: 112px;
+            z-index: 25;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+            pointer-events: auto;
+            transform-origin: 45% 48%;
+            animation: snow-gentle-breathe 4.4s ease-in-out infinite;
+            transition: filter 220ms ease;
+        }
+
+        .snow-mote {
+            position: absolute;
+            pointer-events: none;
+            font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--accent);
+            z-index: 30;
+            animation: snow-mote-rise 1.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes snow-mote-rise {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, 0) translateX(0px) scale(0.75);
+            }
+
+            20% {
+                opacity: 0.95;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -34px) translateX(var(--drift, 8px)) scale(0.95);
+            }
+        }
+
+        @media (max-width: 639px) {
+            .shelf-cat-perch {
+                right: 10px;
+                bottom: -41px;
+                width: 82px;
+            }
+        }
+
+        /* =====================================================================
          * RADIAL CIRCULAR THEME TRANSITION (VIEW TRANSITIONS API)
          * =================================================================== */
         ::view-transition-old(root),
@@ -1609,7 +1666,7 @@
             <!-- =================================================================== -->
             <!-- SECTION 05: INTERACTIVE 3D BOOKSHELF (READING)                      -->
             <!-- =================================================================== -->
-            <section id="reads" class="px-5 sm:px-7 py-9 scroll-mt-20 reveal">
+            <section id="reads" class="relative px-5 sm:px-7 pt-9 pb-14 sm:py-9 scroll-mt-20 reveal">
                 <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-5">
                     <div>
                         <p class="font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--muted)]">
@@ -3831,6 +3888,14 @@
              *      - Click expanded cover -> opens Editorial Modal with key takeaways
              *      - Full keyboard support (Enter / Space) & optional coverImg field
              * ------------------------------------------------------------------- */
+            const SNOW_PERCH_HTML = `
+                <div id="snowCatSlot" class="shelf-cat-perch" role="button" tabindex="0"
+                    aria-label="Snow, white Persian cat sleeping on the bookshelf ledge. Click to hear her purr.">
+                    <img src="images/snow.png" alt="Snow sleeping" draggable="false" />
+                </div>
+            `;
+
+
             function renderBookshelf() {
                 if (!bookshelfRow) return;
 
@@ -3852,13 +3917,8 @@
                         >
                             <div class="book-shadow" aria-hidden="true"></div>
                             <div class="book-3d">
-                                <!-- Back Volume -->
                                 <div class="book-back" style="background-color: ${book.backBg};" aria-hidden="true"></div>
-
-                                <!-- Physical Page Block Edge -->
                                 <div class="book-pages" aria-hidden="true"></div>
-
-                                <!-- Spine Face -->
                                 <div class="book-spine" style="background-color: ${book.spineBg}; color: ${book.spineInk};">
                                     <div class="book-spine-cap" style="background-color: ${book.capBg}; color: ${book.capInk};">
                                         ${book.num}
@@ -3866,8 +3926,6 @@
                                     <div class="book-spine-title">${book.title}</div>
                                     <div class="book-spine-author">${book.author}</div>
                                 </div>
-
-                                <!-- Front Cover Face -->
                                 <div class="book-cover">
                                     ${coverInner}
                                 </div>
@@ -3876,6 +3934,7 @@
                     `;
                 }).join('');
             }
+
             /* Subtle Tactile Bookshelf Slide + Settle Sound (Web Audio API) */
             const playBookSlideSound = (function () {
                 let ctx = null;
@@ -3979,12 +4038,9 @@
                 if (!bookshelfRow || !bookId || bookId === activeBookId) return;
                 playBookSlideSound();
                 activeBookId = bookId;
-                bookshelfRow.querySelectorAll('.book-slot').forEach((slot) => {
-                    const isMatch = slot.dataset.bookId === activeBookId;
-                    slot.setAttribute('data-active', String(isMatch));
-                    slot.setAttribute('aria-expanded', String(isMatch));
-                });
+                renderBookshelf();
             }
+
 
             function openBookModal(bookId) {
                 const book = BOOKS.find((b) => b.id === bookId);
@@ -4024,6 +4080,134 @@
             function initBookshelf() {
                 if (!bookshelfRow) return;
                 renderBookshelf();
+                const readsSection = document.getElementById('reads');
+                if (readsSection && !readsSection.querySelector('.shelf-cat-perch')) {
+                    readsSection.insertAdjacentHTML('beforeend', SNOW_PERCH_HTML);
+                }
+
+                /* Snow: Rhythmic Web Audio Purr + Floating Hearts */
+                const playSnowPurr = (function () {
+                    let ctx = null;
+                    let lastPurr = 0;
+
+                    return function triggerPurr() {
+                        const nowMs = performance.now();
+                        if (nowMs - lastPurr < 1100) return;
+                        lastPurr = nowMs;
+
+                        try {
+                            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                            if (!AudioCtx) return;
+                            if (!ctx) ctx = new AudioCtx();
+                            if (ctx.state === 'suspended') ctx.resume().catch(() => { });
+
+                            const now = ctx.currentTime;
+                            const duration = 1.35;
+
+                            const master = ctx.createGain();
+                            master.gain.setValueAtTime(0.0001, now);
+                            master.gain.linearRampToValueAtTime(0.14, now + 0.14);
+                            master.gain.setValueAtTime(0.14, now + duration - 0.3);
+                            master.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+                            master.connect(ctx.destination);
+
+                            // Warm low-frequency purr carrier (26Hz + 52Hz harmonic)
+                            const carrier = ctx.createOscillator();
+                            carrier.type = 'triangle';
+                            carrier.frequency.setValueAtTime(27, now);
+
+                            const overtone = ctx.createOscillator();
+                            overtone.type = 'sine';
+                            overtone.frequency.setValueAtTime(54, now);
+
+                            // Rhythmic breath LFO (~4.5 Hz) creating inhale/exhale purr pulse
+                            const lfo = ctx.createOscillator();
+                            lfo.type = 'sine';
+                            lfo.frequency.setValueAtTime(4.5, now);
+
+                            const lfoDepth = ctx.createGain();
+                            lfoDepth.gain.setValueAtTime(0.38, now);
+
+                            const purrMod = ctx.createGain();
+                            purrMod.gain.setValueAtTime(0.55, now);
+
+                            const filter = ctx.createBiquadFilter();
+                            filter.type = 'lowpass';
+                            filter.frequency.setValueAtTime(160, now);
+
+                            lfo.connect(lfoDepth);
+                            lfoDepth.connect(purrMod.gain);
+
+                            carrier.connect(filter);
+                            overtone.connect(filter);
+                            filter.connect(purrMod);
+                            purrMod.connect(master);
+
+                            carrier.start(now);
+                            overtone.start(now);
+                            lfo.start(now);
+
+                            carrier.stop(now + duration + 0.04);
+                            overtone.stop(now + duration + 0.04);
+                            lfo.stop(now + duration + 0.04);
+                        } catch (_) {
+                            // Fail silently in restricted audio environments
+                        }
+                    };
+                })();
+
+                const snowEl = readsSection ? readsSection.querySelector('.shelf-cat-perch') : null;
+                if (snowEl) {
+                    let snowPurrTimer = null;
+
+                    function spawnPurrMotes(count) {
+                        const symbols = ['purr', 'purr', 'purr'];
+                        for (let i = 0; i < count; i++) {
+                            setTimeout(() => {
+                                if (!snowEl.isConnected) return;
+                                const mote = document.createElement('span');
+                                mote.className = 'snow-mote';
+                                mote.textContent = symbols[i % symbols.length];
+                                const leftPx = 24 + i * 14 + (Math.random() - 0.5) * 6;
+                                const driftPx = (Math.random() - 0.5) * 16;
+                                mote.style.left = `${leftPx}px`;
+                                mote.style.top = '-8px';
+                                mote.style.setProperty('--drift', `${driftPx.toFixed(1)}px`);
+                                snowEl.appendChild(mote);
+                                setTimeout(() => mote.remove(), 1400);
+                            }, i * 260);
+                        }
+                    }
+
+                    function petSnow() {
+                        playSnowPurr();
+                        spawnPurrMotes(3);
+                        snowEl.classList.add('is-purring');
+                        clearTimeout(purrClassTimer);
+                        purrClassTimer = setTimeout(() => {
+                            snowEl.classList.remove('is-purring');
+                        }, 1400);
+                    }
+
+
+                    snowEl.addEventListener('pointerenter', (e) => {
+                        if (e.pointerType === 'mouse') petSnow();
+                    });
+
+                    snowEl.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        petSnow();
+                    });
+
+                    snowEl.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            petSnow();
+                        }
+                    });
+                }
 
                 // Hovering any collapsed spine with a mouse smoothly rotates it open
                 bookshelfRow.addEventListener('pointerover', (e) => {
