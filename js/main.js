@@ -1,3 +1,4 @@
+import { initGitHubGraph } from './github-graph.js';
 import { initTheme } from './theme.js';
 import {
     initModal,
@@ -40,6 +41,7 @@ const initializers = [
     initOrbitalHeader,
     initGlobe3D,
     initStarbaseFooter,
+    initGitHubGraph,
     () => initCommandPalette(openProjectModal),
 ];
 
