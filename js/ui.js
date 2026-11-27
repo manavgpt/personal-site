@@ -345,6 +345,79 @@ export function initObservers() {
             else stopClock();
         });
     }
+    // Hybrid Focused Section View on Navbar Click
+    const primaryNavLinks = document.querySelectorAll('nav[aria-label="Primary Navigation"] a[href^="#"]');
+    const brandHomeLink = document.querySelector('a[aria-label="Manav Chaudhari Home"]');
+    const mainSections = document.querySelectorAll('main > section[id]');
+
+    function showAllSections(updateHash = true) {
+        setActiveSpy('hero');
+        document.body.classList.remove('is-focused-view');
+        mainSections.forEach((sec) => sec.classList.remove('is-focused-section'));
+        primaryNavLinks.forEach((a) => {
+            a.classList.toggle('is-nav-active', a.getAttribute('href') === '#hero');
+        });
+        mobileSpyLinks.forEach((link) => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const id = link.dataset.mobileSpy;
+                setMobileMenuOpen(false);
+                focusSection(id, true);
+            });
+        });
+        if (updateHash && location.hash) {
+            history.pushState(null, '', location.pathname + location.search);
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function focusSection(id, updateHash = true) {
+        const target = document.getElementById(id);
+        if (!target) return;
+
+        // "About" (#hero) restores the full scrolling portfolio
+        if (id === 'hero') {
+            showAllSections(updateHash);
+            return;
+        }
+
+        document.body.classList.add('is-focused-view');
+        mainSections.forEach((sec) => {
+            const isTarget = sec.id === id;
+            sec.classList.toggle('is-focused-section', isTarget);
+            if (isTarget) sec.classList.add('is-visible'); // bypass scroll-reveal delay
+        });
+
+        primaryNavLinks.forEach((a) => {
+            a.classList.toggle('is-nav-active', a.getAttribute('href') === `#${id}`);
+        });
+        setActiveSpy(id);
+        if (updateHash) {
+            history.pushState({ focused: id }, '', `#${id}`);
+        }
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    primaryNavLinks.forEach((link) => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const id = link.getAttribute('href').slice(1);
+            focusSection(id, true);
+        });
+    });
+
+    if (brandHomeLink) {
+        brandHomeLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showAllSections(true);
+        });
+    }
+
+    window.addEventListener('popstate', () => {
+        const id = location.hash ? location.hash.slice(1) : 'hero';
+        focusSection(id, false);
+    });
 }
 
 

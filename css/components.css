@@ -1283,3 +1283,39 @@ html.dark .gh-ship-flap {
 .location-dot.is-night {
     background-color: var(--muted);
 }
+
+/* =====================================================================
+ * FOCUSED SECTION VIEW (NAVBAR ISOLATION MODE)
+ * =================================================================== */
+body.is-focused-view main>section,
+body.is-focused-view main>.hatch-divider {
+    display: none;
+}
+
+body.is-focused-view main>section.is-focused-section {
+    display: block;
+    animation: focusSectionIn 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Hide desktop scroll-spy rail when only one section is mounted */
+body.is-focused-view aside[aria-label="Section scroll progress"] {
+    opacity: 0;
+    pointer-events: none;
+}
+
+nav[aria-label="Primary Navigation"] a.is-nav-active {
+    color: var(--text);
+    font-weight: 500;
+}
+
+@keyframes focusSectionIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
