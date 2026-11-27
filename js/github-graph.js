@@ -139,7 +139,7 @@ export function initGitHubGraph() {
     });
 
     gridEl.addEventListener('pointerleave', () => {
-        if (readoutEl) readoutEl.textContent = 'Hover a day for details';
+        if (readoutEl) readoutEl.textContent = '';
     });
 
     fetchGitHubData()
