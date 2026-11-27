@@ -117,11 +117,12 @@ export function initResumeAndCopy() {
     }
 
     const copyEmailBtn = document.getElementById('copyEmailBtn');
-    if (copyEmailBtn) {
-        const copyIconSvg = copyEmailBtn.innerHTML;
+    const copyEmailIcon = document.getElementById('copyEmailIcon');
+    if (copyEmailBtn && copyEmailIcon) {
+        const copyIconSvg = copyEmailIcon.innerHTML;
         const checkIconSvg = `
-            <svg class="w-3.5 h-3.5" style="color: var(--accent);" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="w-3 h-3" style="color: var(--accent);" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
         `;
@@ -130,10 +131,11 @@ export function initResumeAndCopy() {
         copyEmailBtn.addEventListener('click', () => {
             const markCopied = () => {
                 clearTimeout(copyResetTimer);
-                copyEmailBtn.innerHTML = checkIconSvg;
+                copyEmailIcon.innerHTML = checkIconSvg;
                 copyEmailBtn.setAttribute('aria-label', 'Email copied');
+                showToast('Copied hello@manav.here');
                 copyResetTimer = setTimeout(() => {
-                    copyEmailBtn.innerHTML = copyIconSvg;
+                    copyEmailIcon.innerHTML = copyIconSvg;
                     copyEmailBtn.setAttribute('aria-label', 'Copy email address');
                 }, 1800);
             };
@@ -281,6 +283,18 @@ export function initObservers() {
     }
 
     setActiveSpy('hero');
+    // Cursor-tracking radial border glow on project cards
+    const projectsGrid = document.getElementById('projectsGrid');
+    if (projectsGrid && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        projectsGrid.addEventListener('pointermove', (e) => {
+            const card = e.target.closest('#projectsGrid > *');
+            if (!card) return;
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+            card.style.setProperty('--my', `${e.clientY - rect.top}px`);
+        });
+    }
+
 }
 
 

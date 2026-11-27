@@ -1151,6 +1151,16 @@ html.dark .gh-ship-flap {
     background-color: var(--surface-hover);
 }
 
+.contact-copy-icon {
+    display: inline-flex;
+    align-items: center;
+}
+
+.contact-cell:hover .contact-copy-icon {
+    transform: none;
+}
+
+
 .contact-icon {
     width: 32px;
     height: 32px;
@@ -1186,4 +1196,36 @@ html.dark .gh-ship-flap {
 .contact-cell:hover .contact-arrow {
     color: var(--text);
     transform: translate(1.5px, -1.5px);
+}
+
+/* =====================================================================
+ * CURSOR-TRACKING RADIAL BORDER GLOW (PROJECT CARDS)
+ * =================================================================== */
+@media (hover: hover) and (pointer: fine) {
+    #projectsGrid>* {
+        position: relative;
+    }
+
+    #projectsGrid>*::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        padding: 1.5px;
+        background: radial-gradient(240px circle at var(--mx, -999px) var(--my, -999px),
+                var(--accent),
+                transparent 65%);
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 220ms ease;
+    }
+
+    #projectsGrid>*:hover::before {
+        opacity: 0.85;
+    }
 }
