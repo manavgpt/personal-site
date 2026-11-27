@@ -122,23 +122,31 @@ export const EXPERIENCE = [
 ];
 
 export const STACK = [
-    { name: 'TypeScript', category: 'Languages', symbol: 'TS' },
-    { name: 'Go', category: 'Languages', symbol: 'GO' },
-    { name: 'Python', category: 'Languages', symbol: 'PY' },
-    { name: 'Rust', category: 'Languages', symbol: 'RS' },
-    { name: 'SQL', category: 'Languages', symbol: 'SQ' },
-    { name: 'React', category: 'Frontend', symbol: '⚛' },
-    { name: 'Next.js', category: 'Frontend', symbol: '▲' },
-    { name: 'Tailwind CSS', category: 'Frontend', symbol: '≈' },
-    { name: 'HTML5 Canvas', category: 'Frontend', symbol: '▦' },
-    { name: 'Node.js', category: 'Backend', symbol: '⬢' },
-    { name: 'PostgreSQL', category: 'Backend', symbol: '⛁' },
-    { name: 'Redis', category: 'Backend', symbol: '◈' },
-    { name: 'gRPC', category: 'Backend', symbol: '⇄' },
-    { name: 'Docker', category: 'AI & Infra', symbol: '❏' },
-    { name: 'PyTorch', category: 'AI & Infra', symbol: '◉' },
-    { name: 'Gemini / OpenAI', category: 'AI & Infra', symbol: '✦' },
-    { name: 'Linux / eBPF', category: 'AI & Infra', symbol: '⌘' },
+    { name: 'TypeScript', category: 'Languages', slug: 'typescript' },
+    { name: 'Go', category: 'Languages', slug: 'go' },
+    { name: 'Python', category: 'Languages', slug: 'python' },
+    { name: 'Rust', category: 'Languages', slug: 'rust' },
+    {
+        name: 'SQL',
+        category: 'Languages',
+        svg: `<svg class="w-3.5 h-3.5 opacity-85 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>`,
+    },
+    { name: 'React', category: 'Frontend', slug: 'react' },
+    { name: 'Next.js', category: 'Frontend', slug: 'nextdotjs' },
+    { name: 'Tailwind CSS', category: 'Frontend', slug: 'tailwindcss' },
+    { name: 'HTML5 Canvas', category: 'Frontend', slug: 'html5' },
+    { name: 'Node.js', category: 'Backend', slug: 'nodedotjs' },
+    { name: 'PostgreSQL', category: 'Backend', slug: 'postgresql' },
+    { name: 'Redis', category: 'Backend', slug: 'redis' },
+    {
+        name: 'gRPC',
+        category: 'Backend',
+        svg: `<svg class="w-3.5 h-3.5 opacity-85 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 16l-4-4 4-4"/><path d="M17 8l4 4-4 4"/><path d="M3 12h18"/></svg>`,
+    },
+    { name: 'Docker', category: 'AI & Infra', slug: 'docker' },
+    { name: 'PyTorch', category: 'AI & Infra', slug: 'pytorch' },
+    { name: 'Gemini / OpenAI', category: 'AI & Infra', slug: 'googlegemini' },
+    { name: 'Linux / eBPF', category: 'AI & Infra', slug: 'linux' },
 ];
 
 export const NOTES = [

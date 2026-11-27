@@ -27,25 +27,25 @@ export function openProjectModal(projectId) {
                     <h4 class="font-mono text-[11px] uppercase tracking-wider text-[var(--muted)] mb-2">Key Metrics</h4>
                     <ul class="space-y-1.5">
                         ${p.metrics
-                            .map(
-                                (m) => `
+                .map(
+                    (m) => `
                             <li class="flex items-start gap-2 text-[13.5px] text-[var(--text)]">
                                 <span class="font-mono text-xs mt-0.5" style="color: var(--accent);">→</span>
                                 <span>${m}</span>
                             </li>
                         `
-                            )
-                            .join('')}
+                )
+                .join('')}
                     </ul>
                 </div>
                 <div class="pt-3 border-t theme-border flex items-center justify-between flex-wrap gap-3">
                     <div class="flex items-center flex-wrap gap-1.5">
                         ${p.tags
-                            .map(
-                                (t) =>
-                                    `<span class="px-2.5 py-1 rounded-md border theme-border theme-surface font-mono text-[11px] text-[var(--text)]">${t}</span>`
-                            )
-                            .join('')}
+                .map(
+                    (t) =>
+                        `<span class="px-2.5 py-1 rounded-md border theme-border theme-surface font-mono text-[11px] text-[var(--text)]">${t}</span>`
+                )
+                .join('')}
                     </div>
                     <div class="flex items-center gap-4 font-mono text-xs text-[var(--text)]">
                         <a href="#live-${p.id}" data-mock-action="Launching ${p.title} live demo" class="hover:underline underline-offset-4">Live Preview ↗</a>
@@ -111,11 +111,11 @@ export function initProjects() {
                         <div class="pt-3 border-t theme-border flex items-center justify-between gap-2 flex-wrap">
                             <div class="flex items-center flex-wrap gap-1.5">
                                 ${project.tags
-                                    .map(
-                                        (tag) =>
-                                            `<span class="px-2 py-0.5 rounded border theme-border theme-surface font-mono text-[10.5px] text-[var(--muted)]">${tag}</span>`
-                                    )
-                                    .join('')}
+                        .map(
+                            (tag) =>
+                                `<span class="px-2 py-0.5 rounded border theme-border theme-surface font-mono text-[10.5px] text-[var(--muted)]">${tag}</span>`
+                        )
+                        .join('')}
                             </div>
 
                             <div class="flex items-center gap-3 font-mono text-[11px] text-[var(--muted)]">
@@ -206,15 +206,15 @@ export function initExperience() {
                     <div class="accordion-inner">
                         <ul class="px-4 sm:px-5 pb-5 pt-1 space-y-2 text-[13.5px] leading-relaxed text-[var(--text-secondary)]">
                             ${item.bullets
-                                .map(
-                                    (bullet) => `
+                .map(
+                    (bullet) => `
                                 <li class="flex items-start gap-2.5">
                                     <span class="font-mono text-xs mt-0.5 select-none" style="color: var(--accent);">•</span>
                                     <span>${bullet}</span>
                                 </li>
                             `
-                                )
-                                .join('')}
+                )
+                .join('')}
                         </ul>
                     </div>
                 </div>
@@ -250,16 +250,18 @@ export function initStack() {
                 : STACK.filter((item) => item.category === activeStackFilter);
 
         stackGrid.innerHTML = list
-            .map(
-                (tech) => `
-                <div class="tech-chip animate-filter-in inline-flex items-center gap-2 px-3 py-1.5 rounded-lg">
-                    <span class="w-5 h-5 rounded border theme-border theme-surface flex items-center justify-center font-mono text-[10px] text-[var(--muted)] shrink-0">
-                        ${tech.symbol}
-                    </span>
-                    <span class="font-mono text-[12px] text-[var(--text)]">${tech.name}</span>
-                </div>
-            `
-            )
+            .map((item) => {
+                const icon = item.slug
+                    ? `<span class="stack-logo" style="--icon-url: url('https://cdn.simpleicons.org/${item.slug}')" aria-hidden="true"></span>`
+                    : item.svg;
+
+                return `
+            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border theme-border theme-surface font-mono text-[12px] text-[var(--text)] select-none">
+                ${icon}
+                <span>${item.name}</span>
+            </span>
+        `;
+            })
             .join('');
     }
 

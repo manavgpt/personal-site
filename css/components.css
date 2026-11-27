@@ -1319,3 +1319,29 @@ nav[aria-label="Primary Navigation"] a.is-nav-active {
         transform: translateY(0);
     }
 }
+
+/* =====================================================================
+ * STATIC MONOCHROME TECH STACK CHIPS (NO HOVER)
+ * =================================================================== */
+#stackGrid>* {
+    cursor: default;
+    transition: none;
+}
+
+#stackGrid>*:hover {
+    background-color: var(--surface);
+    border-color: var(--border);
+    color: var(--text);
+    transform: none;
+}
+
+.stack-logo {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    flex-shrink: 0;
+    background-color: currentColor;
+    opacity: 0.85;
+    -webkit-mask: var(--icon-url) no-repeat center / contain;
+    mask: var(--icon-url) no-repeat center / contain;
+}
