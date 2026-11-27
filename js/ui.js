@@ -294,7 +294,57 @@ export function initObservers() {
             card.style.setProperty('--my', `${e.clientY - rect.top}px`);
         });
     }
+    // Hover-to-reveal Live IST Clock on Hero Location
+    const locationClock = document.getElementById('locationClock');
+    const istClockText = document.getElementById('istClockText');
+    const istStatusDot = document.getElementById('istStatusDot');
 
+    if (locationClock && istClockText) {
+        const istFormatter = new Intl.DateTimeFormat('en-GB', {
+            timeZone: 'Asia/Kolkata',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+        });
+
+        let clockTimer = null;
+
+        const updateIstClock = () => {
+            const now = new Date();
+            const timeStr = istFormatter.format(now);
+            istClockText.textContent = `${timeStr} IST`;
+
+            if (istStatusDot) {
+                const istHour = Number(timeStr.slice(0, 2));
+                const isNight = istHour >= 0 && istHour < 8;
+                istStatusDot.classList.toggle('is-night', isNight);
+            }
+        };
+
+        const startClock = () => {
+            updateIstClock();
+            if (!clockTimer) clockTimer = setInterval(updateIstClock, 1000);
+        };
+
+        const stopClock = () => {
+            if (locationClock.classList.contains('is-clock-open')) return;
+            clearInterval(clockTimer);
+            clockTimer = null;
+        };
+
+        locationClock.addEventListener('mouseenter', startClock);
+        locationClock.addEventListener('mouseleave', stopClock);
+        locationClock.addEventListener('focus', startClock);
+        locationClock.addEventListener('blur', stopClock);
+
+        // Mobile tap-to-toggle support
+        locationClock.addEventListener('click', () => {
+            const isOpen = locationClock.classList.toggle('is-clock-open');
+            if (isOpen) startClock();
+            else stopClock();
+        });
+    }
 }
 
 

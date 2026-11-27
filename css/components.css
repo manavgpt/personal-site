@@ -1229,3 +1229,57 @@ html.dark .gh-ship-flap {
         opacity: 0.85;
     }
 }
+
+/* =====================================================================
+ * HERO LOCATION HOVER -> LIVE IST CLOCK SWAP
+ * =================================================================== */
+.location-swap {
+    display: inline-grid;
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+.location-city,
+.location-time {
+    grid-area: 1 / 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition:
+        transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 200ms ease;
+}
+
+.location-time {
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+.header-location:hover .location-city,
+.header-location:focus-visible .location-city,
+.header-location.is-clock-open .location-city {
+    transform: translateY(-100%);
+    opacity: 0;
+}
+
+.header-location:hover .location-time,
+.header-location:focus-visible .location-time,
+.header-location.is-clock-open .location-time {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.location-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background-color: var(--accent);
+    flex-shrink: 0;
+}
+
+.location-dot.is-night {
+    background-color: var(--muted);
+}

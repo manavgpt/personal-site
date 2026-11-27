@@ -315,11 +315,19 @@
                             </div>
                         </div>
 
-                        <!-- Rotating WebGL 3D Globe + Location -->
-                        <span class="header-location shrink-0 pl-[70px] sm:pl-0 sm:pb-[2px]">
+                        <!-- Rotating WebGL 3D Globe + Hover-to-IST Clock -->
+                        <span id="locationClock" tabindex="0"
+                            class="header-location shrink-0 pl-[70px] sm:pl-0 sm:pb-[2px] cursor-default select-none">
                             <canvas class="globe-3d" id="globe3d" width="64" height="64" aria-hidden="true"></canvas>
-                            <span>Bengaluru, India</span>
+                            <span class="location-swap">
+                                <span class="location-city">Bengaluru, India</span>
+                                <span class="location-time">
+                                    <!-- <span id="istStatusDot" class="location-dot" aria-hidden="true"></span> -->
+                                    <span id="istClockText">--:--:-- IST</span>
+                                </span>
+                            </span>
                         </span>
+
                     </div>
 
                     <!-- High-Density About: Strictly 3 Scannable Engineering Bullets -->
