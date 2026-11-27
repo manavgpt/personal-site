@@ -1320,6 +1320,17 @@ nav[aria-label="Primary Navigation"] a.is-nav-active {
     }
 }
 
+/* Keep framed column (and Snow's hanging tail) painted above the footer */
+.framed-column {
+    z-index: 20;
+}
+
+/* Keep the hatched shelf directly under #reads so Snow has a ledge to rest on */
+body.is-focused-view #reads.is-focused-section+.hatch-divider {
+    display: block;
+}
+
+
 /* =====================================================================
  * STATIC MONOCHROME TECH STACK CHIPS (NO HOVER)
  * =================================================================== */
