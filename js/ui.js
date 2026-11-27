@@ -186,6 +186,16 @@ export function initObservers() {
     const mobileSpyLabel = document.getElementById('mobileSpyLabel');
     const mobileSpyChevron = document.getElementById('mobileSpyChevron');
     const mobileSpyLinks = document.querySelectorAll('.mobile-spy-link');
+    const spyIndicator = document.getElementById('spyIndicator');
+
+    function moveSpyIndicator(activeLink) {
+        if (!spyIndicator || !activeLink) return;
+        const barHeight = spyIndicator.offsetHeight || 18;
+        const targetY = activeLink.offsetTop + (activeLink.offsetHeight - barHeight) / 2;
+        spyIndicator.style.transform = `translateY(${targetY}px)`;
+        spyIndicator.style.opacity = '1';
+    }
+
 
     const SECTION_LABELS = {
         hero: '00 / Intro',
@@ -225,24 +235,18 @@ export function initObservers() {
     }
 
     function setActiveSpy(id) {
+        let activeLink = null;
+
         // Desktop rail
         spyLinks.forEach((link) => {
             const isMatch = link.dataset.spy === id;
-            const bar = link.querySelector('.spy-bar');
-            if (isMatch) {
-                link.style.color = 'var(--text)';
-                if (bar) {
-                    bar.style.background = 'var(--accent)';
-                    bar.style.height = '18px';
-                }
-            } else {
-                link.style.color = 'var(--muted)';
-                if (bar) {
-                    bar.style.background = 'var(--border)';
-                    bar.style.height = '14px';
-                }
-            }
+            link.classList.toggle('is-active', isMatch);
+            link.style.color = isMatch ? 'var(--text)' : 'var(--muted)';
+            if (isMatch) activeLink = link;
         });
+
+        // Glide the single emerald indicator bar to the active section
+        if (activeLink) moveSpyIndicator(activeLink);
 
         // Mobile floating pill + active dot
         if (mobileSpyLabel && SECTION_LABELS[id]) {

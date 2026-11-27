@@ -982,3 +982,47 @@ html.dark .gh-ship-flap {
     width: 10px;
     height: 10px;
 }
+
+/* =====================================================================
+ * SMOOTH SLIDING SCROLL-SPY INDICATOR
+ * =================================================================== */
+.spy-indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    width: 2px;
+    height: 18px;
+    border-radius: 9999px;
+    background-color: var(--accent);
+    pointer-events: none;
+    opacity: 0;
+    will-change: transform;
+    transition:
+        transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 180ms ease;
+}
+
+.spy-link.is-active {
+    color: var(--text);
+}
+
+.spy-link.is-active .spy-bar {
+    opacity: 0;
+}
+
+
+/* Keep individual ticks subtle; let #spyIndicator carry the emerald highlight
+.spy-link.is-active {
+    color: var(--text);
+}
+
+.spy-link.is-active .spy-bar {
+    opacity: 0;
+} */
+
+@media (prefers-reduced-motion: reduce) {
+    .spy-indicator {
+        transition: none;
+    }
+}

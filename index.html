@@ -130,7 +130,9 @@
     <!-- ======================================================================= -->
     <aside aria-label="Section scroll progress"
         class="hidden lg:flex fixed top-1/2 -translate-y-1/2 z-30 flex-col gap-1.5" style="left: calc(50% + 408px);">
-        <nav id="scrollSpyRail" class="flex flex-col gap-1">
+        <nav id="scrollSpyRail" class="relative flex flex-col gap-1">
+            <!-- Smooth Sliding Active Bar -->
+            <span id="spyIndicator" aria-hidden="true" class="spy-indicator"></span>
             <a href="#hero" data-spy="hero"
                 class="spy-link group flex items-center gap-2.5 py-1 text-[11px] font-mono text-[var(--muted)] hover:text-[var(--text)] transition-colors">
                 <span class="spy-bar w-[2px] h-3.5 rounded-full bg-[var(--border)] transition-all duration-200"></span>
