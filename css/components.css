@@ -1104,3 +1104,86 @@ html.dark .gh-ship-flap {
     -webkit-mask-image: linear-gradient(var(--blur-dir), transparent 76%, #000 94%, #000 100%);
     mask-image: linear-gradient(var(--blur-dir), transparent 76%, #000 94%, #000 100%);
 }
+
+/* =====================================================================
+ * COMPACT 5-COLUMN CONTACT STRIP
+ * =================================================================== */
+.contact-strip {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background-color: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+@media (min-width: 640px) {
+    .contact-strip {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+
+.contact-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 18px 10px;
+    background-color: var(--bg);
+    color: var(--text);
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 180ms ease;
+}
+
+.contact-cell-last {
+    grid-column: span 2;
+}
+
+@media (min-width: 640px) {
+    .contact-cell-last {
+        grid-column: span 1;
+    }
+}
+
+.contact-cell:hover {
+    background-color: var(--surface-hover);
+}
+
+.contact-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background-color: var(--surface);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--text);
+    transition: border-color 180ms ease, color 180ms ease;
+}
+
+.contact-label {
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+}
+
+.contact-arrow {
+    font-size: 11px;
+    color: var(--muted);
+    transition: transform 180ms ease, color 180ms ease;
+}
+
+.contact-cell:hover .contact-icon {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+.contact-cell:hover .contact-arrow {
+    color: var(--text);
+    transform: translate(1.5px, -1.5px);
+}
