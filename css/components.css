@@ -569,9 +569,9 @@ html.dark .book-shadow {
 }
 
 .book-slot[data-active="true"] .book-3d {
-    /* Expanded: front cover opens smoothly to a physical 3D perspective angle */
-    transform: translateX(13px) rotateY(15deg) rotateX(1.5deg) translateY(-3px);
+    transform: translateX(13px) translateZ(18px) rotateY(15deg) rotateX(1.5deg) translateY(-4px);
 }
+
 
 /* Front Cover Face */
 .book-cover {

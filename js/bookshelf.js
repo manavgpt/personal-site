@@ -6,7 +6,8 @@ export function initBookshelf() {
     const bookshelfRow = document.getElementById('bookshelfRow');
     if (!bookshelfRow) return;
 
-    let activeBookId = BOOKS[0].id;
+    // All books start tucked inside the shelf
+    let activeBookId = null;
 
     function renderBookshelf() {
         bookshelfRow.innerHTML = BOOKS.map((book) => {
@@ -23,7 +24,7 @@ export function initBookshelf() {
                     data-book-id="${book.id}"
                     data-active="${isActive}"
                     aria-expanded="${isActive}"
-                    aria-label="${book.title} by ${book.author}. ${isActive ? 'Expanded. Press Enter to read notes.' : 'Collapsed spine. Hover or press Enter to expand.'}"
+                    aria-label="${book.title} by ${book.author}."
                 >
                     <div class="book-shadow" aria-hidden="true"></div>
                     <div class="book-3d">
@@ -46,10 +47,17 @@ export function initBookshelf() {
     }
 
     function setActiveBook(bookId) {
-        if (!bookId || bookId === activeBookId) return;
+        const nextId = bookId || null;
+        if (nextId === activeBookId) return;
+
         playBookSlideSound();
-        activeBookId = bookId;
-        renderBookshelf();
+        activeBookId = nextId;
+
+        bookshelfRow.querySelectorAll('.book-slot').forEach((slot) => {
+            const isActive = slot.dataset.bookId === activeBookId;
+            slot.dataset.active = String(isActive);
+            slot.setAttribute('aria-expanded', String(isActive));
+        });
     }
 
     function openBookModal(bookId) {
@@ -70,15 +78,15 @@ export function initBookshelf() {
                         </h4>
                         <ul class="space-y-2">
                             ${book.takeaways
-                                .map(
-                                    (t) => `
+                    .map(
+                        (t) => `
                                 <li class="flex items-start gap-2.5 text-[13.5px] leading-relaxed text-[var(--text-secondary)]">
                                     <span class="font-mono text-xs mt-0.5 select-none" style="color: var(--accent);">→</span>
                                     <span>${t}</span>
                                 </li>
                             `
-                                )
-                                .join('')}
+                    )
+                    .join('')}
                         </ul>
                     </div>
                 </div>
@@ -88,6 +96,7 @@ export function initBookshelf() {
 
     renderBookshelf();
 
+    // Desktop: hover a spine to slide it out, leave the shelf to tuck all books back in
     bookshelfRow.addEventListener('pointerover', (e) => {
         if (e.pointerType !== 'mouse') return;
         const slot = e.target.closest('.book-slot');
@@ -96,6 +105,12 @@ export function initBookshelf() {
         }
     });
 
+    bookshelfRow.addEventListener('pointerleave', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        setActiveBook(null);
+    });
+
+    // Click / Touch: first tap opens spine, second tap opens reading notes modal
     bookshelfRow.addEventListener('click', (e) => {
         const slot = e.target.closest('.book-slot');
         if (!slot) return;
@@ -107,6 +122,14 @@ export function initBookshelf() {
         }
     });
 
+    // Touch / Click outside the shelf tucks any open book back in
+    document.addEventListener('click', (e) => {
+        if (activeBookId && !bookshelfRow.contains(e.target)) {
+            setActiveBook(null);
+        }
+    });
+
+    // Keyboard navigation
     bookshelfRow.addEventListener('keydown', (e) => {
         if (e.key !== 'Enter' && e.key !== ' ') return;
         const slot = e.target.closest('.book-slot');
