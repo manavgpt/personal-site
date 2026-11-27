@@ -821,6 +821,11 @@ html.dark {
     --gh-ink-dark: #052e16;
 }
 
+#ghGraphScroll {
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
 .gh-months {
     display: grid;
     grid-auto-flow: column;
@@ -1011,18 +1016,12 @@ html.dark .gh-ship-flap {
     opacity: 0;
 }
 
-
-/* Keep individual ticks subtle; let #spyIndicator carry the emerald highlight
-.spy-link.is-active {
-    color: var(--text);
-}
-
-.spy-link.is-active .spy-bar {
-    opacity: 0;
-} */
-
 @media (prefers-reduced-motion: reduce) {
     .spy-indicator {
         transition: none;
     }
+}
+
+.framed-column {
+    overflow-x: clip;
 }
