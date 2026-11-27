@@ -1038,6 +1038,11 @@ html.dark .gh-ship-flap {
     right: 0;
     pointer-events: none;
     z-index: 25;
+    transition: opacity 250ms ease;
+}
+
+.progressive-blur.is-hidden {
+    opacity: 0;
 }
 
 .progressive-blur-top {

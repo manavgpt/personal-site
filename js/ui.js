@@ -328,21 +328,36 @@ export function initDynamicFavicon() {
  * ------------------------------------------------------------------- */
 export function initMorphingNavbar() {
     const navWrap = document.getElementById('siteNavWrap');
+    const topBlur = document.querySelector('.progressive-blur-top');
+    const bottomBlur = document.querySelector('.progressive-blur-bottom');
     if (!navWrap) return;
 
     let lastScrolled = null;
+    let lastAtBottom = null;
 
     function updateNavState() {
         const isScrolled = window.scrollY > 8;
-        if (isScrolled === lastScrolled) return;
-        lastScrolled = isScrolled;
-        navWrap.classList.toggle('is-scrolled', isScrolled);
+        if (isScrolled !== lastScrolled) {
+            lastScrolled = isScrolled;
+            navWrap.classList.toggle('is-scrolled', isScrolled);
+            if (topBlur) topBlur.classList.toggle('is-hidden', !isScrolled);
+        }
+
+        if (bottomBlur) {
+            const distFromBottom =
+                document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
+            const isAtBottom = distFromBottom < 140;
+            if (isAtBottom !== lastAtBottom) {
+                lastAtBottom = isAtBottom;
+                bottomBlur.classList.toggle('is-hidden', isAtBottom);
+            }
+        }
     }
 
     window.addEventListener('scroll', updateNavState, { passive: true });
+    window.addEventListener('resize', updateNavState, { passive: true });
     updateNavState();
 }
-
 
 /* ---------------------------------------------------------------------
 * 18C. COMMAND PALETTE (⌘K / Ctrl+K)
