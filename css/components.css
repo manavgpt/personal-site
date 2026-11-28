@@ -1518,26 +1518,25 @@ body.is-blueprint .bp-hud {
 
 /* Stack Brand Icons: Desaturated at rest -> True Brand Color on hover */
 .stack-icon {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
     flex-shrink: 0;
-    filter: grayscale(100%) opacity(0.72);
-    transition: filter 0.2s ease, transform 0.2s ease;
+    filter: grayscale(100%) opacity(0.62);
+    transition: filter 0.65s ease, transform 0.35s ease;
 }
 
-.stack-pill:hover .stack-icon {
-    filter: grayscale(0%) opacity(1);
-    transform: scale(1.06);
+.stack-pill:hover .stack-icon,
+.stack-pill.is-lit .stack-icon {
+    filter: grayscale(0%) opacity(1) drop-shadow(0 0 6px var(--glow, transparent));
+    transform: scale(1.08);
 }
 
-/* Auto-invert pure-black logos (GitHub, Next.js, Rust, Express, etc.) in dark mode */
-html.dark .stack-icon.icon-invert {
-    filter: invert(1) grayscale(100%) opacity(0.75);
+html.dark .stack-pill:hover .stack-icon.icon-invert,
+html.dark .stack-pill.is-lit .stack-icon.icon-invert {
+    filter: invert(1) opacity(1) drop-shadow(0 0 6px var(--glow, transparent));
+    transform: scale(1.08);
 }
 
-html.dark .stack-pill:hover .stack-icon.icon-invert {
-    filter: invert(1) opacity(1);
-}
 
 @keyframes stackBlurIn {
     from {

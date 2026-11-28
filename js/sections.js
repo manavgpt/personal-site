@@ -264,13 +264,35 @@ export function initStack() {
                     : item.svg;
 
                 return `
-            <span class="stack-pill stack-pill-enter inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border theme-border theme-surface font-mono text-[12px] text-[var(--text)] select-none" style="--i:${idx}">
+            <span class="stack-pill stack-pill-enter inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border theme-border theme-surface font-mono text-[12px] text-[var(--text)] select-none" style="--i:${idx}; --glow:${item.glow || 'transparent'}">
                 ${icon}
                 <span>${item.name}</span>
             </span>
         `;
             })
             .join('');
+    }
+    const reducedMotion =
+        window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!reducedMotion) {
+        setInterval(() => {
+            const pills = [...stackGrid.querySelectorAll('.stack-pill')];
+            if (!pills.length) return;
+
+            // Pick 1 random pill (or 2 if viewing the full 'All' list)
+            const count = pills.length > 8 ? 2 : 1;
+            const chosen = [];
+            while (chosen.length < count) {
+                const candidate = pills[Math.floor(Math.random() * pills.length)];
+                if (!chosen.includes(candidate)) chosen.push(candidate);
+            }
+
+            chosen.forEach((el) => {
+                el.classList.add('is-lit');
+                setTimeout(() => el.classList.remove('is-lit'), 1800);
+            });
+        }, 2600);
     }
 
     document.querySelectorAll('[data-stack-filter]').forEach((btn) => {
