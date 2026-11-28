@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8" />
@@ -719,8 +719,9 @@
     <div id="modalOverlay"
         class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-[2px] modal-backdrop opacity-0"
         role="dialog" aria-modal="true" aria-labelledby="modalHeading">
-        <div id="modalPanel"
-            class="w-full max-w-[640px] max-h-[85vh] overflow-y-auto rounded-xl border theme-border bg-[var(--bg)] shadow-2xl p-6 sm:p-7 modal-panel scale-95 opacity-0">
+        <div id="modalPanel" data-lenis-prevent class="w-full max-w-[640px] max-h-[85vh] overflow-y-auto class=" w-full
+            max-w-[640px] max-h-[85vh] overflow-y-auto rounded-xl border theme-border bg-[var(--bg)] shadow-2xl p-6
+            sm:p-7 modal-panel scale-95 opacity-0">
             <!-- Modal Top Meta + Close -->
             <div class="flex items-center justify-between gap-4 pb-4 border-b theme-border">
                 <span id="modalKicker" class="font-mono text-[11px] uppercase tracking-wider text-[var(--muted)]">
@@ -766,7 +767,7 @@
             </div>
 
             <!-- Dynamic Results List -->
-            <div id="cmdList" class="max-h-[300px] overflow-y-auto p-1.5 space-y-0.5" role="listbox">
+            <div id="cmdList" data-lenis-prevent class="max-h-[300px] overflow-y-auto p-1.5 space-y-0.5" role="listbox">
                 <!-- Rendered via JS -->
             </div>
 

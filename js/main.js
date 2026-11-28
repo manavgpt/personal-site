@@ -1,5 +1,10 @@
 import { initGitHubGraph } from './github-graph.js';
 import { initTheme } from './theme.js';
+import { initSmoothScroll } from './smooth-scroll.js';
+
+// Inside your DOMContentLoaded / init block:
+initSmoothScroll();
+
 import {
     initModal,
     initResumeAndCopy,
