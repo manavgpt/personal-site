@@ -418,6 +418,112 @@ export function initObservers() {
         const id = location.hash ? location.hash.slice(1) : 'hero';
         focusSection(id, false);
     });
+    // Live Runtime Telemetry Pill (Real DOM, FPS, Frame Time, JS Heap)
+    const telemetryBtn = document.getElementById('telemetryBtn');
+    const telemetryPanel = document.getElementById('telemetryPanel');
+    const telFps = document.getElementById('telFps');
+    const telDomMini = document.getElementById('telDomMini');
+    const telFrame = document.getElementById('telFrame');
+    const telDom = document.getElementById('telDom');
+    const telMemRow = document.getElementById('telMemRow');
+    const telMem = document.getElementById('telMem');
+    const telViewport = document.getElementById('telViewport');
+    const telStatus = document.getElementById('telStatus');
+    const telDot = document.getElementById('telDot');
+
+    if (telemetryBtn && telemetryPanel && telFps) {
+        // 1. Real DOM Content Loaded timing
+        const updateDomMetric = () => {
+            const nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+            const ms = nav && nav.domContentLoadedEventEnd > 0
+                ? Math.round(nav.domContentLoadedEventEnd - nav.startTime)
+                : Math.round(performance.now());
+            if (telDomMini) telDomMini.textContent = `${ms}ms`;
+            if (telDom) telDom.textContent = `${ms} ms`;
+        };
+        if (document.readyState === 'complete') updateDomMetric();
+        else window.addEventListener('load', updateDomMetric, { once: true });
+
+        // 2. Viewport & DPR
+        const updateViewport = () => {
+            if (!telViewport) return;
+            const dpr = (window.devicePixelRatio || 1).toFixed(1);
+            telViewport.textContent = `${window.innerWidth}×${window.innerHeight} @${dpr}x`;
+        };
+        updateViewport();
+        window.addEventListener('resize', updateViewport);
+
+        // 3. Hide JS Heap row on browsers without performance.memory (Safari/Firefox)
+        const hasMem = !!(performance && performance.memory);
+        if (!hasMem && telMemRow) telMemRow.classList.add('hidden');
+
+        // 4. Rolling FPS & frame-time sampler (updates DOM every 500ms, pauses when hidden)
+        let frames = 0;
+        let lastSample = performance.now();
+        let telRafId = null;
+
+        const sampleFrame = (now) => {
+            frames++;
+            const delta = now - lastSample;
+            if (delta >= 500) {
+                const fps = Math.round((frames * 1000) / delta);
+                const frameMs = (delta / frames).toFixed(1);
+                telFps.textContent = `${fps} FPS`;
+                if (telFrame) telFrame.textContent = `${frameMs} ms`;
+
+                if (hasMem && telMem) {
+                    const mb = (performance.memory.usedJSHeapSize / 1048576).toFixed(1);
+                    telMem.textContent = `${mb} MB`;
+                }
+
+                const isHealthy = fps >= 50;
+                if (telStatus) {
+                    telStatus.textContent = isHealthy ? 'NOMINAL' : 'THROTTLED';
+                    telStatus.style.color = isHealthy ? 'var(--accent)' : '#f59e0b';
+                }
+                if (telDot) {
+                    telDot.style.backgroundColor = isHealthy ? 'var(--accent)' : '#f59e0b';
+                }
+
+                frames = 0;
+                lastSample = now;
+            }
+            telRafId = requestAnimationFrame(sampleFrame);
+        };
+
+        const startTelemetry = () => {
+            if (telRafId) return;
+            frames = 0;
+            lastSample = performance.now();
+            telRafId = requestAnimationFrame(sampleFrame);
+        };
+
+        const stopTelemetry = () => {
+            if (!telRafId) return;
+            cancelAnimationFrame(telRafId);
+            telRafId = null;
+        };
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) stopTelemetry();
+            else startTelemetry();
+        });
+        startTelemetry();
+
+        // 5. Toggle expanded panel
+        telemetryBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = telemetryPanel.classList.toggle('hidden');
+            telemetryBtn.setAttribute('aria-expanded', String(!isOpen));
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!telemetryPanel.classList.contains('hidden') && !telemetryPanel.contains(e.target)) {
+                telemetryPanel.classList.add('hidden');
+                telemetryBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
 }
 
 

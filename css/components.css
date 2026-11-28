@@ -1356,3 +1356,27 @@ body.is-focused-view #reads.is-focused-section+.hatch-divider {
     -webkit-mask: var(--icon-url) no-repeat center / contain;
     mask: var(--icon-url) no-repeat center / contain;
 }
+
+/* =====================================================================
+ * LIVE RUNTIME TELEMETRY HUD
+ * =================================================================== */
+.telemetry-pill {
+    font-variant-numeric: tabular-nums;
+}
+
+.telemetry-panel {
+    transform-origin: bottom left;
+    animation: telemetryIn 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes telemetryIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
