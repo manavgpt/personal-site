@@ -3,6 +3,8 @@ import { toggleTheme } from './theme.js';
 import { playStarshipTakeoffAudio } from './audio.js';
 
 let toastTimeout = null;
+let focusSectionRef = null;
+let toggleBlueprintRef = null;
 
 export function showToast(message) {
     const toastEl = document.getElementById('toast');
@@ -357,14 +359,6 @@ export function initObservers() {
         primaryNavLinks.forEach((a) => {
             a.classList.toggle('is-nav-active', a.getAttribute('href') === '#hero');
         });
-        mobileSpyLinks.forEach((link) => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const id = link.dataset.mobileSpy;
-                setMobileMenuOpen(false);
-                focusSection(id, true);
-            });
-        });
         if (updateHash && location.hash) {
             history.pushState(null, '', location.pathname + location.search);
         }
@@ -375,7 +369,6 @@ export function initObservers() {
         const target = document.getElementById(id);
         if (!target) return;
 
-        // "About" (#hero) restores the full scrolling portfolio
         if (id === 'hero') {
             showAllSections(updateHash);
             return;
@@ -385,7 +378,7 @@ export function initObservers() {
         mainSections.forEach((sec) => {
             const isTarget = sec.id === id;
             sec.classList.toggle('is-focused-section', isTarget);
-            if (isTarget) sec.classList.add('is-visible'); // bypass scroll-reveal delay
+            if (isTarget) sec.classList.add('is-visible');
         });
 
         primaryNavLinks.forEach((a) => {
@@ -398,11 +391,21 @@ export function initObservers() {
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+    focusSectionRef = focusSection;
 
     primaryNavLinks.forEach((link) => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const id = link.getAttribute('href').slice(1);
+            focusSection(id, true);
+        });
+    });
+
+    mobileSpyLinks.forEach((link) => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const id = link.dataset.mobileSpy;
+            setMobileMenuOpen(false);
             focusSection(id, true);
         });
     });
@@ -418,112 +421,133 @@ export function initObservers() {
         const id = location.hash ? location.hash.slice(1) : 'hero';
         focusSection(id, false);
     });
-    // Live Runtime Telemetry Pill (Real DOM, FPS, Frame Time, JS Heap)
-    const telemetryBtn = document.getElementById('telemetryBtn');
-    const telemetryPanel = document.getElementById('telemetryPanel');
-    const telFps = document.getElementById('telFps');
-    const telDomMini = document.getElementById('telDomMini');
-    const telFrame = document.getElementById('telFrame');
-    const telDom = document.getElementById('telDom');
-    const telMemRow = document.getElementById('telMemRow');
-    const telMem = document.getElementById('telMem');
-    const telViewport = document.getElementById('telViewport');
-    const telStatus = document.getElementById('telStatus');
-    const telDot = document.getElementById('telDot');
 
-    if (telemetryBtn && telemetryPanel && telFps) {
-        // 1. Real DOM Content Loaded timing
-        const updateDomMetric = () => {
-            const nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
-            const ms = nav && nav.domContentLoadedEventEnd > 0
-                ? Math.round(nav.domContentLoadedEventEnd - nav.startTime)
-                : Math.round(performance.now());
-            if (telDomMini) telDomMini.textContent = `${ms}ms`;
-            if (telDom) telDom.textContent = `${ms} ms`;
-        };
-        if (document.readyState === 'complete') updateDomMetric();
-        else window.addEventListener('load', updateDomMetric, { once: true });
+    // Live Blueprint / X-Ray DOM & Canvas Inspector
+    let bpHud = null;
+    let bpCrossX = null;
+    let bpCrossY = null;
+    let bpBox = null;
+    let bpTag = null;
+    let bpActive = false;
 
-        // 2. Viewport & DPR
-        const updateViewport = () => {
-            if (!telViewport) return;
-            const dpr = (window.devicePixelRatio || 1).toFixed(1);
-            telViewport.textContent = `${window.innerWidth}×${window.innerHeight} @${dpr}x`;
-        };
-        updateViewport();
-        window.addEventListener('resize', updateViewport);
-
-        // 3. Hide JS Heap row on browsers without performance.memory (Safari/Firefox)
-        const hasMem = !!(performance && performance.memory);
-        if (!hasMem && telMemRow) telMemRow.classList.add('hidden');
-
-        // 4. Rolling FPS & frame-time sampler (updates DOM every 500ms, pauses when hidden)
-        let frames = 0;
-        let lastSample = performance.now();
-        let telRafId = null;
-
-        const sampleFrame = (now) => {
-            frames++;
-            const delta = now - lastSample;
-            if (delta >= 500) {
-                const fps = Math.round((frames * 1000) / delta);
-                const frameMs = (delta / frames).toFixed(1);
-                telFps.textContent = `${fps} FPS`;
-                if (telFrame) telFrame.textContent = `${frameMs} ms`;
-
-                if (hasMem && telMem) {
-                    const mb = (performance.memory.usedJSHeapSize / 1048576).toFixed(1);
-                    telMem.textContent = `${mb} MB`;
-                }
-
-                const isHealthy = fps >= 50;
-                if (telStatus) {
-                    telStatus.textContent = isHealthy ? 'NOMINAL' : 'THROTTLED';
-                    telStatus.style.color = isHealthy ? 'var(--accent)' : '#f59e0b';
-                }
-                if (telDot) {
-                    telDot.style.backgroundColor = isHealthy ? 'var(--accent)' : '#f59e0b';
-                }
-
-                frames = 0;
-                lastSample = now;
-            }
-            telRafId = requestAnimationFrame(sampleFrame);
-        };
-
-        const startTelemetry = () => {
-            if (telRafId) return;
-            frames = 0;
-            lastSample = performance.now();
-            telRafId = requestAnimationFrame(sampleFrame);
-        };
-
-        const stopTelemetry = () => {
-            if (!telRafId) return;
-            cancelAnimationFrame(telRafId);
-            telRafId = null;
-        };
-
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) stopTelemetry();
-            else startTelemetry();
-        });
-        startTelemetry();
-
-        // 5. Toggle expanded panel
-        telemetryBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const isOpen = telemetryPanel.classList.toggle('hidden');
-            telemetryBtn.setAttribute('aria-expanded', String(!isOpen));
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!telemetryPanel.classList.contains('hidden') && !telemetryPanel.contains(e.target)) {
-                telemetryPanel.classList.add('hidden');
-                telemetryBtn.setAttribute('aria-expanded', 'false');
-            }
+    function updateBlueprintSections() {
+        document.querySelectorAll('main > section[id]').forEach((sec) => {
+            const rect = sec.getBoundingClientRect();
+            const nodes = sec.querySelectorAll('*').length;
+            sec.dataset.bpMeta = `#${sec.id} · ${Math.round(rect.width)}×${Math.round(rect.height)} · ${nodes} nodes`;
         });
     }
+
+    function ensureBpHud() {
+        if (bpHud) return;
+        bpHud = document.createElement('div');
+        bpHud.className = 'bp-hud';
+        bpHud.setAttribute('aria-hidden', 'true');
+        bpHud.innerHTML = `
+            <div class="bp-cross-x"></div>
+            <div class="bp-cross-y"></div>
+            <div class="bp-box"></div>
+            <div class="bp-tag"></div>
+        `;
+        document.body.appendChild(bpHud);
+        bpCrossX = bpHud.querySelector('.bp-cross-x');
+        bpCrossY = bpHud.querySelector('.bp-cross-y');
+        bpBox = bpHud.querySelector('.bp-box');
+        bpTag = bpHud.querySelector('.bp-tag');
+    }
+
+    function onBpMove(e) {
+        if (!bpHud) return;
+        bpCrossX.style.transform = `translate3d(0, ${e.clientY}px, 0)`;
+        bpCrossY.style.transform = `translate3d(${e.clientX}px, 0, 0)`;
+
+        const el = e.target;
+        if (!el || el === document.body || el === document.documentElement) {
+            bpBox.style.opacity = '0';
+            bpTag.style.opacity = '0';
+            return;
+        }
+
+        const rect = el.getBoundingClientRect();
+        const w = Math.round(rect.width);
+        const h = Math.round(rect.height);
+        const tag = el.tagName.toLowerCase();
+        const id = el.id ? `#${el.id}` : '';
+
+        bpBox.style.opacity = '1';
+        bpBox.style.transform = `translate3d(${rect.left}px, ${rect.top}px, 0)`;
+        bpBox.style.width = `${rect.width}px`;
+        bpBox.style.height = `${rect.height}px`;
+
+        const extra =
+            tag === 'canvas'
+                ? ` · buf ${el.width}×${el.height}`
+                : ` · x:${Math.round(rect.left)} y:${Math.round(rect.top + window.scrollY)}`;
+
+        bpTag.style.opacity = '1';
+        bpTag.innerHTML = `<em>${tag}${id}</em> · ${w}×${h}px${extra}`;
+
+        const tagW = bpTag.offsetWidth || 180;
+        const tx = Math.min(window.innerWidth - tagW - 10, Math.max(10, e.clientX + 14));
+        const ty = e.clientY > 44 ? e.clientY - 30 : e.clientY + 16;
+        bpTag.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+    }
+
+    function toggleBlueprint() {
+        bpActive = document.body.classList.toggle('is-blueprint');
+        if (bpActive) {
+            ensureBpHud();
+            updateBlueprintSections();
+            window.addEventListener('pointermove', onBpMove, { passive: true });
+            window.addEventListener('resize', updateBlueprintSections);
+            showToast('X-Ray inspector: ON');
+        } else {
+            window.removeEventListener('pointermove', onBpMove);
+            window.removeEventListener('resize', updateBlueprintSections);
+            showToast('X-Ray inspector: OFF');
+        }
+    }
+    toggleBlueprintRef = toggleBlueprint;
+
+
+    // Deterministic 0–6, G & Esc Keyboard Shortcuts
+    const KEY_SECTION_MAP = {
+        '0': 'hero',
+        '1': 'projects',
+        '2': 'experience',
+        '3': 'stack',
+        '4': 'notes',
+        '5': 'reads',
+        '6': 'connect',
+    };
+
+    document.addEventListener('keydown', (e) => {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const tag = e.target && e.target.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return;
+
+        const modalOpen = !document.getElementById('modalOverlay')?.classList.contains('hidden');
+        const cmdOpen = !document.getElementById('cmdOverlay')?.classList.contains('hidden');
+        if (modalOpen || cmdOpen) return;
+
+        if (e.key === 'Escape' && document.body.classList.contains('is-focused-view')) {
+            e.preventDefault();
+            showAllSections(true);
+            return;
+        }
+
+        if (e.key.toLowerCase() === 'g') {
+            e.preventDefault();
+            toggleBlueprint();
+            return;
+        }
+
+        const targetId = KEY_SECTION_MAP[e.key];
+        if (targetId) {
+            e.preventDefault();
+            focusSection(targetId, true);
+        }
+    });
 }
 
 
@@ -605,6 +629,9 @@ export function initMorphingNavbar() {
 /* ---------------------------------------------------------------------
 * 18C. COMMAND PALETTE (⌘K / Ctrl+K)
 * ------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------
+ * 18C. COMMAND PALETTE (⌘K / Ctrl+K) — GROUPED SITE EXPLORER
+ * ------------------------------------------------------------------- */
 export function initCommandPalette(openProjectModal) {
     const overlay = document.getElementById('cmdOverlay');
     const panel = document.getElementById('cmdPanel');
@@ -616,45 +643,116 @@ export function initCommandPalette(openProjectModal) {
     let activeIdx = 0;
     let filtered = [];
 
-    const jumpTo = (id) => {
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
+    const go = (id) => {
+        if (focusSectionRef) {
+            focusSectionRef(id, true);
+        } else {
+            document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    const ICONS = {
+        nav: `<svg class="w-3.5 h-3.5 shrink-0 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`,
+        project: `<svg class="w-3.5 h-3.5 shrink-0 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>`,
+        action: `<svg class="w-3.5 h-3.5 shrink-0 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
     };
 
     const COMMANDS = [
-        { group: 'Navigate', label: 'About & Intro', hint: 'Section', run: () => jumpTo('hero') },
-        { group: 'Navigate', label: 'Projects', hint: 'Section', run: () => jumpTo('projects') },
-        { group: 'Navigate', label: 'Experience', hint: 'Section', run: () => jumpTo('experience') },
-        { group: 'Navigate', label: 'Tech Stack', hint: 'Section', run: () => jumpTo('stack') },
-        { group: 'Navigate', label: 'Technical Notes', hint: 'Section', run: () => jumpTo('notes') },
-        { group: 'Navigate', label: 'Reading Bookshelf', hint: 'Section', run: () => jumpTo('reads') },
-        { group: 'Navigate', label: 'Socials & Contact', hint: 'Section', run: () => jumpTo('connect') },
+        // 1. Navigate (mirrors 0–6 deterministic shortcuts)
+        { group: 'Navigate', icon: ICONS.nav, label: 'Full Portfolio (Overview)', keywords: 'home intro about', kbd: '0', run: () => go('hero') },
+        { group: 'Navigate', icon: ICONS.nav, label: 'Projects', keywords: 'work code builds', kbd: '1', run: () => go('projects') },
+        { group: 'Navigate', icon: ICONS.nav, label: 'Experience', keywords: 'career jobs roles', kbd: '2', run: () => go('experience') },
+        { group: 'Navigate', icon: ICONS.nav, label: 'Tech Stack', keywords: 'tools languages', kbd: '3', run: () => go('stack') },
+        { group: 'Navigate', icon: ICONS.nav, label: 'Technical Notes', keywords: 'writing blog articles', kbd: '4', run: () => go('notes') },
+        { group: 'Navigate', icon: ICONS.nav, label: 'Reading Bookshelf', keywords: 'books snow', kbd: '5', run: () => go('reads') },
+        { group: 'Navigate', icon: ICONS.nav, label: 'Socials & Contact', keywords: 'email github twitter', kbd: '6', run: () => go('connect') },
+
+        // 2. Dynamic Projects (auto-populated from data.js)
+        ...PROJECTS.map((p) => ({
+            group: 'Projects',
+            icon: ICONS.project,
+            label: p.title,
+            sub: p.tagline,
+            keywords: `${p.category} ${(p.tags || []).join(' ')}`,
+            kbd: '↵',
+            run: () => openProjectModal && openProjectModal(p.id),
+        })),
+
+        // 3. System & Actions
+        {
+            group: 'System',
+            icon: ICONS.action,
+            label: 'Toggle X-Ray DOM Inspector',
+            keywords: 'blueprint grid caliper debug',
+            kbd: 'G',
+            run: () => toggleBlueprintRef && toggleBlueprintRef(),
+        },
+        {
+            group: 'System',
+            icon: ICONS.action,
+            label: 'Toggle Light / Dark Theme',
+            keywords: 'dark mode light appearance',
+            kbd: 'T',
+            run: () => toggleTheme(),
+        },
+        {
+            group: 'System',
+            icon: ICONS.action,
+            label: 'Copy Email Address',
+            sub: 'hello@manav.here',
+            keywords: 'mail contact clipboard',
+            kbd: '↵',
+            run: () => document.getElementById('copyEmailBtn')?.click(),
+        },
+        {
+            group: 'System',
+            icon: ICONS.action,
+            label: 'Open Resume Preview',
+            keywords: 'cv pdf download',
+            kbd: '↵',
+            run: () => document.getElementById('resumeBtn')?.click(),
+        },
     ];
 
     function renderList() {
         const q = input.value.trim().toLowerCase();
         filtered = q
-            ? COMMANDS.filter((c) => `${c.label} ${c.group} ${c.hint}`.toLowerCase().includes(q))
+            ? COMMANDS.filter((c) =>
+                `${c.label} ${c.sub || ''} ${c.group} ${c.keywords || ''}`.toLowerCase().includes(q)
+            )
             : COMMANDS;
 
         if (activeIdx >= filtered.length) activeIdx = 0;
 
         if (!filtered.length) {
-            listEl.innerHTML = `<div class="px-3 py-6 text-center font-mono text-xs text-[var(--muted)]">No matching commands</div>`;
+            listEl.innerHTML = `<div class="px-3 py-8 text-center font-mono text-xs text-[var(--muted)]">No matching commands for "${q}"</div>`;
             return;
         }
 
-        listEl.innerHTML = filtered
-            .map(
-                (cmd, i) => `
-                       <button type="button" data-cmd-idx="${i}" role="option" aria-selected="${i === activeIdx}"
-                           class="w-full text-left px-3 py-2 rounded-lg flex items-center justify-between gap-3 transition-colors cursor-pointer ${i === activeIdx ? 'bg-[var(--surface-hover)] text-[var(--text)]' : 'text-[var(--text-secondary)] hover:bg-[var(--surface)]'}">
-                           <span class="text-[13px] truncate">${cmd.label}</span>
-                           <span class="font-mono text-[10.5px] text-[var(--muted)] shrink-0">${cmd.hint}</span>
-                       </button>
-                   `
-            )
-            .join('');
+        let html = '';
+        let lastGroup = '';
+
+        filtered.forEach((cmd, i) => {
+            if (cmd.group !== lastGroup) {
+                lastGroup = cmd.group;
+                html += `<div class="cmd-group-label">${cmd.group}</div>`;
+            }
+            const subHtml = cmd.sub
+                ? `<span class="text-[11.5px] text-[var(--muted)] truncate hidden sm:inline">— ${cmd.sub}</span>`
+                : '';
+            html += `
+                <button type="button" data-cmd-idx="${i}" role="option" aria-selected="${i === activeIdx}" class="cmd-item">
+                    <span class="flex items-center gap-2.5 min-w-0">
+                        ${cmd.icon}
+                        <span class="text-[13px] font-medium truncate">${cmd.label}</span>
+                        ${subHtml}
+                    </span>
+                    <kbd class="cmd-kbd">${cmd.kbd}</kbd>
+                </button>
+            `;
+        });
+
+        listEl.innerHTML = html;
 
         const activeBtn = listEl.querySelector(`[data-cmd-idx="${activeIdx}"]`);
         if (activeBtn) activeBtn.scrollIntoView({ block: 'nearest' });

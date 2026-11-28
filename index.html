@@ -774,7 +774,7 @@
             <div
                 class="px-4 py-2 border-t theme-border theme-surface flex items-center justify-between font-mono text-[10px] text-[var(--muted)]">
                 <span>↑↓ navigate · ↵ select</span>
-                <span>⌘K / Ctrl+K</span>
+                <!-- <span>⌘K / Ctrl+K</span> -->
             </div>
         </div>
     </div>
@@ -786,49 +786,6 @@
         style="background-color: var(--text); color: var(--bg);">
         <span class="w-1.5 h-1.5 rounded-full" style="background-color: var(--accent);"></span>
         <span id="toastText">Notification</span>
-    </div>
-
-    <!-- ======================================================================= -->
-    <!-- LIVE RUNTIME TELEMETRY PILL (DESKTOP, BOTTOM-LEFT)                      -->
-    <!-- ======================================================================= -->
-    <div id="telemetryWrap" class="hidden sm:flex fixed bottom-5 left-5 z-40 flex-col items-start gap-2">
-        <!-- Expanded Metrics Panel -->
-        <div id="telemetryPanel" role="region" aria-label="Runtime telemetry"
-            class="telemetry-panel hidden w-56 p-3 rounded-xl border theme-border shadow-xl backdrop-blur-md font-mono text-[11px]"
-            style="background-color: var(--glass);">
-            <div class="flex items-center justify-between pb-2 mb-2 border-b theme-border">
-                <span class="uppercase tracking-[0.1em] text-[10px] text-[var(--muted)]">Runtime</span>
-                <span id="telStatus" class="text-[10px]" style="color: var(--accent);">NOMINAL</span>
-            </div>
-            <div class="space-y-1.5 text-[var(--muted)]">
-                <div class="flex items-center justify-between">
-                    <span>FRAME</span>
-                    <span id="telFrame" class="text-[var(--text)] tabular-nums">-- ms</span>
-                </div>
-                <div class="flex items-center justify-between">
-                    <span>DOM LOAD</span>
-                    <span id="telDom" class="text-[var(--text)] tabular-nums">-- ms</span>
-                </div>
-                <div id="telMemRow" class="flex items-center justify-between">
-                    <span>JS HEAP</span>
-                    <span id="telMem" class="text-[var(--text)] tabular-nums">-- MB</span>
-                </div>
-                <div class="flex items-center justify-between">
-                    <span>VIEWPORT</span>
-                    <span id="telViewport" class="text-[var(--text)] tabular-nums">--</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Compact Trigger Pill -->
-        <button id="telemetryBtn" type="button" aria-expanded="false" aria-controls="telemetryPanel"
-            class="telemetry-pill inline-flex items-center gap-2 px-3 py-1.5 rounded-full border theme-border shadow-lg backdrop-blur-md font-mono text-[11px] text-[var(--muted)] hover:text-[var(--text)] cursor-pointer transition-colors"
-            style="background-color: var(--glass);">
-            <span id="telDot" class="w-1.5 h-1.5 rounded-full shrink-0" style="background-color: var(--accent);"></span>
-            <span id="telFps" class="tabular-nums text-[var(--text)]">-- FPS</span>
-            <span class="opacity-40">·</span>
-            <span id="telDomMini" class="tabular-nums">--ms</span>
-        </button>
     </div>
     <!-- Modular ES Entry Point -->
     <script type="module" src="js/main.js"></script>
