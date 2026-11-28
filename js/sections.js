@@ -250,13 +250,21 @@ export function initStack() {
                 : STACK.filter((item) => item.category === activeStackFilter);
 
         stackGrid.innerHTML = list
-            .map((item) => {
+            .map((item, idx) => {
+                const iconClasses = [
+                    'stack-icon',
+                    item.invertDark ? 'icon-invert' : '',
+                    item.boostLight ? 'icon-boost-light' : '',
+                ]
+                    .filter(Boolean)
+                    .join(' ');
+
                 const icon = item.slug
-                    ? `<span class="stack-logo" style="--icon-url: url('https://cdn.simpleicons.org/${item.slug}')" aria-hidden="true"></span>`
+                    ? `<img src="https://cdn.simpleicons.org/${item.slug}" alt="" loading="lazy" class="${iconClasses}" aria-hidden="true" />`
                     : item.svg;
 
                 return `
-            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border theme-border theme-surface font-mono text-[12px] text-[var(--text)] select-none">
+            <span class="stack-pill stack-pill-enter inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border theme-border theme-surface font-mono text-[12px] text-[var(--text)] select-none" style="--i:${idx}">
                 ${icon}
                 <span>${item.name}</span>
             </span>

@@ -125,14 +125,14 @@ export const STACK = [
     { name: 'TypeScript', category: 'Languages', slug: 'typescript' },
     { name: 'Go', category: 'Languages', slug: 'go' },
     { name: 'Python', category: 'Languages', slug: 'python' },
-    { name: 'Rust', category: 'Languages', slug: 'rust' },
+    { name: 'Rust', category: 'Languages', slug: 'rust', invertDark: true },
+    { name: 'Next.js', category: 'Frontend', slug: 'nextdotjs', invertDark: true },
     {
         name: 'SQL',
         category: 'Languages',
         svg: `<svg class="w-3.5 h-3.5 opacity-85 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>`,
     },
-    { name: 'React', category: 'Frontend', slug: 'react' },
-    { name: 'Next.js', category: 'Frontend', slug: 'nextdotjs' },
+    { name: 'React', category: 'Frontend', slug: 'react', boostLight: true },
     { name: 'Tailwind CSS', category: 'Frontend', slug: 'tailwindcss' },
     { name: 'HTML5 Canvas', category: 'Frontend', slug: 'html5' },
     { name: 'Node.js', category: 'Backend', slug: 'nodedotjs' },
@@ -146,7 +146,7 @@ export const STACK = [
     { name: 'Docker', category: 'AI & Infra', slug: 'docker' },
     { name: 'PyTorch', category: 'AI & Infra', slug: 'pytorch' },
     { name: 'Gemini / OpenAI', category: 'AI & Infra', slug: 'googlegemini' },
-    { name: 'Linux / eBPF', category: 'AI & Infra', slug: 'linux' },
+    { name: 'Linux / eBPF', category: 'AI & Infra', slug: 'linux', boostLight: true },
 ];
 
 export const NOTES = [
