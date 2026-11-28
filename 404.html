@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 — Manav Chaudhari</title>
+
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/inactive.png" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Immediate Theme Detection (Prevents FOUC) -->
+    <script>
+        (function () {
+            try {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark');
+                }
+            } catch (e) { }
+        })();
+    </script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+                    },
+                },
+            },
+        };
+    </script>
+
+    <link rel="stylesheet" href="/css/base.css" />
+</head>
+
+<body class="font-sans antialiased overflow-hidden min-h-screen relative select-none">
+
+    <!-- Full-Viewport Lost-in-Space Illustration Canvas -->
+    <canvas id="lostSpaceCanvas" class="fixed inset-0 w-full h-full block cursor-crosshair"></canvas>
+
+    <!-- Minimal Top-Left Brand + Top-Right Theme Toggle -->
+    <a href="/"
+        class="fixed top-5 left-5 sm:left-7 z-20 font-sans text-sm font-semibold tracking-tight text-[var(--text)] opacity-80 hover:opacity-100 transition-opacity">
+        Manav
+    </a>
+
+    <button id="themeToggleBtn" type="button" aria-label="Toggle color theme"
+        class="fixed top-5 right-5 sm:right-7 z-20 w-8 h-8 rounded-lg border theme-border bg-[var(--glass)] backdrop-blur-md hover:border-[var(--border-strong)] flex items-center justify-center text-[var(--text)] transition-all cursor-pointer">
+        <svg class="w-4 h-4 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path
+                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41">
+            </path>
+        </svg>
+        <svg class="w-4 h-4 block dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+        </svg>
+    </button>
+
+    <!-- Minimal Bottom-Centered Overlay -->
+    <main
+        class="relative z-10 min-h-screen flex flex-col items-center justify-end pb-12 sm:pb-16 px-6 text-center pointer-events-none">
+        <p class="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--muted)]">
+            404 · Beyond Telemetry
+        </p>
+
+        <h1 class="mt-2 text-xl sm:text-2xl font-medium tracking-tight text-[var(--text)]">
+            Nothing out here but cold gas and dead links.
+        </h1>
+
+        <p id="badRoutePath" class="mt-1.5 font-mono text-[11.5px] text-[var(--muted)] opacity-75 max-w-xs truncate">
+        </p>
+
+        <div class="pointer-events-auto mt-6 flex items-center gap-3">
+            <a href="/"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-xs transition-opacity hover:opacity-85"
+                style="background-color: var(--text); color: var(--bg);">
+                <span>← Pull the tether</span>
+            </a>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initTheme, onThemeChange } from '/js/theme.js';
+
+        initTheme();
+
+        // Display mistyped route quietly
+        const pathEl = document.getElementById('badRoutePath');
+        if (pathEl) {
+            const raw = window.location.pathname;
+            pathEl.textContent = raw === '/404.html' ? '' : raw;
+        }
+
+        // 'H' shortcut to return home
+        document.addEventListener('keydown', (e) => {
+            if (e.metaKey || e.ctrlKey || e.altKey) return;
+            if (e.key === 'h' || e.key === 'H') window.location.href = '/';
+        });
+
+        (function initLostInSpaceArt() {
+            const canvas = document.getElementById('lostSpaceCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+
+            const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+            let w = 0, h = 0;
+            const start = performance.now();
+            let last = start;
+
+            // Smooth cursor parallax
+            const pointer = { nx: 0, ny: 0, active: false };
+            const cam = { x: 0, y: 0 };
+
+            // 3-depth starfield
+            const stars = Array.from({ length: 150 }, (_, i) => ({
+                u: ((i * 73 + 19) % 100) / 100,
+                v: ((i * 41 + 7) % 100) / 100,
+                r: i % 17 === 0 ? 1.65 : i % 4 === 0 ? 1.05 : 0.6,
+                depth: 0.25 + (i % 3) * 0.35,
+                phase: i * 1.37,
+            }));
+
+            // Tiny floating debris flecks
+            const debris = Array.from({ length: 10 }, (_, i) => ({
+                angle: (i / 10) * Math.PI * 2,
+                dist: 90 + (i % 4) * 42,
+                size: 1.5 + (i % 3) * 1.1,
+                speed: (i % 2 === 0 ? 1 : -1) * (0.04 + (i % 3) * 0.02),
+                rot: i * 0.9,
+            }));
+
+            // Drifting Starship state
+            const ship = {
+                x: 0,
+                y: 0,
+                vx: 8,
+                vy: -3,
+                angle: -0.48,
+                vAngle: 0.09,
+                ready: false,
+            };
+
+            // Tethered astronaut state (lags behind ship softly)
+            const astro = {
+                x: 0,
+                y: 0,
+                vx: 0,
+                vy: 0,
+                angle: 0.3,
+            };
+
+            const puffs = [];
+            const pings = [];
+            let shootingStar = null;
+            let nextShootTime = 2.8;
+            let nextRcsTime = 1.6;
+
+            function spawnRcsPuff(localX, localY, dirX, dirY, count = 6) {
+                const cos = Math.cos(ship.angle);
+                const sin = Math.sin(ship.angle);
+                const wx = ship.x + localX * cos - localY * sin;
+                const wy = ship.y + localX * sin + localY * cos;
+                const vdx = dirX * cos - dirY * sin;
+                const vdy = dirX * sin + dirY * cos;
+
+                for (let i = 0; i < count; i++) {
+                    const spread = (Math.random() - 0.5) * 0.48;
+                    const spd = 28 + Math.random() * 34;
+                    const c = Math.cos(spread), s = Math.sin(spread);
+                    puffs.push({
+                        x: wx,
+                        y: wy,
+                        vx: (vdx * c - vdy * s) * spd,
+                        vy: (vdx * s + vdy * c) * spd,
+                        r: 1.8 + Math.random() * 2.2,
+                        life: 0,
+                        maxLife: 0.7 + Math.random() * 0.5,
+                    });
+                }
+            }
+
+            // 1. Distant Curved Earth Horizon (Bottom-Left)
+            function drawEarthLimb(isDark) {
+                const cx = -w * 0.08 + cam.x * 0.3;
+                const cy = h * 1.18 + cam.y * 0.3;
+                const R = Math.max(w, h) * 0.62;
+
+                ctx.save();
+
+                // Outer atmospheric glow
+                const atmo = ctx.createRadialGradient(cx, cy, R * 0.94, cx, cy, R * 1.12);
+                if (isDark) {
+                    atmo.addColorStop(0, 'rgba(16, 185, 129, 0.24)');
+                    atmo.addColorStop(0.45, 'rgba(56, 189, 248, 0.12)');
+                    atmo.addColorStop(1, 'rgba(9, 9, 11, 0)');
+                } else {
+                    atmo.addColorStop(0, 'rgba(5, 150, 105, 0.14)');
+                    atmo.addColorStop(0.5, 'rgba(148, 163, 184, 0.09)');
+                    atmo.addColorStop(1, 'rgba(248, 247, 244, 0)');
+                }
+                ctx.fillStyle = atmo;
+                ctx.beginPath();
+                ctx.arc(cx, cy, R * 1.12, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Planet body
+                const bodyGrad = ctx.createRadialGradient(
+                    cx + R * 0.35, cy - R * 0.65, R * 0.1,
+                    cx, cy, R
+                );
+                if (isDark) {
+                    bodyGrad.addColorStop(0, '#132a2e');
+                    bodyGrad.addColorStop(0.55, '#0d1520');
+                    bodyGrad.addColorStop(1, '#09090b');
+                } else {
+                    bodyGrad.addColorStop(0, '#e5e7eb');
+                    bodyGrad.addColorStop(0.6, '#ecebe6');
+                    bodyGrad.addColorStop(1, '#f8f7f4');
+                }
+                ctx.fillStyle = bodyGrad;
+                ctx.beginPath();
+                ctx.arc(cx, cy, R, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Crisp atmospheric limb arc
+                ctx.strokeStyle = isDark ? 'rgba(16, 185, 129, 0.45)' : 'rgba(5, 150, 105, 0.28)';
+                ctx.lineWidth = 1.4;
+                ctx.beginPath();
+                ctx.arc(cx, cy, R, -Math.PI * 0.55, 0.05);
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            // 2. Distant Ringed Planet (Upper-Right)
+            function drawRingedPlanet(isDark) {
+                const px = w * 0.80 + cam.x * 0.45;
+                const py = h * 0.22 + cam.y * 0.45;
+                const r = Math.min(w, h) * 0.036;
+
+                ctx.save();
+                ctx.translate(px, py);
+                ctx.rotate(-0.28);
+
+                // Back ring
+                ctx.strokeStyle = isDark ? 'rgba(250, 250, 250, 0.18)' : 'rgba(24, 24, 27, 0.16)';
+                ctx.lineWidth = 1.4;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, r * 2.25, r * 0.52, 0, Math.PI, Math.PI * 2);
+                ctx.stroke();
+
+                // Planet sphere
+                const pGrad = ctx.createRadialGradient(-r * 0.35, -r * 0.35, r * 0.1, 0, 0, r);
+                if (isDark) {
+                    pGrad.addColorStop(0, '#52525b');
+                    pGrad.addColorStop(0.6, '#27272a');
+                    pGrad.addColorStop(1, '#09090b');
+                } else {
+                    pGrad.addColorStop(0, '#ffffff');
+                    pGrad.addColorStop(0.6, '#d4d4d8');
+                    pGrad.addColorStop(1, '#a1a1aa');
+                }
+                ctx.fillStyle = pGrad;
+                ctx.beginPath();
+                ctx.arc(0, 0, r, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Front ring
+                ctx.strokeStyle = isDark ? 'rgba(250, 250, 250, 0.34)' : 'rgba(24, 24, 27, 0.28)';
+                ctx.lineWidth = 1.6;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, r * 2.25, r * 0.52, 0, 0, Math.PI);
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            // 3. Detailed Drifting Starship + Distress Signal Rings
+            function drawStarship(elapsedSec, isDark) {
+                const scale = Math.min(1.25, Math.max(0.85, Math.min(w, h) / 680));
+
+                ctx.save();
+                ctx.translate(ship.x, ship.y);
+
+                // Expanding faint distress signal pulse from ship
+                const sigProg = (elapsedSec * 0.42) % 1;
+                const sigR = 26 * scale + sigProg * 72 * scale;
+                ctx.strokeStyle = isDark
+                    ? `rgba(239, 68, 68, ${((1 - sigProg) * 0.24).toFixed(3)})`
+                    : `rgba(220, 38, 38, ${((1 - sigProg) * 0.18).toFixed(3)})`;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.arc(0, 0, sigR, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.rotate(ship.angle);
+                ctx.scale(scale, scale);
+
+                const bodyW = 20;
+                const halfW = bodyW / 2;
+
+                // Aft flaps
+                ctx.fillStyle = '#18181b';
+                ctx.beginPath();
+                ctx.moveTo(-halfW, 11);
+                ctx.lineTo(-halfW - 9, 27);
+                ctx.lineTo(-halfW - 7, 30);
+                ctx.lineTo(-halfW, 30);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = isDark ? '#52525b' : '#71717a';
+                ctx.beginPath();
+                ctx.moveTo(halfW, 11);
+                ctx.lineTo(halfW + 9, 27);
+                ctx.lineTo(halfW + 7, 30);
+                ctx.lineTo(halfW, 30);
+                ctx.closePath();
+                ctx.fill();
+
+                // Forward flaps
+                ctx.fillStyle = '#18181b';
+                ctx.beginPath();
+                ctx.moveTo(-halfW + 1.5, -18);
+                ctx.lineTo(-halfW - 6, -6);
+                ctx.lineTo(-halfW, -4);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = isDark ? '#52525b' : '#71717a';
+                ctx.beginPath();
+                ctx.moveTo(halfW - 1.5, -18);
+                ctx.lineTo(halfW + 6, -6);
+                ctx.lineTo(halfW, -4);
+                ctx.closePath();
+                ctx.fill();
+
+                // Stainless-steel hull
+                const hullGrad = ctx.createLinearGradient(-halfW, 0, halfW, 0);
+                if (isDark) {
+                    hullGrad.addColorStop(0, '#71717a');
+                    hullGrad.addColorStop(0.32, '#e4e4e7');
+                    hullGrad.addColorStop(0.54, '#ffffff');
+                    hullGrad.addColorStop(0.82, '#a1a1aa');
+                    hullGrad.addColorStop(1, '#3f3f46');
+                } else {
+                    hullGrad.addColorStop(0, '#94a3b8');
+                    hullGrad.addColorStop(0.35, '#ffffff');
+                    hullGrad.addColorStop(0.75, '#cbd5e1');
+                    hullGrad.addColorStop(1, '#52525b');
+                }
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(-halfW, 30);
+                ctx.lineTo(-halfW, -8);
+                ctx.bezierCurveTo(-halfW, -23, -3, -33, 0, -36);
+                ctx.bezierCurveTo(3, -33, halfW, -23, halfW, -8);
+                ctx.lineTo(halfW, 30);
+                ctx.closePath();
+                ctx.fillStyle = hullGrad;
+                ctx.fill();
+                ctx.clip();
+
+                // Black ceramic heat shield
+                ctx.fillStyle = '#18181b';
+                ctx.fillRect(-halfW, -36, bodyW * 0.42, 68);
+
+                // Subtle weld rings
+                ctx.strokeStyle = isDark ? 'rgba(24,24,27,0.22)' : 'rgba(71,85,105,0.20)';
+                ctx.lineWidth = 0.7;
+                for (let ry = -6; ry <= 24; ry += 10) {
+                    ctx.beginPath();
+                    ctx.moveTo(-halfW, ry);
+                    ctx.lineTo(halfW, ry);
+                    ctx.stroke();
+                }
+
+                // Tiny "404" hull stencil
+                ctx.font = '700 6.5px "JetBrains Mono", monospace';
+                ctx.fillStyle = isDark ? '#27272a' : '#3f3f46';
+                ctx.textAlign = 'center';
+                ctx.fillText('', 4.5, 4);
+                ctx.restore();
+
+                // Hull outline
+                ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.22)' : 'rgba(24,24,27,0.34)';
+                ctx.lineWidth = 0.85;
+                ctx.beginPath();
+                ctx.moveTo(-halfW, 30);
+                ctx.lineTo(-halfW, -8);
+                ctx.bezierCurveTo(-halfW, -23, -3, -33, 0, -36);
+                ctx.bezierCurveTo(3, -33, halfW, -23, halfW, -8);
+                ctx.lineTo(halfW, 30);
+                ctx.closePath();
+                ctx.stroke();
+
+                // Engine skirt
+                ctx.fillStyle = '#27272a';
+                ctx.fillRect(-halfW + 2, 30, bodyW - 4, 2.5);
+
+                // Blinking red distress beacon
+                const blink = reducedMotion ? 1 : 0.25 + 0.75 * (0.5 + 0.5 * Math.sin(elapsedSec * 4.5));
+                ctx.fillStyle = `rgba(239, 68, 68, ${blink.toFixed(2)})`;
+                ctx.beginPath();
+                ctx.arc(0, -20, 1.7, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+
+            // 4. Tiny Tethered Astronaut Floating Beside Starship
+            function drawTetheredAstronaut(elapsedSec, isDark) {
+                const cos = Math.cos(ship.angle);
+                const sin = Math.sin(ship.angle);
+                // Anchor point on ship's starboard side
+                const ax = ship.x + 10 * cos - 8 * sin;
+                const ay = ship.y + 10 * sin + 8 * cos;
+
+                // Curved slack tether
+                const midX = (ax + astro.x) * 0.5 + Math.sin(elapsedSec * 1.4) * 10;
+                const midY = (ay + astro.y) * 0.5 + 14 + Math.cos(elapsedSec * 1.1) * 6;
+
+                ctx.save();
+                ctx.strokeStyle = isDark ? 'rgba(228, 228, 231, 0.35)' : 'rgba(63, 63, 70, 0.35)';
+                ctx.lineWidth = 0.9;
+                ctx.beginPath();
+                ctx.moveTo(ax, ay);
+                ctx.quadraticCurveTo(midX, midY, astro.x, astro.y);
+                ctx.stroke();
+
+                // Draw miniature astronaut
+                ctx.translate(astro.x, astro.y);
+                ctx.rotate(astro.angle);
+
+                // Backpack (PLSS)
+                ctx.fillStyle = isDark ? '#a1a1aa' : '#71717a';
+                ctx.fillRect(-5.5, -3.5, 3, 7);
+
+                // Suit torso
+                ctx.fillStyle = isDark ? '#f4f4f5' : '#ffffff';
+                ctx.strokeStyle = isDark ? '#52525b' : '#3f3f46';
+                ctx.lineWidth = 0.8;
+                ctx.beginPath();
+                ctx.roundRect(-2.8, -4, 5.6, 8, 2);
+                ctx.fill();
+                ctx.stroke();
+
+                // Legs (floating slightly bent)
+                ctx.strokeStyle = isDark ? '#f4f4f5' : '#3f3f46';
+                ctx.lineWidth = 1.9;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(-1.2, 4);
+                ctx.lineTo(-2.8, 9);
+                ctx.moveTo(1.2, 4);
+                ctx.lineTo(3.2, 8.2);
+                // Arms
+                ctx.moveTo(-2.5, -1.5);
+                ctx.lineTo(-6, 1);
+                ctx.moveTo(2.5, -1.5);
+                ctx.lineTo(5.8, -3.2);
+                ctx.stroke();
+
+                // Helmet
+                ctx.fillStyle = isDark ? '#fafafa' : '#ffffff';
+                ctx.strokeStyle = isDark ? '#52525b' : '#3f3f46';
+                ctx.lineWidth = 0.8;
+                ctx.beginPath();
+                ctx.arc(0, -7.2, 3.6, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                // Gold/Emerald visor
+                ctx.fillStyle = isDark ? '#10b981' : '#059669';
+                ctx.beginPath();
+                ctx.ellipse(1.1, -7.3, 2.2, 1.8, 0, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+
+            function draw(now, dt) {
+                if (!w || !h) return;
+                const elapsedSec = reducedMotion ? 2.5 : (now - start) * 0.001;
+                const isDark = document.documentElement.classList.contains('dark');
+
+                // Smooth camera parallax
+                const tx = pointer.active && !reducedMotion ? pointer.nx * 18 : 0;
+                const ty = pointer.active && !reducedMotion ? pointer.ny * 12 : 0;
+                const damp = dt > 0 ? Math.min(1, dt * 5) : 1;
+                cam.x += (tx - cam.x) * damp;
+                cam.y += (ty - cam.y) * damp;
+
+                // Backdrop
+                ctx.fillStyle = isDark ? '#09090b' : '#f8f7f4';
+                ctx.fillRect(0, 0, w, h);
+
+                // Subtle deep-space emerald nebula wash
+                const neb = ctx.createRadialGradient(w * 0.55 + cam.x, h * 0.38 + cam.y, 10, w * 0.55, h * 0.38, Math.max(w, h) * 0.55);
+                if (isDark) {
+                    neb.addColorStop(0, 'rgba(16, 185, 129, 0.06)');
+                    neb.addColorStop(0.55, 'rgba(39, 39, 42, 0.05)');
+                    neb.addColorStop(1, 'rgba(9, 9, 11, 0)');
+                } else {
+                    neb.addColorStop(0, 'rgba(5, 150, 105, 0.045)');
+                    neb.addColorStop(1, 'rgba(248, 247, 244, 0)');
+                }
+                ctx.fillStyle = neb;
+                ctx.fillRect(0, 0, w, h);
+
+                // Stars / blueprint dots
+                stars.forEach((st) => {
+                    const sx = st.u * w + cam.x * st.depth;
+                    const sy = st.v * h + cam.y * st.depth;
+                    const tw = reducedMotion ? 0.65 : 0.25 + 0.75 * (0.5 + 0.5 * Math.sin(elapsedSec * 1.4 + st.phase));
+                    ctx.fillStyle = isDark
+                        ? `rgba(244, 244, 245, ${(tw * 0.68).toFixed(2)})`
+                        : `rgba(24, 24, 27, ${(tw * 0.16).toFixed(2)})`;
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, st.r, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                // Occasional shooting star
+                if (!reducedMotion && elapsedSec >= nextShootTime && !shootingStar) {
+                    nextShootTime = elapsedSec + 5 + Math.random() * 6;
+                    shootingStar = {
+                        x: w * (0.2 + Math.random() * 0.6),
+                        y: h * (0.06 + Math.random() * 0.25),
+                        vx: 260 + Math.random() * 140,
+                        vy: 85 + Math.random() * 60,
+                        life: 0,
+                        maxLife: 0.55,
+                    };
+                }
+                if (shootingStar) {
+                    shootingStar.life += dt;
+                    shootingStar.x += shootingStar.vx * dt;
+                    shootingStar.y += shootingStar.vy * dt;
+                    const p = shootingStar.life / shootingStar.maxLife;
+                    if (p >= 1) {
+                        shootingStar = null;
+                    } else {
+                        const a = Math.sin(p * Math.PI) * (isDark ? 0.65 : 0.35);
+                        ctx.strokeStyle = isDark ? `rgba(255,255,255,${a.toFixed(2)})` : `rgba(24,24,27,${a.toFixed(2)})`;
+                        ctx.lineWidth = 1.2;
+                        ctx.beginPath();
+                        ctx.moveTo(shootingStar.x, shootingStar.y);
+                        ctx.lineTo(shootingStar.x - shootingStar.vx * 0.08, shootingStar.y - shootingStar.vy * 0.08);
+                        ctx.stroke();
+                    }
+                }
+
+                // Faint broken orbital trajectory arc
+                ctx.save();
+                ctx.strokeStyle = isDark ? 'rgba(250, 250, 250, 0.09)' : 'rgba(24, 24, 27, 0.10)';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([4, 7]);
+                ctx.beginPath();
+                ctx.ellipse(w * 0.5 + cam.x * 0.2, h * 0.94 + cam.y * 0.2, Math.max(w * 0.65, 360), h * 0.72, 0, Math.PI * 1.1, Math.PI * 1.44);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.ellipse(w * 0.5 + cam.x * 0.2, h * 0.94 + cam.y * 0.2, Math.max(w * 0.65, 360), h * 0.72, 0, Math.PI * 1.56, Math.PI * 1.9);
+                ctx.stroke();
+                ctx.restore();
+
+                // Background celestial bodies
+                drawRingedPlanet(isDark);
+                drawEarthLimb(isDark);
+
+                // Physics update for ship & tethered astronaut
+                if (!reducedMotion && dt > 0) {
+                    const cx = w * 0.48 + cam.x * 0.7;
+                    const cy = h * 0.42 + cam.y * 0.7;
+
+                    ship.x += ship.vx * dt;
+                    ship.y += ship.vy * dt;
+                    ship.angle += ship.vAngle * dt;
+                    ship.vx += (cx - ship.x) * 0.05 * dt;
+                    ship.vy += (cy - ship.y) * 0.05 * dt;
+                    ship.vx *= 0.994;
+                    ship.vy *= 0.994;
+
+                    // Astronaut follows ship on a soft spring offset
+                    const targetAx = ship.x + 56 + Math.sin(elapsedSec * 0.7) * 10;
+                    const targetAy = ship.y + 18 + Math.cos(elapsedSec * 0.9) * 12;
+                    astro.vx += (targetAx - astro.x) * 1.4 * dt;
+                    astro.vy += (targetAy - astro.y) * 1.4 * dt;
+                    astro.vx *= 0.92;
+                    astro.vy *= 0.92;
+                    astro.x += astro.vx * dt;
+                    astro.y += astro.vy * dt;
+                    astro.angle = 0.25 + Math.sin(elapsedSec * 0.85) * 0.32;
+
+                    // Periodic tiny RCS cold-gas puff
+                    if (elapsedSec >= nextRcsTime) {
+                        nextRcsTime = elapsedSec + 2.4 + Math.random() * 2.4;
+                        const side = Math.random() > 0.5 ? 1 : -1;
+                        spawnRcsPuff(side * 9, -16, side, -0.2, 6);
+                        ship.vAngle += -side * 0.035;
+                    }
+                }
+
+                // Tiny orbiting debris around the ship
+                ctx.save();
+                ctx.fillStyle = isDark ? 'rgba(161, 161, 170, 0.45)' : 'rgba(82, 82, 91, 0.35)';
+                debris.forEach((d) => {
+                    const a = d.angle + elapsedSec * d.speed;
+                    const dx = ship.x + Math.cos(a) * d.dist;
+                    const dy = ship.y + Math.sin(a) * d.dist * 0.55;
+                    ctx.save();
+                    ctx.translate(dx, dy);
+                    ctx.rotate(d.rot + elapsedSec * 0.6);
+                    ctx.fillRect(-d.size / 2, -d.size / 2, d.size, d.size * 0.65);
+                    ctx.restore();
+                });
+                ctx.restore();
+
+                // RCS puffs
+                for (let i = puffs.length - 1; i >= 0; i--) {
+                    const p = puffs[i];
+                    p.life += dt;
+                    if (p.life >= p.maxLife) { puffs.splice(i, 1); continue; }
+                    p.x += p.vx * dt;
+                    p.y += p.vy * dt;
+                    p.r += dt * 4.8;
+                    const a = (1 - p.life / p.maxLife) * (isDark ? 0.36 : 0.24);
+                    ctx.fillStyle = isDark ? `rgba(228,228,231,${a.toFixed(3)})` : `rgba(82,82,91,${a.toFixed(3)})`;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // Click radar pings
+                for (let i = pings.length - 1; i >= 0; i--) {
+                    const pg = pings[i];
+                    pg.life += dt;
+                    if (pg.life >= 1.2) { pings.splice(i, 1); continue; }
+                    const prog = pg.life / 1.2;
+                    ctx.strokeStyle = isDark
+                        ? `rgba(16, 185, 129, ${((1 - prog) * 0.58).toFixed(2)})`
+                        : `rgba(5, 150, 105, ${((1 - prog) * 0.48).toFixed(2)})`;
+                    ctx.lineWidth = 1.15;
+                    ctx.beginPath();
+                    ctx.arc(pg.x, pg.y, 6 + (1 - Math.pow(1 - prog, 3)) * 64, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+
+                drawTetheredAstronaut(elapsedSec, isDark);
+                drawStarship(elapsedSec, isDark);
+            }
+
+            function resize() {
+                const dpr = Math.min(window.devicePixelRatio || 1, 2);
+                w = window.innerWidth;
+                h = window.innerHeight;
+                canvas.width = Math.round(w * dpr);
+                canvas.height = Math.round(h * dpr);
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                if (!ship.ready) {
+                    ship.x = w * 0.48;
+                    ship.y = h * 0.42;
+                    astro.x = ship.x + 56;
+                    astro.y = ship.y + 18;
+                    ship.ready = true;
+                }
+                draw(performance.now(), 0);
+            }
+
+            window.addEventListener('pointermove', (e) => {
+                pointer.nx = (e.clientX / (w || 1) - 0.5) * 2;
+                pointer.ny = (e.clientY / (h || 1) - 0.5) * 2;
+                pointer.active = true;
+            }, { passive: true });
+
+            canvas.addEventListener('click', (e) => {
+                pings.push({ x: e.clientX, y: e.clientY, life: 0 });
+                const dx = e.clientX - ship.x;
+                const dy = e.clientY - ship.y;
+                const dist = Math.hypot(dx, dy) || 1;
+                ship.vx += (dx / dist) * 32;
+                ship.vy += (dy / dist) * 32;
+                spawnRcsPuff(0, 30, 0, 1, 9);
+            });
+
+            onThemeChange(() => draw(performance.now(), 0));
+            window.addEventListener('resize', resize);
+            resize();
+
+            if (!reducedMotion) {
+                (function loop(now) {
+                    const dt = Math.min(0.05, Math.max(0.001, (now - last) * 0.001));
+                    last = now;
+                    if (!document.hidden) draw(now, dt);
+                    requestAnimationFrame(loop);
+                })(performance.now());
+            }
+        })();
+    </script>
+</body>
+
+</html>
