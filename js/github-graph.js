@@ -30,16 +30,18 @@ function formatDate(isoDate) {
 }
 
 async function fetchGitHubData() {
-    try {
-        const cached = sessionStorage.getItem(CACHE_KEY);
-        if (cached) {
-            const parsed = JSON.parse(cached);
-            if (Date.now() - parsed.ts < CACHE_TTL_MS && Array.isArray(parsed.contributions)) {
-                return parsed;
+    const isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+    if (!isLocal) {
+        try {
+            const cached = sessionStorage.getItem(CACHE_KEY);
+            if (cached) {
+                const parsed = JSON.parse(cached);
+                if (Date.now() - parsed.ts < CACHE_TTL_MS && Array.isArray(parsed.contributions)) {
+                    return parsed;
+                }
             }
-        }
-    } catch (_) { }
-
+        } catch (_) { }
+    }
     const [contribRes, reposRes] = await Promise.all([
         fetch(`https://github-contributions-api.jogruber.de/v4/${GITHUB_USER}?y=last`),
         fetch(`https://api.github.com/users/${GITHUB_USER}/repos?per_page=100&sort=created`).catch(() => null),
